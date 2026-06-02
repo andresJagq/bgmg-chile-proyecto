@@ -6,7 +6,7 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-05-31**
+> Última actualización: **2026-06-02**
 
 ---
 
@@ -22,6 +22,10 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | bgmg-landing | **6.5.5** |
 | beautygirlmg-mayorista | **2.5.4** |
 | bgmg-tema-base | 1.1.0 |
+
+**Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
+**privado** (`andresJagq/bgmg-chile-proyecto`). Checkpoint pre-promo = commit `618f00a`. Flujo de
+trabajo con 2 PCs + Drive en **§5.18**.
 
 **Hecho y VERIFICADO en vivo:**
 - **bgmg-chile 1.18.1** — BC-01 (checkbox "Necesito factura" se desmarca) + BC-02 (estado retiro
@@ -77,6 +81,10 @@ globalizó). Después, lo de mayor valor para *lanzar*: los 2 ajustes 🔴 de wp
 
 > **BL-01c quedó CERRADO** (Fase 1 CSS+markup + Fase 2 JS). El minicart/lupa están 100% globales,
 > de 8 copias a 1. Detalle en §3.
+
+**Nuevo feature pedido (2026-06-02): descuento promocional minorista** en el plugin mayorista.
+Diseño YA acordado con el usuario; falta implementar. Empezar por **Fase 1 (productos simples)**.
+Spec completa y decisiones en §4 (bloque "Descuento promocional minorista").
 
 ---
 
@@ -168,6 +176,40 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
 - **LiteSpeed Cache presets para WC**: qué cachear, qué excluir (carrito, checkout, mi cuenta, ajax),
   cómo invalidar tras deploy.
 
+**🟡 NUEVO — Descuento promocional minorista (plugin mayorista). Diseño acordado 2026-06-02, PENDIENTE implementar:**
+
+*Reglas de negocio:*
+- Aplica solo a **productos o categorías seleccionables en admin**.
+- Activo solo en **fechas/ocasiones especiales** (ej. Cyber): fecha inicio/fin **+** interruptor
+  on/off (zona horaria del sitio; inicio 00:00, fin 23:59:59 inclusive).
+- Tipo de descuento **configurable en admin: % o monto fijo** (siempre sobre el precio **regular**,
+  `bgm_get_precio_base`).
+- Es para **MINORISTAS**: aplica solo **bajo el umbral mayorista**. El mayorista entra con
+  `qty >= min_1` (default `min_1 = 3`, ver `beautygirlmg-mayorista.php`). **Caso límite resuelto:**
+  en `qty = 3` **gana el mayorista**; el promo cubre `qty < min_1`. **No se pisan ni se suman.**
+
+*Arquitectura (clave: NO tocar la lógica mayorista):*
+- `bgm_calcular_precio()` (`includes/core/helpers.php`) queda **intacta** (sigue pura mayorista). El
+  promo va en un helper **aislado** `bgm_calcular_precio_promo($product, $qty)` → devuelve precio o `null`.
+- **Precedencia en `includes/frontend/carrito.php`**: primero mayorista; **solo si el mayorista NO
+  aplicó (nivel 0)** se intenta el promo → mutuamente excluyentes por construcción (cero stacking).
+- Config nueva en `wp_options`: `bgm_promo_activa`, `bgm_promo_fecha_inicio`/`_fin`, `bgm_promo_tipo`
+  (% | monto), `bgm_promo_valor`, `bgm_promo_qty_min`/`_qty_max`, `bgm_promo_productos` (IDs),
+  `bgm_promo_categorias` (term IDs). UI en `includes/admin/`.
+- Helpers soporte: `bgm_promo_activa_ahora()` (toggle + fechas) y `bgm_producto_en_promo($product_id)`
+  (ID en lista **o** categoría coincide; para variaciones resuelve al **padre**). Con **cache
+  estático por request** (el carrito recalcula muchas veces).
+- Ajustes en `carrito.php`: ampliar el gate de `bgm_aplicar_precio_simple` (~L110) para dejar pasar
+  productos **solo-promo** (sin mayorista); para variables, ampliar la agrupación (~L84) e intentar
+  promo cuando el surtido falla o `qty_total < umbral` (**el promo ignora la regla de surtido**).
+
+*Entrega poco a poco (el usuario quiere ambos tipos, bien hechos):*
+- **Fase 1 — productos simples** (limpia, bajo riesgo). Validar en staging antes de seguir.
+- **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
+- Pendiente menor (fuera de alcance inicial): **aviso visual propio del promo** en
+  `includes/frontend/avisos-carrito.php` (hoy esos avisos son solo de mayorista).
+- Cierre: **bump `BGM_VERSION` en 2 sitios**, escribir sin BOM, `php -l` antes de subir.
+
 **🟢 Post-deploy / opcional:** auditoría línea a línea de `wizard-checkout.php` y `wizard-operativa.php`
 (ya validados en vivo); BANNERS-CUSTOMIZER-PLAN.md L68 tiene info vieja del logo.
 
@@ -209,6 +251,15 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
     + datos reales si llega a ser problema (>50ms en `wc_get_orders limit=-1`).
 17. Tests con estado (carrito, login, compra) los hace **el usuario manualmente**; Claude solo
     verifica URLs públicas sin sesión.
+18. **Respaldo en GitHub + flujo 2 PCs.** Repo **privado** `andresJagq/bgmg-chile-proyecto` (creado
+    2026-06-02). El proyecto entero (raíz `bgmg-chile-proyecto/`) es un repo git; `.gitignore` excluye
+    `zips/`, `**/.claude/settings.local.json` y cruft de SO. Identidad git `BeautyGirlMG
+    <jose1011961@gmail.com>`. Como `.git` vive **dentro de Drive**: (a) dejar que Drive sincronice
+    **100% ANTES de apagar** y **ANTES de correr git** en la otra PC; (b) **nunca** trabajar en las 2
+    PCs a la vez; (c) la credencial de GitHub se guarda **por PC** (Windows Cred Manager, no viaja por
+    Drive) → el primer `push` en cada PC abre el navegador una vez. **GitHub es la fuente de verdad:**
+    si Drive corrompe `.git`, re-clonar con `git clone https://github.com/andresJagq/bgmg-chile-proyecto.git`.
+    Flujo normal: `commit` → `push`.
 
 ---
 
