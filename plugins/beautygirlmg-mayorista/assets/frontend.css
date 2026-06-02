@@ -1,0 +1,1058 @@
+/* ============================================================
+ * BGM Mayorista — Frontend Styles
+ * Sistema de diseño BeautyGirlMG (rosa/mauve)
+ *
+ * Convención: usar las variables del tema (--pink, --pink-dark,
+ * etc.) definidas en bgmg-product.php. Si no existen (otros
+ * temas), aplican los fallbacks definidos abajo.
+ * ============================================================ */
+
+.bgm-bloque-mayor {
+    --bgm-pink:      var(--pink,      #F2C4CE);
+    --bgm-pink-soft: var(--pink-soft, #FBF0F2);
+    --bgm-pink-dark: var(--pink-dark, #C4728A);
+    --bgm-cream:     var(--cream,     #FDF7F4);
+    --bgm-dark:      var(--dark,      #1A1015);
+    --bgm-mid:       var(--mid,       #7A5060);
+    --bgm-border:    var(--border,    #f0e0e5);
+
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* ─── Tier badges inline (1 línea por tier) ──────────────── */
+.bgm-tiers-row {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin: 0 0 16px;
+}
+
+.bgm-tier-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 11px 14px;
+    background: var(--bgm-pink-soft);
+    border-radius: 10px;
+    font-size: 13px;
+    transition: background .2s, box-shadow .2s;
+}
+
+.bgm-tier-row-2 {
+    background: linear-gradient(135deg, var(--bgm-pink-soft) 0%, #fff6ef 100%);
+}
+
+.bgm-tier-row.is-active-tier {
+    background: linear-gradient(135deg, #fff6ef, var(--bgm-pink-soft));
+    box-shadow: 0 0 0 1.5px var(--bgm-pink) inset;
+}
+
+.bgm-tier-row-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--bgm-mid);
+    flex: 1;
+    min-width: 0;
+    flex-wrap: wrap;
+}
+
+.bgm-tier-icon {
+    color: var(--bgm-pink-dark);
+    font-size: 14px;
+    line-height: 1;
+    flex-shrink: 0;
+}
+
+.bgm-tier-label {
+    font-weight: 600;
+    color: var(--bgm-dark);
+}
+
+.bgm-tier-cond {
+    color: var(--bgm-mid);
+}
+
+.bgm-tier-cond::before {
+    content: '·';
+    margin: 0 6px;
+    color: var(--bgm-border);
+}
+
+.bgm-tier-price {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--bgm-pink-dark);
+    white-space: nowrap;
+}
+
+.bgm-tier-price .amount {
+    color: inherit;
+}
+
+.bgm-tier-price-cu {
+    font-size: 11px;
+    font-weight: 400;
+    color: var(--bgm-mid);
+    margin-left: 2px;
+}
+
+.bgm-tier-check {
+    display: none;
+    font-size: 11px;
+    font-weight: 700;
+    color: #2e7d32;
+    margin-left: 4px;
+}
+
+.bgm-tier-row.is-active-tier .bgm-tier-check {
+    display: inline;
+}
+
+/* ─── Preview producto simple (precio en vivo) ──────────── */
+.bgm-simple-preview {
+    margin: 0 0 16px;
+    padding: 14px 16px;
+    background: linear-gradient(135deg, #fff 0%, var(--bgm-pink-soft) 100%);
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    transition: border-color .25s, box-shadow .25s, padding .25s;
+}
+
+/* Estado "detalle" (qty sin tier): ocultar el precio (evita duplicado con
+   el precio del header del tema) y reducir paddings para que sea solo un
+   aviso compacto "Agrega N más para X". */
+.bgm-simple-preview[data-tier-activo="0"] {
+    padding: 10px 14px;
+    background: var(--bgm-pink-soft);
+    border-color: transparent;
+}
+
+.bgm-simple-preview[data-tier-activo="0"] .bgm-simple-preview-precio {
+    display: none;
+}
+
+.bgm-simple-preview[data-tier-activo="1"] {
+    border-color: var(--bgm-pink);
+    box-shadow: 0 2px 8px rgba(196, 114, 138, .08);
+}
+
+.bgm-simple-preview[data-tier-activo="2"] {
+    border-color: var(--bgm-pink-dark);
+    box-shadow: 0 4px 12px rgba(196, 114, 138, .15);
+}
+
+.bgm-simple-preview-precio {
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.bgm-simple-precio-label {
+    font-size: 13px;
+    color: var(--bgm-mid);
+    font-weight: 500;
+}
+
+.bgm-simple-precio-valor {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--bgm-pink-dark);
+    line-height: 1.1;
+    transition: color .25s, transform .25s;
+}
+
+.bgm-simple-preview[data-tier-activo="2"] .bgm-simple-precio-valor {
+    color: #b85a73;
+}
+
+.bgm-simple-precio-valor .amount {
+    color: inherit;
+}
+
+.bgm-simple-precio-suffix {
+    font-size: 12px;
+    color: var(--bgm-mid);
+}
+
+.bgm-simple-preview-aviso {
+    font-size: 13px;
+    color: var(--bgm-mid);
+    line-height: 1.4;
+}
+
+.bgm-simple-preview-aviso strong {
+    color: var(--bgm-pink-dark);
+    font-weight: 600;
+}
+
+.bgm-simple-preview-aviso[data-estado="tier2"] {
+    color: var(--bgm-pink-dark);
+    font-weight: 600;
+}
+
+.bgm-simple-preview-aviso[data-estado="tier2"]::before {
+    content: '★★ ';
+}
+
+.bgm-simple-preview-aviso.is-empty {
+    display: none;
+}
+
+/* ─── Sub-tabs Sorpréndeme / Manual ──────────────────────── */
+.bgm-subtabs {
+    display: flex;
+    gap: 4px;
+    padding: 4px;
+    background: var(--bgm-pink-soft);
+    border-radius: 30px;
+    margin-bottom: 16px;
+}
+
+.bgm-subtab {
+    flex: 1;
+    padding: 9px 14px;
+    background: transparent;
+    border: none;
+    border-radius: 30px;
+    color: var(--bgm-mid);
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .2s ease;
+    min-height: 40px;
+}
+
+.bgm-subtab:hover {
+    color: var(--bgm-pink-dark);
+}
+
+.bgm-subtab.is-active {
+    background: #fff;
+    color: var(--bgm-dark);
+    box-shadow: 0 1px 3px rgba(26, 16, 21, .08);
+}
+
+.bgm-subpanel {
+    animation: bgmFade .25s cubic-bezier(.4, 0, .2, 1);
+}
+
+.bgm-subpanel[hidden] {
+    display: none;
+}
+
+@keyframes bgmFade {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── Bloque descripción interna ─────────────────────────── */
+.bgm-bloque-desc {
+    font-size: 13px;
+    color: var(--bgm-mid);
+    line-height: 1.5;
+    margin: 0 0 14px;
+}
+
+.bgm-bloque-desc strong {
+    color: var(--bgm-pink-dark);
+    font-weight: 600;
+}
+
+/* ─── Fila cantidad (modo auto) ──────────────────────────── */
+.bgm-fila-cantidad {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.bgm-label-cantidad {
+    font-size: 13px;
+    color: var(--bgm-mid);
+    font-weight: 500;
+}
+
+/* ─── Controles +/− ──────────────────────────────────────── */
+.bgm-qty-controls {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.bgm-qty-btn {
+    width: 36px;
+    height: 36px;
+    border: 1.5px solid var(--bgm-pink);
+    background: #fff;
+    color: var(--bgm-pink-dark);
+    border-radius: 50%;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all .15s ease;
+    line-height: 1;
+    font-family: inherit;
+}
+
+.bgm-qty-btn:hover {
+    background: var(--bgm-pink);
+    color: #fff;
+}
+
+.bgm-qty-btn:active {
+    transform: scale(0.95);
+}
+
+.bgm-qty-input {
+    width: 56px;
+    height: 36px;
+    text-align: center;
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--bgm-dark);
+    transition: border-color .15s ease;
+    -moz-appearance: textfield;
+}
+
+.bgm-qty-input::-webkit-inner-spin-button,
+.bgm-qty-input::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+.bgm-qty-input:focus {
+    border-color: var(--bgm-pink-dark);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 114, 138, .12);
+}
+
+/* ─── Subtotal ──────────────────────────────────────────── */
+.bgm-fila-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+
+.bgm-subtotal-label {
+    font-size: 12px;
+    color: var(--bgm-mid);
+    font-weight: 500;
+}
+
+.bgm-subtotal-precio-cu {
+    font-size: 12px;
+    color: var(--bgm-mid);
+    display: block;
+    margin-top: 2px;
+}
+
+.bgm-subtotal-valor {
+    font-size: 18px;
+    font-weight: 600;
+    color: var(--bgm-pink-dark);
+    transition: color .25s, transform .25s;
+}
+
+.bgm-subtotal-valor .amount {
+    color: inherit;
+}
+
+/* ─── CTA primario ──────────────────────────────────────── */
+.bgm-btn-primario {
+    width: 100%;
+    padding: 14px 24px;
+    background: var(--bgm-pink-dark);
+    color: #fff;
+    border: none;
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all .15s ease;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.bgm-btn-primario:hover:not(:disabled) {
+    background: #ad6178;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(196, 114, 138, .3);
+}
+
+.bgm-btn-primario:active:not(:disabled) {
+    transform: translateY(0);
+}
+
+.bgm-btn-primario:disabled {
+    background: #d4b5be;
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.bgm-btn-primario.is-loading {
+    background: var(--bgm-mid);
+    pointer-events: none;
+}
+
+/* ─── CTA secundario ────────────────────────────────────── */
+.bgm-btn-secundario {
+    padding: 12px 18px;
+    background: #fff;
+    color: var(--bgm-pink-dark);
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 30px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all .15s ease;
+    min-height: 44px;
+}
+
+.bgm-btn-secundario:hover {
+    background: var(--bgm-pink-soft);
+    border-color: var(--bgm-pink);
+}
+
+/* ─── Acciones del modo manual ──────────────────────────── */
+.bgm-acciones-manual {
+    display: flex;
+    gap: 8px;
+    flex-wrap: wrap;
+}
+
+.bgm-acciones-manual .bgm-btn-secundario {
+    flex: 1;
+    min-width: 130px;
+}
+
+.bgm-acciones-manual .bgm-btn-primario {
+    flex: 2;
+    min-width: 170px;
+}
+
+/* ─── Spinner para botones loading ───────────────────────── */
+.bgm-btn-primario .bgm-spinner,
+.bgm-btn-secundario .bgm-spinner {
+    display: none;
+    width: 14px;
+    height: 14px;
+    border: 2px solid rgba(255, 255, 255, .3);
+    border-top-color: #fff;
+    border-radius: 50%;
+    animation: bgmSpin .6s linear infinite;
+}
+
+.bgm-btn-primario.is-loading .bgm-spinner {
+    display: inline-block;
+}
+
+@keyframes bgmSpin {
+    to { transform: rotate(360deg); }
+}
+
+/* ─── Grilla de variaciones (modo manual) ───────────────── */
+.bgm-grilla-variaciones {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    margin-bottom: 14px;
+}
+
+.bgm-variacion-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 9px 12px 9px 14px;
+    background: var(--bgm-pink-soft);
+    border-radius: 12px;
+    border: 1.5px solid transparent;
+    transition: all .15s ease;
+}
+
+.bgm-variacion-row:hover {
+    background: rgba(242, 196, 206, 0.3);
+}
+
+.bgm-variacion-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    min-width: 0;
+}
+
+.bgm-variacion-nombre {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bgm-dark);
+}
+
+.bgm-variacion-stock {
+    font-size: 11px;
+    color: var(--bgm-mid);
+    font-style: italic;
+}
+
+/* Estados visuales del análisis de surtido */
+.bgm-row-falta {
+    background: rgba(165, 214, 167, .25) !important;
+    border-color: #66bb6a !important;
+    position: relative;
+}
+
+.bgm-row-falta::after {
+    content: '+ Agrega';
+    position: absolute;
+    top: 50%;
+    right: -6px;
+    transform: translateY(-50%);
+    background: #66bb6a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.bgm-row-sobra {
+    background: rgba(255, 183, 178, .3) !important;
+    border-color: #ef5350 !important;
+    position: relative;
+}
+
+.bgm-row-sobra::after {
+    content: '− Reduce';
+    position: absolute;
+    top: 50%;
+    right: -6px;
+    transform: translateY(-50%);
+    background: #ef5350;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 2px 8px;
+    border-radius: 12px;
+    pointer-events: none;
+}
+
+.bgm-row-balance {
+    background: rgba(196, 114, 138, .1) !important;
+    border-color: var(--bgm-pink) !important;
+}
+
+/* ─── Contador en vivo (modo manual) ────────────────────── */
+.bgm-contador-vivo {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 14px;
+    background: #fff;
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 12px;
+    margin-bottom: 12px;
+}
+
+.bgm-contador-mensaje {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--bgm-mid);
+    line-height: 1.4;
+}
+
+.bgm-contador-mensaje[data-estado="tier1"] {
+    color: var(--bgm-pink-dark);
+    font-weight: 600;
+}
+
+.bgm-contador-mensaje[data-estado="tier2"] {
+    color: var(--bgm-pink-dark);
+    font-weight: 700;
+}
+
+.bgm-contador-mensaje[data-estado="no-cumple"],
+.bgm-contador-mensaje[data-estado="excede"] {
+    color: #c62828;
+    font-weight: 600;
+}
+
+.bgm-contador-subtotal {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding-top: 6px;
+    border-top: 1px solid var(--bgm-pink-soft);
+}
+
+/* ─── Feedback ──────────────────────────────────────────── */
+.bgm-feedback {
+    margin-top: 12px;
+    padding: 10px 14px;
+    border-radius: 8px;
+    font-size: 13px;
+    display: none;
+    text-align: center;
+    line-height: 1.45;
+}
+
+.bgm-feedback-exito {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+    display: block;
+}
+
+.bgm-feedback-error {
+    background: #fbe9e7;
+    color: #c62828;
+    border: 1px solid #ffcdd2;
+    display: block;
+}
+
+/* ─── Carrito: tags y avisos ────────────────────────────── */
+.bgm-tag-surtido {
+    display: inline-block;
+    margin-left: 8px;
+    padding: 2px 10px;
+    background: var(--bgm-pink-dark);
+    color: #fff;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: .4px;
+    vertical-align: middle;
+}
+
+.bgm-aviso-aplicado {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: #e8f5e9;
+    color: #2e7d32;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.bgm-aviso-sugerencia {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: var(--bgm-pink-soft);
+    color: var(--bgm-pink-dark);
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 500;
+}
+
+.bgm-aviso-error {
+    color: #c62828;
+    font-size: 13px;
+    padding: 8px 12px;
+    background: #fbe9e7;
+    border-radius: 8px;
+}
+
+.bgm-aviso-roto {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 3px 10px;
+    background: #fff3e0;
+    color: #d84315;
+    border-radius: 12px;
+    font-size: 11px;
+    font-weight: 600;
+}
+
+/* ─── Swatches: pills para selectores de variación ──────── */
+.bgm-select-oculto {
+    /* Escondido visualmente pero accesible para WC; no usar display:none
+       porque algunos themes/scripts dependen de su existencia visible. */
+    position: absolute !important;
+    width: 1px !important;
+    height: 1px !important;
+    padding: 0 !important;
+    margin: -1px !important;
+    overflow: hidden !important;
+    clip: rect(0, 0, 0, 0) !important;
+    white-space: nowrap !important;
+    border: 0 !important;
+    pointer-events: none !important;
+}
+
+.bgm-swatches {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 4px 0;
+}
+
+.bgm-swatch {
+    --bgm-pink:      var(--pink,      #F2C4CE);
+    --bgm-pink-soft: var(--pink-soft, #FBF0F2);
+    --bgm-pink-dark: var(--pink-dark, #C4728A);
+    --bgm-dark:      var(--dark,      #1A1015);
+    --bgm-mid:       var(--mid,       #7A5060);
+    --bgm-border:    var(--border,    #f0e0e5);
+
+    appearance: none;
+    border: 1.5px solid var(--bgm-border);
+    background: #fff;
+    color: var(--bgm-dark);
+    padding: 9px 18px;
+    border-radius: 30px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-size: 13px;
+    font-weight: 500;
+    cursor: pointer;
+    transition: border-color .15s ease, background .15s ease, color .15s ease, transform .15s ease, box-shadow .15s ease;
+    line-height: 1.2;
+    min-height: 38px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    user-select: none;
+}
+
+.bgm-swatch:hover:not(.is-disabled):not(.is-active) {
+    border-color: var(--bgm-pink);
+    background: var(--bgm-pink-soft);
+    color: var(--bgm-pink-dark);
+}
+
+.bgm-swatch:active:not(.is-disabled) {
+    transform: scale(.97);
+}
+
+.bgm-swatch.is-active {
+    background: var(--bgm-pink-dark);
+    border-color: var(--bgm-pink-dark);
+    color: #fff;
+    box-shadow: 0 2px 6px rgba(196, 114, 138, .25);
+}
+
+.bgm-swatch.is-disabled {
+    color: var(--bgm-mid);
+    background: #fafafa;
+    border-color: var(--bgm-border);
+    cursor: not-allowed;
+    opacity: .55;
+    text-decoration: line-through;
+}
+
+.bgm-swatch.is-disabled:hover {
+    transform: none;
+}
+
+.bgm-swatch:focus-visible {
+    outline: 2px solid var(--bgm-pink-dark);
+    outline-offset: 2px;
+}
+
+/* ─── Avisos de surtido en minicart + página /cart/ ──────── */
+.bgm-chip-aviso {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    margin-left: 6px;
+    padding: 2px 8px;
+    border-radius: 12px;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: .3px;
+    vertical-align: middle;
+    line-height: 1.4;
+    white-space: nowrap;
+}
+
+.bgm-chip-aviso.bgm-chip-warn {
+    background: #fff3e0;
+    color: #d84315;
+    border: 1px solid #ffccbc;
+}
+
+.bgm-chip-aviso.bgm-chip-ok {
+    background: #e8f5e9;
+    color: #2e7d32;
+    border: 1px solid #c8e6c9;
+}
+
+.bgm-avisos-grupos {
+    margin: 16px 0 20px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--border, #f0e0e5);
+    border-radius: 12px;
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+.bgm-avisos-titulo {
+    margin: 0 0 12px;
+    font-size: 13px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    color: var(--mid, #7A5060);
+}
+
+.bgm-aviso-grupo {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    font-size: 13px;
+}
+
+.bgm-aviso-grupo:last-child {
+    margin-bottom: 0;
+}
+
+.bgm-aviso-grupo.bgm-aviso-ok {
+    background: #e8f5e9;
+    border-left: 3px solid #2e7d32;
+    color: var(--dark, #1A1015);
+}
+
+.bgm-aviso-grupo.bgm-aviso-warn {
+    background: #fff3e0;
+    border-left: 3px solid #d84315;
+    color: var(--dark, #1A1015);
+}
+
+.bgm-aviso-icono {
+    flex-shrink: 0;
+    width: 22px;
+    height: 22px;
+    background: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1;
+}
+
+.bgm-aviso-grupo.bgm-aviso-ok .bgm-aviso-icono {
+    color: #2e7d32;
+}
+
+.bgm-aviso-grupo.bgm-aviso-warn .bgm-aviso-icono {
+    color: #d84315;
+}
+
+.bgm-aviso-cuerpo {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    line-height: 1.4;
+}
+
+.bgm-aviso-cuerpo strong {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--dark, #1A1015);
+}
+
+.bgm-aviso-cuerpo span {
+    font-size: 12px;
+    color: var(--mid, #7A5060);
+}
+
+/* ─── Toast flotante (post agregar al carrito) ──────────── */
+#bgm-toast-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    z-index: 999999;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    pointer-events: none;
+}
+
+.bgm-toast {
+    pointer-events: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 320px;
+    max-width: 420px;
+    padding: 14px 16px;
+    background: #fff;
+    border: 1px solid var(--pink, #F2C4CE);
+    border-left: 4px solid var(--pink-dark, #C4728A);
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(26, 16, 21, .12), 0 2px 6px rgba(26, 16, 21, .06);
+    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--dark, #1A1015);
+    transform: translateX(420px);
+    opacity: 0;
+    transition: transform .3s cubic-bezier(.2, 1, .3, 1), opacity .25s;
+}
+
+.bgm-toast.is-visible {
+    transform: translateX(0);
+    opacity: 1;
+}
+
+.bgm-toast.is-leaving {
+    transform: translateX(60px);
+    opacity: 0;
+}
+
+.bgm-toast-icon {
+    flex-shrink: 0;
+    width: 32px;
+    height: 32px;
+    background: var(--pink-dark, #C4728A);
+    color: #fff;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.bgm-toast-body {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.bgm-toast-titulo {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--dark, #1A1015);
+    line-height: 1.2;
+}
+
+.bgm-toast-sub {
+    font-size: 12px;
+    color: var(--mid, #7A5060);
+    line-height: 1.3;
+}
+
+.bgm-toast-cta {
+    flex-shrink: 0;
+    padding: 8px 14px;
+    background: var(--pink-dark, #C4728A);
+    color: #fff !important;
+    text-decoration: none !important;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+    transition: background .15s ease, transform .15s ease;
+    white-space: nowrap;
+}
+
+.bgm-toast-cta:hover {
+    background: #ad6178;
+    transform: translateY(-1px);
+    color: #fff !important;
+}
+
+.bgm-toast-cerrar {
+    flex-shrink: 0;
+    width: 24px;
+    height: 24px;
+    background: transparent;
+    border: none;
+    color: var(--mid, #7A5060);
+    font-size: 22px;
+    line-height: 1;
+    cursor: pointer;
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 50%;
+    transition: background .15s ease, color .15s ease;
+}
+
+.bgm-toast-cerrar:hover {
+    background: var(--pink-soft, #FBF0F2);
+    color: var(--pink-dark, #C4728A);
+}
+
+@media (max-width: 600px) {
+    #bgm-toast-container {
+        top: 12px;
+        right: 12px;
+        left: 12px;
+    }
+    .bgm-toast {
+        min-width: 0;
+        max-width: none;
+        width: 100%;
+    }
+}
+
+/* ─── Mobile ────────────────────────────────────────────── */
+@media (max-width: 600px) {
+    .bgm-tier-row {
+        padding: 10px 12px;
+        font-size: 12px;
+    }
+
+    .bgm-tier-cond::before {
+        margin: 0 4px;
+    }
+
+    .bgm-fila-cantidad {
+        gap: 8px;
+    }
+
+    .bgm-qty-btn {
+        width: 36px;
+        height: 36px;
+    }
+
+    .bgm-qty-input {
+        width: 50px;
+    }
+
+    .bgm-acciones-manual {
+        flex-direction: column;
+    }
+
+    .bgm-acciones-manual .bgm-btn-secundario,
+    .bgm-acciones-manual .bgm-btn-primario {
+        width: 100%;
+    }
+}

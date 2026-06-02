@@ -1,0 +1,741 @@
+# Copyright (C) 2026 BeautyGirlMG
+# This file is distributed under the GPL-2.0-or-later.
+msgid ""
+msgstr ""
+"Project-Id-Version: BGMG Chile 1.10.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-05-18 00:00+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: \n"
+"Language-Team: \n"
+"Language: es_CL\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: bgmg-chile 1.10.0\n"
+"X-Domain: bgmg-chile\n"
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Envíos Chile (RM)"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "No tienes permisos para acceder a esta pantalla."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Envíos Chile — Tarifas fijas Región Metropolitana"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Configura el precio fijo de envío para las comunas de la Región Metropolitana donde tienes tarifa pactada. Las comunas que dejes inactivas o sin precio se entregarán como \"Por pagar\" (el cliente paga el flete al recibir)."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Comuna"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Precio fijo despacho (CLP)"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Despacho activo"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Permite retiro en tienda"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Ej: 3990"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Sí"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Ofrecer retiro"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Guardar"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "¿Cómo funciona?"
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Despacho activo + precio > 0 → cobra esa tarifa fija en el checkout."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Despacho inactivo o sin precio (y cualquier comuna fuera de RM) → \"Por pagar\" (cliente paga al recibir)."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Permite retiro en tienda → al cliente le aparece \"Retiro en tienda (gratis)\" como opción de envío alternativa."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Ambos métodos (\"Envío BeautyGirlMG (Chile)\" y \"Retiro en tienda\") deben estar agregados a tu zona de envío de Chile (WooCommerce → Ajustes → Envío)."
+msgstr ""
+
+#: inc/envio/admin-tarifas-rm.php
+msgid "Se guardó %d tarifa."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Envío BeautyGirlMG (Chile)"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Tarifa fija configurable por comuna para Región Metropolitana, \"Por pagar\" para el resto."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Envío Chile"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Despacho por pagar (cliente paga al recibir)"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Título mostrado al cliente"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Texto del método de envío en el checkout."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Etiqueta para envíos \"Por pagar\""
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Se muestra junto al precio cuando la comuna no tiene tarifa fija. El precio será $0 en el checkout y el cliente paga al recibir."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Envío gratis a partir de (CLP)"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Para temporadas (ej. Cyber, Navidad): si el subtotal supera este monto, el despacho pasa a $0 con etiqueta \"gratis\" en el checkout. Solo aplica a comunas con tarifa fija configurada — nunca a \"Por pagar\". Cuando termina la temporada, pon este campo en 0 (o vacío) para desactivar todo el flujo y el aviso \"Te faltan $X\" deja de aparecer."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "%1$s — despacho GRATIS 🎉"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Despacho"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "%1$s — tarifa fija"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "🎉 ¡Tu pedido tiene <strong>envío gratis</strong> a tu comuna!"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "✨ Te faltan <strong>%1$s</strong> para envío <strong>gratis</strong> a tu comuna."
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "Sobre tu envío:"
+msgstr ""
+
+#: inc/envio/class-shipping-method.php
+msgid "El despacho a tu comuna se cobra \"Por pagar\". Te enviamos el paquete por courier (Starken o Chilexpress) y tú pagas el flete directamente al recibirlo. El monto que ves en el resumen es solo el de los productos."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Retiro en tienda (BeautyGirlMG)"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Retiro gratis en la tienda física. Solo se ofrece a las comunas de RM marcadas como \"Permite retiro\" en WooCommerce → Envíos Chile (RM)."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Retiro en tienda (gratis)"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Texto del método en el checkout."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Dirección del local"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Aparece en el checkout y en el email de la orden."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Horario de retiro"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Ej: Lun-Vie 10:00-19:00 / Sáb 11:00-14:00"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "WhatsApp de coordinación"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Se muestra como link clicable wa.me al cliente."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Instrucciones extra"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Cualquier nota adicional al cliente (avisos, restricciones, etc.)."
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "📍 Datos para tu retiro:"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Dirección:"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Horario:"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "WhatsApp:"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "RETIRO EN TIENDA"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Dirección"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Horario"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "WhatsApp"
+msgstr ""
+
+#: inc/envio/class-shipping-retiro.php
+msgid "Datos para tu retiro en tienda"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Nombre"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "RUT"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Región"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Correo"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Método de envío"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "ID del pedido"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "🏷️ Datos de despacho"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "No se puede leer la orden."
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Copiar todo"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Imprimir etiqueta"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Etiqueta de despacho"
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "No tienes permisos para imprimir esta etiqueta."
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Enlace de impresión inválido o expirado."
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Orden no encontrada."
+msgstr ""
+
+#: inc/etiqueta/admin-etiqueta-despacho.php
+msgid "Imprimir"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Seguimiento de tu despacho"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Método:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Código:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Copiar"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Datos para tu retiro"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Datos para boleta/factura"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "RUT:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Razón social:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Giro:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "Dirección comercial:"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "¡Gracias por tu compra!"
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "¡Gracias por tu compra! Estamos preparando tu pedido y te avisaremos por email apenas esté listo para retirar."
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "¡Gracias por tu compra! Vamos a preparar tu pedido y te avisaremos cuando salga por courier con su código de seguimiento."
+msgstr ""
+
+#: inc/integracion/landing-helpers.php
+msgid "¡Gracias por tu compra! Despachamos por courier a todo Chile. El flete a tu comuna se paga al recibir el paquete; te avisaremos cuando salga con su código de seguimiento."
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Datos Chile"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Información que el cliente entregó en su última compra o registro. Puedes corregirla aquí si te la pide por soporte."
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "12.345.678-9"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Se valida con módulo 11 al guardar. Si dejas el campo vacío se borra."
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Teléfono móvil"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "+56 9 1234 5678"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Móvil chileno. Se normaliza a +56 9 XXXX XXXX al guardar."
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Cliente requiere factura"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Sí, este cliente compra como empresa y necesita factura"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Razón social"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Giro comercial"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "Dirección comercial"
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "<strong>RUT inválido:</strong> verifica el dígito verificador. No se guardó ese campo."
+msgstr ""
+
+#: inc/perfil/admin-user-fields.php
+msgid "<strong>Teléfono inválido:</strong> debe ser un móvil chileno (+56 9 XXXX XXXX). No se guardó ese campo."
+msgstr ""
+
+#: inc/regiones/checkout-cascade.php
+msgid "Selecciona tu comuna"
+msgstr ""
+
+#: inc/regiones/checkout-cascade.php
+msgid "Selecciona tu región"
+msgstr ""
+
+#: inc/regiones/validator.php
+msgid "facturación"
+msgstr ""
+
+#: inc/regiones/validator.php
+msgid "envío"
+msgstr ""
+
+#: inc/regiones/validator.php
+msgid "Por favor selecciona una región de Chile válida para la dirección de %s."
+msgstr ""
+
+#: inc/regiones/validator.php
+msgid "Por favor selecciona una comuna para la dirección de %s."
+msgstr ""
+
+#: inc/regiones/validator.php
+msgid "La comuna seleccionada no pertenece a la región elegida (dirección de %s)."
+msgstr ""
+
+#: inc/rut/account-fields.php
+msgid "RUT (opcional)"
+msgstr ""
+
+#: inc/rut/account-fields.php
+msgid "Si nos lo dejas ahora, no tendrás que escribirlo en cada compra."
+msgstr ""
+
+#: inc/rut/account-fields.php
+msgid "<strong>Error:</strong> el RUT ingresado no es válido."
+msgstr ""
+
+#: inc/rut/checkout-fields.php
+msgid "Por favor ingresa tu RUT para continuar."
+msgstr ""
+
+#: inc/rut/checkout-fields.php
+msgid "El RUT ingresado no es válido. Verifica el número y el dígito verificador."
+msgstr ""
+
+#: inc/rut/checkout-fields.php
+msgid "Para emitir factura necesitamos la razón social."
+msgstr ""
+
+#: inc/rut/checkout-fields.php
+msgid "Para emitir factura necesitamos el giro comercial."
+msgstr ""
+
+#: inc/rut/duplicates.php
+msgid "<strong>Error:</strong> ya existe una cuenta con este RUT. Si es tuya puedes <a href=\"%s\">recuperar el acceso</a>."
+msgstr ""
+
+#: inc/rut/duplicates.php
+msgid "<strong>Error:</strong> ya existe una cuenta con este RUT."
+msgstr ""
+
+#: inc/rut/order-display.php
+msgid "Datos Chile (RUT)"
+msgstr ""
+
+#: inc/rut/order-display.php
+msgid "Necesita factura"
+msgstr ""
+
+#: inc/rut/order-display.php
+msgid "Giro"
+msgstr ""
+
+#: inc/rut/order-display.php
+msgid "Boleta (no requiere factura)"
+msgstr ""
+
+#: inc/rut/order-display.php
+msgid "Se emitirá boleta."
+msgstr ""
+
+#: inc/telefono/checkout-fields.php
+msgid "Por favor ingresa tu teléfono móvil para coordinar la entrega."
+msgstr ""
+
+#: inc/telefono/checkout-fields.php
+msgid "El teléfono no es un móvil chileno válido. Debe ser un número que empieza con 9 y tiene 9 dígitos (ej: +56 9 1234 5678)."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "BeautyGirlMG — Pedido despachado"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Aviso al cliente cuando agregas tracking en una orden y marcas \"Avisar al cliente\"."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Habilitar/Deshabilitar"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Activar este email"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Asunto"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Placeholders disponibles: {site_title}, {order_number}, {order_date}"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Encabezado"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Texto principal del email."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tipo de email"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Actualización de tu pedido #{order_number}"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Actualización de tu pedido"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Estamos preparando tu pedido #{order_number}"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Estamos preparando tu pedido"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "¡Tu pedido #{order_number} fue despachado!"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tu pedido va en camino"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tu pedido #{order_number} está listo para retirar"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tu pedido está listo para retirar"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Estamos preparando tu pedido. Te avisaremos en cuanto salga."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Ya despachamos tu pedido. Acá están los datos para que lo sigas:"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tu pedido ya está disponible para retirar. Pasa cuando quieras dentro del horario."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Hay novedades sobre tu pedido:"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Hola %s,"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Código de seguimiento"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Mantén presionado el código para copiarlo en tu teléfono, o selecciónalo con clic para copiarlo en tu computador."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Si tienes alguna duda escríbenos respondiendo este email o por nuestras redes."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Ya despachamos tu pedido. Datos para que lo sigas:"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Tu pedido ya está disponible para retirar."
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Estado"
+msgstr ""
+
+#: inc/tracking/class-email-tracking.php
+msgid "Si tienes dudas, responde este email."
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Preparando"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Despachado"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Listo para retiro"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "📦 Tracking de envío"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Estado del despacho:"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "— Sin estado —"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Es un sub-estado operativo del despacho. No reemplaza el estado de pago de WooCommerce."
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Método / Courier:"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Moto propia, Starken, Chilexpress…"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Código de seguimiento:"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Déjalo vacío si no aplica"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Puedes dejarlo vacío si el método (ej: moto propia) no genera código."
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Avisar al cliente por email"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Último aviso enviado al cliente: %s"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Tracking actualizado: %1$s — %2$s"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Método de despacho actualizado: %s"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Código de tracking actualizado: %s"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "sin estado"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Estado del despacho: %1$s → %2$s"
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "No se envió aviso al cliente: necesitas completar al menos el método o el código de tracking."
+msgstr ""
+
+#: inc/tracking/order-tracking.php
+msgid "Seguimiento del despacho"
+msgstr ""
+
+#: inc/helpers.php
+msgid "Necesito factura (empresa)"
+msgstr ""
+
+#: inc/helpers.php
+msgid "Empresa SpA"
+msgstr ""
+
+#: inc/helpers.php
+msgid "Venta al por menor de productos de belleza"
+msgstr ""
+
+#: inc/helpers.php
+msgid "Dirección comercial (solo si difiere de la de envío)"
+msgstr ""
+
+#: inc/helpers.php
+msgid "Av. Apoquindo 1234, Of. 501"
+msgstr ""
+
+#: bgmg-chile.php
+msgid "BGMG Chile requiere WooCommerce activo para funcionar. Por favor instala o activa WooCommerce."
+msgstr ""
+
+#: bgmg-chile.php
+msgid "Selecciona una región"
+msgstr ""
+
+#: bgmg-chile.php
+msgid "Selecciona una comuna"
+msgstr ""
+
+#: bgmg-chile.php
+msgid "Primero elige una región"
+msgstr ""
+

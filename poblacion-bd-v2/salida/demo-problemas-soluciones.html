@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Población BD V2 — Problemas y soluciones · beautygirlmg-mayorista</title>
+<style>
+  :root{
+    --bg:#f6f7fb; --card:#fff; --ink:#1d2230; --muted:#6b7280; --line:#e6e8ef;
+    --brand:#b5286e; --brand-soft:#fbe9f2;
+    --ok:#16a34a; --ok-soft:#e7f6ec;
+    --warn:#d97706; --warn-soft:#fdf0dc;
+    --info:#2563eb; --info-soft:#e6effe;
+    --gray:#64748b; --gray-soft:#eef1f5;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);
+    font:15px/1.55 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif}
+  .wrap{max-width:1180px;margin:0 auto;padding:28px 22px 80px}
+  header.top{margin-bottom:26px}
+  header.top h1{margin:0 0 6px;font-size:26px;letter-spacing:-.3px}
+  header.top .sub{color:var(--muted);font-size:14px}
+  header.top .files{margin-top:10px;font-size:12.5px;color:var(--muted);
+    background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;display:inline-block}
+  header.top .files code{color:var(--ink)}
+  h2{font-size:18px;margin:34px 0 14px;letter-spacing:-.2px}
+  h2 .hint{font-weight:400;font-size:13px;color:var(--muted);margin-left:8px}
+
+  .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px 16px}
+  .stat .n{font-size:26px;font-weight:700;letter-spacing:-.5px}
+  .stat .l{font-size:12.5px;color:var(--muted);margin-top:2px}
+  .stat.ok .n{color:var(--ok)} .stat.warn .n{color:var(--warn)}
+  .stat.info .n{color:var(--info)} .stat.brand .n{color:var(--brand)}
+
+  .panel{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 20px}
+  .map-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+  @media(max-width:760px){.map-grid{grid-template-columns:1fr}}
+  table.map{width:100%;border-collapse:collapse;font-size:14px}
+  table.map th,table.map td{text-align:left;padding:8px 10px;border-bottom:1px solid var(--line)}
+  table.map th{color:var(--muted);font-weight:600;font-size:12.5px;text-transform:uppercase;letter-spacing:.04em}
+  table.map code{background:var(--gray-soft);padding:1px 6px;border-radius:6px;font-size:12.5px}
+  .example{background:var(--brand-soft);border:1px solid #f3cfe0;border-radius:12px;padding:14px 16px;font-size:14px}
+  .example .row{display:flex;justify-content:space-between;padding:4px 0;border-bottom:1px dashed #ecc3d7}
+  .example .row:last-child{border-bottom:0}
+  .example b{color:var(--brand)}
+
+  .prob{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:14px}
+  .pcard{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 18px;border-top:4px solid var(--gray)}
+  .pcard.warn{border-top-color:var(--warn)} .pcard.info{border-top-color:var(--info)}
+  .pcard.ok{border-top-color:var(--ok)} .pcard.gray{border-top-color:var(--gray)}
+  .pcard h3{margin:0 0 4px;font-size:15.5px;display:flex;align-items:center;gap:8px}
+  .pcard .big{font-size:22px;font-weight:700}
+  .pcard .seg{margin-top:10px;font-size:13.5px}
+  .pcard .seg b{display:block;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em;margin-bottom:1px}
+  .badge{display:inline-block;font-size:11.5px;font-weight:600;padding:2px 8px;border-radius:999px}
+  .badge.ok{background:var(--ok-soft);color:var(--ok)}
+  .badge.warn{background:var(--warn-soft);color:var(--warn)}
+  .badge.info{background:var(--info-soft);color:var(--info)}
+  .badge.gray{background:var(--gray-soft);color:var(--gray)}
+
+  .tabs{display:flex;flex-wrap:wrap;gap:6px;margin:6px 0 14px}
+  .tabs button{border:1px solid var(--line);background:var(--card);color:var(--ink);
+    padding:8px 14px;border-radius:999px;cursor:pointer;font-size:13.5px;font-weight:600}
+  .tabs button.active{background:var(--brand);border-color:var(--brand);color:#fff}
+  .tabs button .c{opacity:.7;font-weight:500}
+  .toolbar{display:flex;gap:10px;align-items:center;margin-bottom:10px;flex-wrap:wrap}
+  .toolbar input{flex:1;min-width:200px;padding:9px 12px;border:1px solid var(--line);border-radius:10px;font-size:14px}
+  .toolbar .count{font-size:13px;color:var(--muted)}
+  .tablewrap{border:1px solid var(--line);border-radius:12px;overflow:auto;max-height:560px}
+  table.data{width:100%;border-collapse:collapse;font-size:13.5px}
+  table.data th,table.data td{padding:8px 12px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+  table.data thead th{position:sticky;top:0;background:#fafbfd;z-index:1;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em}
+  table.data tr:hover td{background:#fcfcfe}
+  table.data .sku{font-family:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;font-size:12.5px}
+  table.data .tier{white-space:nowrap}
+  table.data .muted{color:var(--muted)}
+  .pill{font-size:11px;padding:1px 7px;border-radius:6px;background:var(--gray-soft);color:var(--gray)}
+  .pill.simple{background:#eef1f5;color:#475569}
+  .pill.variable{background:#e6effe;color:#2563eb}
+  .pill.variation{background:#f0e7fb;color:#7c3aed}
+  .cand{margin:0;padding:0;list-style:none}
+  .cand li{padding:2px 0;border-bottom:1px dashed var(--line)}
+  .cand li:last-child{border-bottom:0}
+  footer{margin-top:40px;color:var(--muted);font-size:12.5px;text-align:center}
+  .hidden{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <h1>Población BD V2 — diagnóstico y mapeo</h1>
+    <div class="sub">Cruce por <b>SKU</b> de los productos de WooCommerce con las reglas de <b>Advanced Woo Discount Rules</b>, traducido al formato <code>_bgm_*</code> del plugin nuevo. Dry-run: <b>no escribe nada</b> en el sitio.</div>
+    <div class="files" id="files"></div>
+  </header>
+
+  <h2>Resumen</h2>
+  <div class="cards" id="stats"></div>
+
+  <h2>Cómo se mapea cada regla <span class="hint">de Advanced Woo Discount Rules → metas <code>_bgm_*</code></span></h2>
+  <div class="map-grid">
+    <div class="panel">
+      <table class="map">
+        <thead><tr><th>Regla (tramo)</th><th>Meta <code>_bgm_</code> destino</th></tr></thead>
+        <tbody>
+          <tr><td><code>from=3, to=11</code> · flat $X<br><span class="pill">Nivel I</span></td>
+              <td><code>_bgm_min_1</code> = 3<br><code>_bgm_descuento_1</code> = X</td></tr>
+          <tr><td><code>from=12</code> · flat $Y<br><span class="pill">Nivel II</span></td>
+              <td><code>_bgm_min_2</code> = 12<br><code>_bgm_descuento_2</code> = Y</td></tr>
+          <tr><td>Producto <span class="pill variable">variable</span></td>
+              <td><code>_bgm_modo_descuento</code> = <code>unico</code> (en el padre)</td></tr>
+        </tbody>
+      </table>
+      <p class="muted" style="font-size:12.5px;margin:10px 2px 0">Todos los descuentos son <b>flat</b> (monto fijo $ por unidad), igual que <code>_bgm_descuento_*</code> → <b>no hay conversión de %</b>. La lógica del plugin ya prioriza el Nivel II (≥12) sobre el Nivel I (≥3).</p>
+    </div>
+    <div>
+      <div class="example">
+        <div style="font-weight:700;margin-bottom:8px">Ejemplo: producto a <b>$2.990</b></div>
+        <div class="row"><span>Al detalle (1–2 u)</span><span><b>$2.990</b></span></div>
+        <div class="row"><span>Nivel I · ≥3 u · −$200</span><span><b>$2.790</b></span></div>
+        <div class="row"><span>Nivel II · ≥12 u · −$400</span><span><b>$2.590</b></span></div>
+      </div>
+    </div>
+  </div>
+
+  <h2>Problemas detectados y solución propuesta</h2>
+  <div class="prob" id="problems"></div>
+
+  <h2>Vista previa del mapeo <span class="hint">esto es lo que el script escribiría</span></h2>
+  <div class="tabs" id="tabs"></div>
+  <div class="toolbar" id="toolbar">
+    <input id="search" type="search" placeholder="Buscar por SKU o nombre…">
+    <span class="count" id="count"></span>
+  </div>
+  <div class="tablewrap"><table class="data"><thead id="thead"></thead><tbody id="tbody"></tbody></table></div>
+
+  <footer>Generado por <code>generar-demo.ps1</code> · datos en <code>poblacion-bd-v2/salida/bgm-demo-data.js</code> · solo lectura / dry-run.</footer>
+</div>
+
+<script src="bgm-demo-data.js"></script>
+<script>
+const D = window.BGM_DEMO, S = D.summary;
+
+const esc = s => (s==null?'':String(s)).replace(/[&<>"]/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const num = n => (n==null||n===''||isNaN(parseFloat(n))) ? null : Math.round(parseFloat(n));
+const fmtCLP = n => { const v=num(n); return v==null ? '<span class="muted">—</span>' : '$'+v.toLocaleString('es-CL'); };
+const pctOf = (desc,precio) => { const d=num(desc),p=num(precio); return (d&&p&&p>0) ? ' <span class="muted">('+Math.round(d/p*100)+'%)</span>' : ''; };
+
+function tierCell(min,desc,precio){
+  if(desc==null) return '<span class="muted">—</span>';
+  return '<span class="tier">≥'+esc(min)+' u · −'+fmtCLP(desc)+pctOf(desc,precio)+'</span>';
+}
+function typePill(t){ return '<span class="pill '+esc(t)+'">'+esc(t)+'</span>'; }
+function motivoBadge(m){
+  const map={nunca_en_regla:['gray','Nunca en regla'],regla_desactivada:['warn','Regla desactivada'],sin_sku:['info','Sin SKU']};
+  const v=map[m]||['gray',m]; return '<span class="badge '+v[0]+'">'+esc(v[1])+'</span>';
+}
+
+/* ---- Files line ---- */
+document.getElementById('files').innerHTML =
+  'Productos: <code>'+esc(S.wc_file)+'</code> · Reglas: <code>'+esc(S.rules_file)+'</code> · Generado: '+esc(S.generado);
+
+/* ---- Stat cards ---- */
+const stats = [
+  {n:S.clean, l:'Match limpio → se poblarán', c:'ok'},
+  {n:S.clean_simple, l:'Simples', c:''},
+  {n:S.clean_variable, l:'Variables (modo único)', c:''},
+  {n:S.skus_en_reglas, l:'SKUs en reglas', c:'brand'},
+  {n:S.notfound, l:'Sin match (huérfanas)', c:'warn'},
+  {n:S.ambiguous, l:'SKU ambiguo (duplicado)', c:'warn'},
+  {n:S.variations, l:'Es variación', c:'info'},
+  {n:S.sin_reglas, l:'Sin reglas (a revisar)', c:'warn'},
+  {n:S.ambos+' / '+S.solo_t1+' / '+S.solo_t2, l:'Niveles: ambos / solo I / solo II', c:''},
+];
+document.getElementById('stats').innerHTML = stats.map(s =>
+  '<div class="stat '+s.c+'"><div class="n">'+esc(s.n)+'</div><div class="l">'+esc(s.l)+'</div></div>').join('');
+
+/* ---- Problem cards ---- */
+const problems = [
+  { cls:'warn', title:'SKUs sin match', big:S.notfound,
+    badge:['warn','No bloquea'],
+    diag:'Reglas que apuntan a SKUs que no existen en el catálogo exportado. Verificado: no es un problema de mayúsculas ni espacios.',
+    causa:'Productos eliminados; las reglas quedaron huérfanas (existen en el plugin, ya no en realidad).',
+    sol:'Se listan y se <b>omiten</b> en la población. Opcional: limpiar esas reglas en el plugin viejo. Si faltaran productos por importar, re-exportar y re-correr.' },
+  { cls:'warn', title:'SKU ambiguo (duplicado)', big:S.ambiguous,
+    badge:['warn','Revisar'],
+    diag:'El mismo SKU aparece en más de un producto distinto del catálogo, así que no se puede decidir a cuál aplicar el descuento.',
+    causa:'Colisiones reales de SKU en WooCommerce (productos diferentes con el mismo código).',
+    sol:'El script los <b>reporta y omite</b>. Solución de fondo: corregir los SKU en WooCommerce (deben ser únicos) y re-exportar.' },
+  { cls:'info', title:'SKU que es una variación', big:S.variations,
+    badge:['info','Aislado'],
+    diag:'Un SKU pertenece a una variación, no a un producto. En _bgm_ configurar por variación exige modo «individual» en el padre.',
+    causa:'Caso único en todo el catálogo.',
+    sol:'Se señala aparte. Se resuelve a mano: configurarlo directo, o poner el padre en modo «individual» y escribir en la variación.' },
+  { cls:'ok', title:'SKUs con un solo nivel', big:S.solo_t1+S.solo_t2,
+    badge:['ok','Correcto por diseño'],
+    diag:S.solo_t1+' tienen solo Nivel I y '+S.solo_t2+' solo Nivel II.',
+    causa:'No es un error: el plugin nuevo maneja mínimos variables por producto; tener un único tramo es válido.',
+    sol:'Se mapean tal cual, sin cambios. (En _bgm_ el Nivel I aplica de su mínimo en adelante.)' },
+  { cls:'gray', title:'Productos sin reglas', big:S.sin_reglas,
+    badge:['gray','A investigar'],
+    diag:S.sin_reglas_simple+' simples y '+S.sin_reglas_variable+' variables existen en el catálogo pero ninguna regla activa los cubre → quedarían sin descuento mayorista.',
+    causa:'Ninguno viene de una regla desactivada ('+S.sin_reglas_desactivada+') ni le falta SKU ('+S.sin_reglas_sin_sku+'): nunca tuvieron una regla bulk.',
+    sol:'Se listan en la pestaña «Sin reglas» para revisar. Si corresponde que no tengan descuento, se dejan así (precio normal en toda cantidad); si deberían tenerlo, crear la regla o configurarlos a mano.' },
+];
+document.getElementById('problems').innerHTML = problems.map(p =>
+  '<div class="pcard '+p.cls+'">'+
+    '<h3>'+esc(p.title)+' <span class="badge '+p.badge[0]+'">'+esc(p.badge[1])+'</span></h3>'+
+    '<div class="big">'+esc(p.big)+'</div>'+
+    '<div class="seg"><b>Qué pasa</b>'+p.diag+'</div>'+
+    '<div class="seg"><b>Causa</b>'+p.causa+'</div>'+
+    '<div class="seg"><b>Solución</b>'+p.sol+'</div>'+
+  '</div>').join('');
+
+/* ---- Preview tables (tabs) ---- */
+const TABS = [
+  { key:'clean', label:'Vista previa (se poblarán)', rows:D.clean, search:true,
+    head:['SKU','Producto','Tipo','Precio','Nivel I','Nivel II'],
+    row:r=>'<td class="sku">'+esc(r.sku)+'</td><td>'+esc(r.nombre)+'</td><td>'+typePill(r.tipo)+'</td>'+
+          '<td>'+fmtCLP(r.precio)+'</td><td>'+tierCell(r.t1_min,r.t1_desc,r.precio)+'</td><td>'+tierCell(r.t2_min,r.t2_desc,r.precio)+'</td>',
+    match:(r,q)=> (r.sku+' '+(r.nombre||'')).toLowerCase().includes(q) },
+  { key:'notfound', label:'Sin match', rows:D.notfound, search:true,
+    head:['SKU','Nivel I','Nivel II','Reglas de origen'],
+    row:r=>'<td class="sku">'+esc(r.sku)+'</td><td>'+tierCell(r.t1_min,r.t1_desc)+'</td><td>'+tierCell(r.t2_min,r.t2_desc)+'</td>'+
+          '<td class="muted">'+esc((r.reglas||[]).join(' · '))+'</td>',
+    match:(r,q)=> r.sku.toLowerCase().includes(q) },
+  { key:'ambiguous', label:'Ambiguos', rows:D.ambiguous, search:false,
+    head:['SKU','Nivel I','Nivel II','Productos candidatos'],
+    row:r=>'<td class="sku">'+esc(r.sku)+'</td><td>'+tierCell(r.t1_min,r.t1_desc)+'</td><td>'+tierCell(r.t2_min,r.t2_desc)+'</td>'+
+          '<td><ul class="cand">'+(r.candidatos||[]).map(c=>'<li>'+typePill(c.tipo)+' <span class="muted">#'+esc(c.id)+'</span> '+esc(c.nombre)+'</li>').join('')+'</ul></td>' },
+  { key:'variations', label:'Variación', rows:D.variations, search:false,
+    head:['SKU','Variación','Padre (SKU)','Nivel I','Nivel II'],
+    row:r=>'<td class="sku">'+esc(r.sku)+'</td><td>'+typePill('variation')+' <span class="muted">#'+esc(r.id)+'</span> '+esc(r.nombre)+'</td>'+
+          '<td class="sku">'+esc(r.padre)+'</td><td>'+tierCell(r.t1_min,r.t1_desc,r.precio)+'</td><td>'+tierCell(r.t2_min,r.t2_desc,r.precio)+'</td>' },
+  { key:'sinreglas', label:'Sin reglas', rows:D.sinreglas, search:true,
+    head:['SKU','Producto','Tipo','Precio','Motivo'],
+    row:r=>'<td class="sku">'+esc(r.sku||'—')+'</td><td>'+esc(r.nombre)+'</td><td>'+typePill(r.tipo)+'</td>'+
+          '<td>'+fmtCLP(r.precio)+'</td><td>'+motivoBadge(r.motivo)+'</td>',
+    match:(r,q)=> ((r.sku||'')+' '+(r.nombre||'')).toLowerCase().includes(q) },
+];
+let cur = TABS[0];
+
+const tabsEl=document.getElementById('tabs'), theadEl=document.getElementById('thead'),
+      tbodyEl=document.getElementById('tbody'), searchEl=document.getElementById('search'),
+      countEl=document.getElementById('count'), toolbarEl=document.getElementById('toolbar');
+
+tabsEl.innerHTML = TABS.map((t,i)=>'<button data-i="'+i+'" class="'+(i===0?'active':'')+'">'+esc(t.label)+' <span class="c">'+t.rows.length+'</span></button>').join('');
+tabsEl.querySelectorAll('button').forEach(b=>b.onclick=()=>{
+  tabsEl.querySelectorAll('button').forEach(x=>x.classList.remove('active'));
+  b.classList.add('active'); cur=TABS[+b.dataset.i]; searchEl.value=''; render();
+});
+searchEl.oninput = render;
+
+function render(){
+  theadEl.innerHTML = '<tr>'+cur.head.map(h=>'<th>'+esc(h)+'</th>').join('')+'</tr>';
+  toolbarEl.style.display = cur.search ? 'flex' : 'none';
+  const q = (searchEl.value||'').trim().toLowerCase();
+  let rows = cur.rows;
+  if(cur.search && q) rows = rows.filter(r=>cur.match(r,q));
+  tbodyEl.innerHTML = rows.map(r=>'<tr>'+cur.row(r)+'</tr>').join('') ||
+    '<tr><td colspan="'+cur.head.length+'" class="muted" style="padding:18px">Sin resultados.</td></tr>';
+  countEl.textContent = rows.length+' de '+cur.rows.length;
+}
+render();
+</script>
+</body>
+</html>

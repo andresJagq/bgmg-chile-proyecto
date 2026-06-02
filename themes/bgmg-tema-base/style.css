@@ -1,0 +1,26 @@
+/*
+Theme Name:        BGMG Base
+Theme URI:         https://new.beautygirlmg.cl
+Author:            BeautyGirlMG
+Author URI:        https://new.beautygirlmg.cl
+Description:       Tema "shell" minimalista para BeautyGirlMG. NO contiene diseño propio — todo el HTML/CSS lo sirve el plugin bgmg-landing vía template_include. Este tema solo existe porque WordPress exige al menos uno activo. No tocar a menos que sepas qué estás haciendo: cualquier template o CSS agregado acá puede romper la integración con los plugins BGMG.
+Version:           1.1.0
+Requires at least: 6.0
+Tested up to:      6.5
+Requires PHP:      7.4
+License:           GPL v2 or later
+License URI:       https://www.gnu.org/licenses/gpl-2.0.html
+Text Domain:       bgmg-base
+Tags:              minimal, woocommerce
+*/
+
+/*
+ * INTENCIONALMENTE VACÍO.
+ *
+ * El diseño completo del sitio vive en los plugins:
+ *   - bgmg-landing (templates de todas las páginas + CSS global)
+ *   - bgmg-chile (estilos de bloques chilenos: tracking, RUT, etc.)
+ *
+ * Si necesitás aplicar un estilo global que NO pueda vivir en un plugin,
+ * usá el Customizer → CSS adicional. NO agregues CSS acá.
+ */

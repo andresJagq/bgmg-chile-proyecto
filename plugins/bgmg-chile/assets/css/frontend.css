@@ -1,0 +1,185 @@
+/*
+ * BGMG Chile — estilos frontend (checkout, mi cuenta, registro).
+ *
+ * Paleta:
+ *   --bgmg-pink:      #F2C4CE
+ *   --bgmg-pink-soft: #FBF0F2
+ *   --bgmg-pink-dark: #C4728A
+ *   --bgmg-cream:     #FDF7F4
+ *   --bgmg-dark:      #1A1015
+ *   --bgmg-mid:       #7A5060
+ *
+ * Tipografías web (deben estar ya cargadas por el tema bgmg-landing):
+ *   Cormorant Garamond (títulos)
+ *   DM Sans (body)
+ *
+ * Mobile-first: las reglas base sirven móvil, los @media son para desktop.
+ */
+
+:root {
+	--bgmg-pink: #F2C4CE;
+	--bgmg-pink-soft: #FBF0F2;
+	--bgmg-pink-dark: #C4728A;
+	--bgmg-cream: #FDF7F4;
+	--bgmg-dark: #1A1015;
+	--bgmg-mid: #7A5060;
+}
+
+/* ------------------------------------------------------------------ *
+ *  CAMPO RUT (checkout + registro + mi cuenta)
+ * ------------------------------------------------------------------ */
+
+.bgmg-chile-rut-field input.bgmg-rut-error {
+	border: 1.5px solid #c4393a !important;
+	background: #fff5f5;
+}
+
+.bgmg-chile-rut-field input.bgmg-rut-ok {
+	border: 1.5px solid #4caf50 !important;
+	background: #f4fbf5;
+}
+
+.bgmg-chile-rut-field small {
+	display: block;
+	color: var(--bgmg-mid);
+	font-family: 'DM Sans', system-ui, sans-serif;
+	font-size: 0.85em;
+	margin-top: 4px;
+}
+
+/* ------------------------------------------------------------------ *
+ *  CAMPO TELÉFONO MÓVIL (mismo tratamiento visual que el RUT)
+ * ------------------------------------------------------------------ */
+
+.bgmg-chile-telefono-field input.bgmg-tel-error {
+	border: 1.5px solid #c4393a !important;
+	background: #fff5f5;
+}
+
+.bgmg-chile-telefono-field input.bgmg-tel-ok {
+	border: 1.5px solid #4caf50 !important;
+	background: #f4fbf5;
+}
+
+/* ------------------------------------------------------------------ *
+ *  TOGGLE FACTURA
+ * ------------------------------------------------------------------ */
+
+.bgmg-chile-factura-toggle label {
+	color: var(--bgmg-dark);
+	font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+.bgmg-chile-factura-toggle .bgmg-chile-aviso-empresa {
+	color: var(--bgmg-pink-dark);
+	font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+/* Bloque empresa: panel suave para diferenciarlo visualmente del checkout normal. */
+.bgmg-chile-empresa-field {
+	background: var(--bgmg-pink-soft);
+	padding: 10px 14px !important;
+	border-radius: 6px;
+	margin-bottom: 6px !important;
+}
+
+.bgmg-chile-empresa-field label {
+	color: var(--bgmg-dark);
+}
+
+/* ------------------------------------------------------------------ *
+ *  OCULTAR "PAÍS / REGIÓN" (billing_country / shipping_country)
+ *  Solo vendemos en Chile → el selector de país no aporta y agrega
+ *  ruido visual, sobre todo en mobile. El valor "CL" sigue viajando
+ *  al backend; solo se esconde el row completo.
+ * ------------------------------------------------------------------ */
+
+.form-row.bgmg-chile-country-hidden,
+p.form-row.bgmg-chile-country-hidden,
+#billing_country_field.bgmg-chile-country-hidden,
+#shipping_country_field.bgmg-chile-country-hidden {
+	display: none !important;
+}
+
+/* ------------------------------------------------------------------ *
+ *  SELECT REGIÓN / COMUNA
+ * ------------------------------------------------------------------ */
+
+.bgmg-chile-region-field select,
+.bgmg-chile-comuna-field select {
+	background-color: #fff;
+	border-radius: 4px;
+}
+
+.bgmg-chile-comuna-field select:disabled {
+	background-color: var(--bgmg-cream);
+	color: var(--bgmg-mid);
+	cursor: not-allowed;
+}
+
+/* ------------------------------------------------------------------ *
+ *  AVISO "POR PAGAR" EN EL RESUMEN DEL CHECKOUT
+ * ------------------------------------------------------------------ */
+
+tr.bgmg-chile-aviso-por-pagar td {
+	font-family: 'DM Sans', system-ui, sans-serif;
+	color: var(--bgmg-dark);
+	line-height: 1.4;
+}
+
+tr.bgmg-chile-aviso-por-pagar strong {
+	color: var(--bgmg-pink-dark);
+	font-weight: 600;
+}
+
+/* ------------------------------------------------------------------ *
+ *  BLOQUE "DATOS PARA BOLETA/FACTURA" EN MI CUENTA → ORDEN
+ * ------------------------------------------------------------------ */
+
+.bgmg-chile-order-extra {
+	margin-top: 30px;
+}
+
+.bgmg-chile-order-extra h2 {
+	font-family: 'Cormorant Garamond', Georgia, serif;
+	color: var(--bgmg-dark);
+	font-weight: 500;
+	letter-spacing: 0.5px;
+}
+
+.bgmg-chile-order-extra table th {
+	color: var(--bgmg-mid);
+	font-family: 'DM Sans', system-ui, sans-serif;
+	font-weight: 500;
+	width: 35%;
+}
+
+.bgmg-chile-order-extra table td {
+	color: var(--bgmg-dark);
+	font-family: 'DM Sans', system-ui, sans-serif;
+}
+
+/* ------------------------------------------------------------------ *
+ *  DESKTOP TWEAKS
+ * ------------------------------------------------------------------ */
+
+@media (min-width: 768px) {
+	.bgmg-chile-empresa-field {
+		padding: 12px 18px !important;
+	}
+}
+
+/* ------------------------------------------------------------------ *
+ *  Esconder código postal en checkout y formularios de dirección.
+ *  Decisión cliente 2026-05-27: el campo no se pide en Chile.
+ *  Lo dejamos en el DOM (no lo unset-eamos en PHP) por si alguna
+ *  pasarela de pago futura lo requiere.
+ * ------------------------------------------------------------------ */
+#billing_postcode_field,
+#shipping_postcode_field,
+.woocommerce-billing-fields #billing_postcode_field,
+.woocommerce-shipping-fields #shipping_postcode_field,
+.woocommerce-address-fields #billing_postcode_field,
+.woocommerce-address-fields #shipping_postcode_field {
+	display: none !important;
+}

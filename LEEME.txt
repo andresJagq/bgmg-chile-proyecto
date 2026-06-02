@@ -1,0 +1,98 @@
+================================================================
+  BGMG CHILE — PROYECTO GENERAL
+  Carpeta organizadora del plugin propio de localización chilena
+  para BeautyGirlMG (new.beautygirlmg.cl)
+================================================================
+
+ESTRUCTURA
+----------
+
+  bgmg-chile-proyecto-general/
+  ├── plugins/                  Código fuente que SE TRABAJA
+  │   └── bgmg-chile/            Plugin RUT + comunas + envío Chile
+  │
+  ├── zips/                     ZIPs listos para subir a WordPress
+  │   └── bgmg-chile.zip
+  │
+  └── LEEME.txt                 Este archivo (NO se sube al server)
+
+
+REGLA DE ORO
+------------
+- En "plugins/" se EDITA el código.
+- En "zips/" se guardan SOLO archivos listos para subir.
+- NUNCA edites directamente un .zip; primero edita en plugins/
+  y luego regenera el zip.
+
+
+CÓMO REGENERAR EL ZIP MANUALMENTE
+---------------------------------
+Abre PowerShell y pega este bloque tal cual (3 líneas, ejecútalo
+todo junto o una por una):
+
+  $src = "C:\Users\maria\Desktop\bgmg-chile-proyecto-general\plugins\bgmg-chile"
+  $zip = "C:\Users\maria\Desktop\bgmg-chile-proyecto-general\zips\bgmg-chile.zip"
+  $build = Join-Path $env:TEMP "bgmg-chile-build"
+  if (Test-Path $build) { Remove-Item $build -Recurse -Force }
+  if (Test-Path $zip) { Remove-Item $zip -Force }
+  $stage = Join-Path $build "bgmg-chile"
+  $null = robocopy $src $stage /E /XF ".DS_Store" "Thumbs.db" "README.md" "*.log" "*.tmp" "LEEME.txt" /XD ".git" ".vscode" "node_modules" /NFL /NDL /NJH /NJS /NP
+  Push-Location $build; tar.exe -a -cf $zip "bgmg-chile"; Pop-Location
+  Remove-Item $build -Recurse -Force
+  Write-Output ("Listo: " + $zip)
+
+Después puedes subir zips/bgmg-chile.zip desde:
+  wp-admin → Plugins → Añadir nuevo → Subir plugin
+
+
+ARCHIVOS QUE SE EXCLUYEN DEL ZIP (no van al server)
+----------------------------------------------------
+- README.md           (documentación interna larga, en español)
+- LEEME.txt           (este archivo, vive en la carpeta padre)
+- .DS_Store           (basura de macOS)
+- Thumbs.db           (basura de Windows)
+- *.log               (logs locales)
+- *.tmp               (temporales)
+- .git/               (control de versiones)
+- .vscode/            (configuración del editor)
+- node_modules/       (dependencias JS, si algún día se usan)
+
+El plugin SÍ lleva readme.txt (estándar de WordPress) — ese
+sí debe subirse.
+
+
+SUBIR EL ZIP A WORDPRESS
+------------------------
+1. wp-admin de https://new.beautygirlmg.cl
+2. Plugins → Añadir nuevo → Subir plugin
+3. Seleccionar zips/bgmg-chile.zip
+4. Instalar ahora → Activar
+5. WooCommerce → Envíos Chile (RM) → llenar tarifas
+6. WooCommerce → Ajustes → Envío → Zona Chile → agregar el
+   método "Envío BeautyGirlMG (Chile)"
+
+
+OTROS PLUGINS DE BEAUTYGIRLMG (no movidos a propósito)
+------------------------------------------------------
+Por seguridad NO se movieron a esta carpeta los siguientes,
+que siguen donde estaban en el Escritorio:
+
+  C:\Users\maria\Desktop\beautygirlmg-mayorista   (v2.5.0)
+  C:\Users\maria\Desktop\bgmg-landing             (v6.2)
+
+Si quieres incluirlos en este proyecto general (recomendado
+para tenerlo todo en un solo lugar), pídeselo a Claude:
+"mueve también los otros dos plugins a la misma estructura".
+Antes de moverlos verifica que ningún script tuyo los esté
+referenciando por su ruta actual.
+
+
+VERSIONADO (opcional, para más adelante)
+----------------------------------------
+Cuando saques una nueva versión del plugin:
+  1. Edita el código en plugins/bgmg-chile/
+  2. Sube el número en plugins/bgmg-chile/bgmg-chile.php
+     (líneas "Version:" y BGMG_CHILE_VERSION)
+  3. Regenera el ZIP con el bloque de PowerShell de arriba
+  4. Renombra el ZIP a bgmg-chile-1.1.0.zip (o el número que
+     toque) y guárdalo en zips/. Así tienes histórico.

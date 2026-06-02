@@ -1,0 +1,55 @@
+/*
+ * BGMG Chile — estilos para pantallas de admin.
+ *
+ * Aplica a:
+ *   - WooCommerce → Envíos Chile (RM): tabla de tarifas.
+ *   - Editor de orden: caja "Datos Chile (RUT)".
+ */
+
+/* Tabla de tarifas RM */
+.bgmg-chile-tarifas-wrap .bgmg-chile-tarifas-tabla {
+	max-width: 800px;
+	margin-top: 16px;
+}
+
+.bgmg-chile-tarifas-wrap .bgmg-chile-tarifas-tabla th {
+	background: #FBF0F2;
+	color: #1A1015;
+	font-weight: 600;
+}
+
+.bgmg-chile-tarifas-wrap .bgmg-chile-tarifas-tabla input[type="number"] {
+	width: 140px;
+}
+
+.bgmg-chile-tarifas-wrap .description {
+	max-width: 800px;
+	color: #7A5060;
+}
+
+/* Bloque "Datos Chile" en el editor de orden (HPOS o legacy) */
+.bgmg-chile-admin-order {
+	padding: 12px 14px;
+	background: #FBF0F2;
+	border-left: 3px solid #C4728A;
+	border-radius: 4px;
+	margin-top: 12px;
+}
+
+.bgmg-chile-admin-order h4 {
+	margin: 0 0 8px;
+	color: #1A1015;
+	font-size: 13px;
+	text-transform: uppercase;
+	letter-spacing: 0.5px;
+}
+
+.bgmg-chile-admin-order p {
+	margin: 4px 0;
+	color: #1A1015;
+	font-size: 13px;
+}
+
+.bgmg-chile-admin-order p em {
+	color: #7A5060;
+}

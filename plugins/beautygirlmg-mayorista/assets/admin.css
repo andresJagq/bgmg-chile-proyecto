@@ -1,0 +1,422 @@
+/* ============================================================
+ * BGM Admin Styles
+ * Sistema de diseño rosa/mauve aplicado a la pestaña Mayorista
+ * y al editor de variaciones.
+ * ============================================================ */
+
+:root {
+    --bgm-pink:      #F2C4CE;
+    --bgm-pink-soft: #FBF0F2;
+    --bgm-pink-dark: #C4728A;
+    --bgm-cream:     #FDF7F4;
+    --bgm-dark:      #1A1015;
+    --bgm-mid:       #7A5060;
+    --bgm-border:    #f0e0e5;
+}
+
+/* ─── Panel principal ───────────────────────────────────────── */
+.bgm-panel {
+    padding: 0 !important;
+}
+
+.bgm-panel .bgm-grupo {
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--bgm-border);
+}
+
+.bgm-panel .bgm-grupo:last-child {
+    border-bottom: none;
+}
+
+.bgm-panel h4.bgm-tier-titulo {
+    margin: 0 0 12px 0;
+    color: var(--bgm-pink-dark);
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+/* ─── Switch modo descuento ─────────────────────────────────── */
+/* Forzamos inline-flex y sobrescribimos el float:left que WC aplica a los <label> */
+.bgm-panel .bgm-grupo-modo .form-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+}
+
+.bgm-panel .bgm-grupo-modo .form-field > label:first-child {
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    min-width: 160px;
+    font-weight: 500;
+    color: var(--bgm-dark);
+}
+
+.bgm-panel .bgm-grupo-modo .bgm-radio-grupo {
+    display: inline-flex !important;
+    flex-direction: row !important;
+    gap: 12px;
+    align-items: center !important;
+    flex-wrap: wrap;
+}
+
+.bgm-panel .bgm-grupo-modo .bgm-radio-grupo label.bgm-radio {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 6px;
+    cursor: pointer;
+    padding: 6px 14px;
+    border: 1.5px solid var(--bgm-border);
+    border-radius: 20px;
+    background: #fff;
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    line-height: 1.2;
+    transition: all 0.15s ease;
+}
+
+.bgm-panel .bgm-grupo-modo .bgm-radio-grupo label.bgm-radio:hover {
+    background: var(--bgm-pink-soft);
+    border-color: var(--bgm-pink);
+}
+
+.bgm-panel .bgm-grupo-modo .bgm-radio-grupo label.bgm-radio input[type="radio"] {
+    margin: 0 !important;
+    width: auto !important;
+    float: none !important;
+}
+
+.bgm-panel .bgm-grupo-modo .form-field > .description {
+    flex-basis: 100%;
+    margin-left: 0 !important;
+    margin-top: 6px;
+}
+
+.bgm-aviso-modo-individual {
+    margin: 0 20px 16px;
+    padding: 12px 16px;
+    background: var(--bgm-pink-soft);
+    border-left: 3px solid var(--bgm-pink-dark);
+    border-radius: 6px;
+    color: var(--bgm-dark);
+    font-size: 13px;
+}
+
+/* ─── Campos numéricos ──────────────────────────────────────── */
+.bgm-panel .bgm-field-row label {
+    display: inline-block;
+    min-width: 160px;
+    font-weight: 500;
+    color: var(--bgm-dark);
+}
+
+.bgm-panel .bgm-field-row input[type="number"] {
+    padding: 6px 10px;
+    border: 1px solid var(--bgm-border);
+    border-radius: 6px;
+    width: 110px;
+    font-size: 14px;
+    transition: border-color 0.15s ease;
+}
+
+.bgm-panel .bgm-field-row input[type="number"]:focus {
+    border-color: var(--bgm-pink-dark);
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(196, 114, 138, 0.12);
+}
+
+.bgm-panel .bgm-field-row input[type="number"]:disabled {
+    background: #f5f5f5;
+    color: #999;
+    cursor: not-allowed;
+}
+
+.bgm-panel .bgm-field-row .description {
+    display: inline-block;
+    margin-left: 12px;
+    color: var(--bgm-mid);
+    font-size: 12px;
+    font-style: italic;
+}
+
+/* ─── Preview de precio en vivo ─────────────────────────────── */
+.bgm-preview-precio {
+    display: inline-block;
+    margin-left: 12px;
+    padding: 4px 10px;
+    background: var(--bgm-pink-soft);
+    border-radius: 20px;
+    color: var(--bgm-dark);
+    font-size: 13px;
+}
+
+.bgm-preview-precio:empty {
+    display: none;
+}
+
+.bgm-preview-precio strong {
+    color: var(--bgm-pink-dark);
+}
+
+.bgm-preview-vacio {
+    color: var(--bgm-mid);
+    font-style: italic;
+}
+
+/* ─── Tabla resumen ─────────────────────────────────────────── */
+.bgm-tabla-resumen {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+    border: 1px solid var(--bgm-border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.bgm-tabla-resumen thead th {
+    background: var(--bgm-pink-soft);
+    color: var(--bgm-dark);
+    padding: 10px 14px;
+    text-align: left;
+    font-weight: 600;
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+    border-bottom: 1px solid var(--bgm-border);
+}
+
+.bgm-tabla-resumen tbody td {
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--bgm-border);
+    color: var(--bgm-dark);
+    font-size: 14px;
+}
+
+.bgm-tabla-resumen tbody tr:last-child td {
+    border-bottom: none;
+}
+
+.bgm-tabla-resumen .bgm-fila-detalle {
+    background: #fff;
+}
+
+.bgm-tabla-resumen .bgm-fila-tier1,
+.bgm-tabla-resumen .bgm-fila-tier2 {
+    background: rgba(251, 240, 242, 0.4);
+}
+
+.bgm-tabla-resumen .bgm-tier-inactivo {
+    opacity: 0.55;
+}
+
+.bgm-tabla-resumen .bgm-no-config {
+    color: var(--bgm-mid);
+    font-style: italic;
+    font-size: 12px;
+}
+
+.bgm-tabla-resumen .bgm-pct {
+    color: var(--bgm-pink-dark);
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.bgm-sin-precio {
+    margin: 12px 0;
+    padding: 12px;
+    background: #fffbe6;
+    border-left: 3px solid #f0c674;
+    border-radius: 6px;
+    color: var(--bgm-dark);
+}
+
+/* ─── Editor de variaciones ─────────────────────────────────── */
+.bgm-variacion-mayorista {
+    margin-top: 12px;
+    padding: 12px;
+    background: var(--bgm-pink-soft);
+    border-radius: 8px;
+    border: 1px solid var(--bgm-border);
+}
+
+.bgm-variacion-titulo {
+    margin: 0 0 8px 0 !important;
+    color: var(--bgm-pink-dark);
+    font-size: 13px;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.bgm-variacion-mayorista .form-row label {
+    color: var(--bgm-dark);
+    font-size: 12px;
+    font-weight: 500;
+}
+
+.bgm-variacion-mayorista input[type="number"] {
+    border: 1px solid var(--bgm-border);
+    border-radius: 6px;
+    padding: 5px 8px;
+    transition: border-color 0.15s ease;
+}
+
+.bgm-variacion-mayorista input[type="number"]:focus {
+    border-color: var(--bgm-pink-dark);
+    outline: none;
+    box-shadow: 0 0 0 2px rgba(196, 114, 138, 0.12);
+}
+
+.bgm-var-preview {
+    display: inline-block;
+    margin-top: 4px;
+    padding: 2px 8px;
+    background: #fff;
+    border-radius: 12px;
+    color: var(--bgm-pink-dark);
+    font-size: 11px;
+    font-weight: 600;
+}
+
+.bgm-var-preview:empty {
+    display: none;
+}
+
+/* ─── Aviso cambio de modo ──────────────────────────────────── */
+.bgm-aviso-cambio-modo {
+    margin: 8px 20px !important;
+    border-left-color: var(--bgm-pink-dark) !important;
+}
+
+/* ─── Info del max_por_variacion ────────────────────────────── */
+.bgm-max-info {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    margin-left: 12px;
+    font-size: 13px;
+    color: var(--bgm-dark);
+}
+
+.bgm-max-help {
+    display: block !important;
+    margin-left: 0 !important;
+    margin-top: 8px;
+    font-size: 12px;
+    color: var(--bgm-mid);
+    font-style: italic;
+}
+
+.bgm-badge-modo {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+
+.bgm-badge-dinamico {
+    background: var(--bgm-pink-soft);
+    color: var(--bgm-pink-dark);
+}
+
+.bgm-badge-estatico {
+    background: var(--bgm-pink-dark);
+    color: #fff;
+}
+
+.bgm-badge-global {
+    background: var(--bgm-mid);
+    color: #fff;
+}
+
+.bgm-badge-libre {
+    background: #f0f0f0;
+    color: var(--bgm-mid);
+}
+
+/* ─── Selector visual de variaciones (swatches) ─────────── */
+.bgm-panel .bgm-grupo-swatches .form-field {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 8px 12px;
+}
+
+.bgm-panel .bgm-grupo-swatches .form-field > label:first-child {
+    width: auto !important;
+    float: none !important;
+    margin: 0 !important;
+    min-width: 160px;
+    font-weight: 500;
+    color: var(--bgm-dark);
+}
+
+.bgm-panel .bgm-checkbox-wrap {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.bgm-panel .bgm-checkbox-wrap input[type="checkbox"] {
+    margin: 0 !important;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.bgm-panel .bgm-checkbox-label {
+    margin: 0 !important;
+    width: auto !important;
+    float: none !important;
+    color: var(--bgm-dark);
+    font-weight: 400;
+    cursor: pointer;
+}
+
+.bgm-panel .bgm-grupo-swatches .description {
+    flex-basis: 100%;
+    margin-left: 0 !important;
+    margin-top: 4px;
+}
+
+/* ─── Debug viewer en pantalla de ajustes ───────────────────── */
+.bgm-debug-info code {
+    background: var(--bgm-pink-soft);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 12px;
+}
+
+/* ─── Panel de visor de logs (WC Settings → Mayorista) ──────── */
+.bgm-panel-debug {
+    margin-top: 24px;
+    padding: 16px 20px;
+    background: #fff;
+    border: 1px solid #c3c4c7;
+    border-radius: 4px;
+}
+.bgm-panel-debug h3 {
+    margin-top: 0;
+    color: #C4728A;
+}
+.bgm-logs-viewer {
+    margin-top: 12px;
+    padding: 14px;
+    background: #1A1015;
+    color: #FBF0F2;
+    border-radius: 8px;
+    font-family: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow: auto;
+}

@@ -1,0 +1,30 @@
+# ─── Artefactos regenerables ─────────────────────────────────────────────────
+# Los zips se regeneran con el script de CLAUDE.md (New-PluginZip)
+/zips/
+
+# ─── Cruft de SO / Google Drive ──────────────────────────────────────────────
+Thumbs.db
+ehthumbs.db
+desktop.ini
+$RECYCLE.BIN/
+.DS_Store
+._*
+
+# ─── Claude Code: ajustes locales por PC (no versionar, en cualquier nivel) ──
+**/.claude/settings.local.json
+
+# ─── Editores / IDE ──────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.swp
+*~
+
+# ─── Logs / temporales ───────────────────────────────────────────────────────
+*.log
+*.tmp
+# .tmp.js: extracciones de <script> para validar con `node --check` (ver CLAUDE.md)
+*.tmp.js
+
+# ─── Dependencias (el proyecto no las usa, pero por si acaso) ─────────────────
+vendor/
+node_modules/
