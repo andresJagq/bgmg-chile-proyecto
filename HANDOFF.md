@@ -225,6 +225,11 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   (mayorista primero; promo solo si nivel 0, mutuamente excluyentes). `bgm_calcular_precio()` **intacta**.
   Lint 19/19 OK, sin BOM. **Validar en staging antes de Fase 2.**
 - **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
+  **Decisión confirmada (2026-06-03): contar por TOTAL del producto** (suma de variaciones = `qty_total`,
+  consistente con el mayorista). Plan: ampliar la agrupación (incluir padres en promo aunque no tengan
+  mayorista) y reestructurar `bgm_aplicar_precio_conjunto_variaciones` para que, si el surtido falla o
+  `qty_total` queda bajo el umbral mayorista, se intente el promo **ignorando la regla de surtido**.
+  `bgm_calcular_precio_promo()` ya soporta variaciones (elegibilidad por el padre).
 - Pendiente menor (fuera de alcance inicial): **aviso visual propio del promo** en
   `includes/frontend/avisos-carrito.php` (hoy esos avisos son solo de mayorista).
 - Cierre: **bump `BGM_VERSION` en 2 sitios**, escribir sin BOM, `php -l` antes de subir.
