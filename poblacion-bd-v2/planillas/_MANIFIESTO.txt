@@ -1,0 +1,17 @@
+﻿MANIFIESTO DE PLANILLAS - poblacion V2
+Generado: 2026-06-02 19:02
+Origen:   salida\bgm-import-v2.csv
+Tamano:   200 productos por planilla
+Al importar: marcar 'Actualizar productos existentes'.
+------------------------------------------------------------
+Planilla             Productos   Filas  hecho
+planilla-01.csv            200     688  [ ]
+planilla-02.csv            200     335  [ ]
+planilla-03.csv            200     814  [ ]
+planilla-04.csv            200     459  [ ]
+planilla-05.csv            200     521  [ ]
+planilla-06.csv            200     674  [ ]
+planilla-07.csv            200     589  [ ]
+planilla-08.csv            177     271  [ ]
+------------------------------------------------------------
+TOTAL                     1577    4351
