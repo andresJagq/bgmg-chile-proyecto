@@ -236,12 +236,13 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   **SIN tocar bgmg-landing**. Helper `bgm_get_promo_info($product)` (fuente única: `bgm_calcular_precio_promo`).
   Solo simples (en variables el precio es rango). **Quirk menor:** en "relacionados" (`bgmg-product.php`
   L476) el HTML pasa por `wp_strip_all_tags` → ahí el tachado se ve como 2 números; lo arregla la Parte B.
-- **Parte B — HECHA (mayorista 2.6.0 + bgmg-landing 6.5.6): badge "Promo −X%"** en tarjetas y
-  producto (simples **y variables**). Helper `bgm_promo_badge_html()` (mayorista) llamado con
-  `function_exists()` en `bgmg_product_card_html` y `bgmg-product.php`. Estilo `.bgm-promo-badge` en
-  `bgmg-global.css` (cargado en todas las páginas). Contrato actualizado (§2 funciones + §7 selector).
-  **Validar en staging** (tarjetas tienda/categoría + página de producto, simples y variables).
-  Quirk de relacionados (strip de tags) deja de molestar: ahí igual aparece el badge.
+- **Parte B — HECHA (mayorista 2.6.0 + bgmg-landing 6.5.7): badge "Promo −X%"** en tarjetas,
+  producto **y relacionados** (simples **y variables**). Helper `bgm_promo_badge_html()` (mayorista)
+  llamado con `function_exists()` en `bgmg_product_card_html`, `bgmg-product.php` (precio + relacionados).
+  Estilo `.bgm-promo-badge` en `bgmg-global.css` (cargado en todas las páginas). Contrato actualizado
+  (§2 funciones + §7 selector). En relacionados se cambió `wp_strip_all_tags`→`wp_kses_post` para que
+  el precio tachado se vea bien (resuelve el quirk de la Parte A). **Validar en staging** (tarjetas
+  tienda/categoría + producto + relacionados, simples y variables).
 - **Fase 2 — productos variables: HECHA (2.5.7, lint 0 errores).** Cuenta por **TOTAL del producto**
   (`qty_total`, consistente con el mayorista). En `carrito.php`: (a) la agrupación incluye padres en
   promo aunque NO tengan mayorista (`bgm_promo_activa_ahora() && bgm_producto_en_promo($padre)`);

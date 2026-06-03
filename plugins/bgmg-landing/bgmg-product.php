@@ -476,7 +476,8 @@ img { max-width: 100%; height: auto; display: block; }
           <div class="bgmg-card-body">
             <?php echo $r_badge; ?>
             <div class="bgmg-card-name"><?php echo $r_name; ?></div>
-            <div class="bgmg-card-price"><?php echo wp_strip_all_tags($rp->get_price_html()); ?></div>
+            <?php if ( function_exists( 'bgm_promo_badge_html' ) ) echo bgm_promo_badge_html( $rp ); ?>
+            <div class="bgmg-card-price"><?php echo wp_kses_post($rp->get_price_html()); ?></div>
           </div>
         </a>
         <a href="<?php echo esc_url($rp->add_to_cart_url()); ?>"
