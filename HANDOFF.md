@@ -229,7 +229,15 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   la inclusión es por **categorías globales** (ocasiones) **o** modo `custom`. En el panel global:
   **contador de afectados** (`bgm_promo_contar_afectados()`, transient 5 min, invalidado en
   `save_post_product` + guardar ajustes) + **alerta de solapamiento**. Badge de estado en el producto.
-  **Tipo (%/monto) sigue global.** Preview en vivo en `admin.js`. **Validar en staging.**
+  **Tipo (%/monto) sigue global.** Preview en vivo en `admin.js`. **VALIDADO por el usuario (2026-06-03).**
+- **PRÓXIMO — Mostrar la promo al CLIENTE (frontend).** Hoy el promo solo cambia el precio en el
+  **carrito**; en la página de producto y en los listados (tienda/categoría) el cliente ve el precio
+  normal → no percibe el descuento (clave para conversión en Cyber). Falta: precio promo
+  tachado/destacado + **badge** ("Cyber −X%") en producto y listados. **Cross-plugin:** el mayorista
+  expone la info (helper `bgm_get_promo_info()` o filtro `woocommerce_get_price_html`, reusando
+  `bgm_calcular_precio_promo($p, 1)` como fuente única de verdad) y **bgmg-landing** lo pinta en sus
+  templates (ver `CONTRATO-PLUGIN-TEMA.md`). Decidir dónde va el badge según si los templates usan
+  hooks WC o markup propio. Cuidar que NO choque con el display "precio mayorista desde X uds".
 - **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
   **Decisión confirmada (2026-06-03): contar por TOTAL del producto** (suma de variaciones = `qty_total`,
   consistente con el mayorista). Plan: ampliar la agrupación (incluir padres en promo aunque no tengan
