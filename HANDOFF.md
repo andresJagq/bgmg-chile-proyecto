@@ -20,7 +20,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.2** |
 | bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.8** |
+| beautygirlmg-mayorista | **2.5.9** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -230,14 +230,15 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   **contador de afectados** (`bgm_promo_contar_afectados()`, transient 5 min, invalidado en
   `save_post_product` + guardar ajustes) + **alerta de solapamiento**. Badge de estado en el producto.
   **Tipo (%/monto) sigue global.** Preview en vivo en `admin.js`. **VALIDADO por el usuario (2026-06-03).**
-- **PRÓXIMO — Mostrar la promo al CLIENTE (frontend).** Hoy el promo solo cambia el precio en el
-  **carrito**; en la página de producto y en los listados (tienda/categoría) el cliente ve el precio
-  normal → no percibe el descuento (clave para conversión en Cyber). Falta: precio promo
-  tachado/destacado + **badge** ("Cyber −X%") en producto y listados. **Cross-plugin:** el mayorista
-  expone la info (helper `bgm_get_promo_info()` o filtro `woocommerce_get_price_html`, reusando
-  `bgm_calcular_precio_promo($p, 1)` como fuente única de verdad) y **bgmg-landing** lo pinta en sus
-  templates (ver `CONTRATO-PLUGIN-TEMA.md`). Decidir dónde va el badge según si los templates usan
-  hooks WC o markup propio. Cuidar que NO choque con el display "precio mayorista desde X uds".
+- **Mostrar la promo al CLIENTE (frontend) — Parte A HECHA (2.5.9).** Filtro `woocommerce_get_price_html`
+  en el mayorista: muestra «~precio normal~ → precio promo» en **productos simples**, automático en
+  tarjetas (`bgmg_product_card_html`), página de producto y relacionados (ya usan `get_price_html()`),
+  **SIN tocar bgmg-landing**. Helper `bgm_get_promo_info($product)` (fuente única: `bgm_calcular_precio_promo`).
+  Solo simples (en variables el precio es rango). **Quirk menor:** en "relacionados" (`bgmg-product.php`
+  L476) el HTML pasa por `wp_strip_all_tags` → ahí el tachado se ve como 2 números; lo arregla la Parte B.
+- **Parte B — PENDIENTE (cross-plugin): badge "Promo −X%"** en tarjetas y producto (cubre también
+  **variables**). Helper `bgm_promo_badge_html()` en el mayorista + llamarlo con `function_exists()` en
+  `bgmg_product_card_html` y `bgmg-product.php`. Requiere bump de **bgmg-landing** + anotar el contrato.
 - **Fase 2 — productos variables: HECHA (2.5.7, lint 0 errores).** Cuenta por **TOTAL del producto**
   (`qty_total`, consistente con el mayorista). En `carrito.php`: (a) la agrupación incluye padres en
   promo aunque NO tengan mayorista (`bgm_promo_activa_ahora() && bgm_producto_en_promo($padre)`);

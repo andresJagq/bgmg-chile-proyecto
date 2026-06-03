@@ -215,3 +215,49 @@ function bgm_promo_migrar_qty_max() {
     }
     update_option( 'bgm_promo_qty_max_migrado', '1' );
 }
+
+// ─── Info de promo para mostrar al CLIENTE (precio tachado) ──────────────────
+//
+// Devuelve los datos de display (precio unitario en promo a la cantidad mínima)
+// o null si el producto no está en promo / no aplica. Fuente única de verdad:
+// reusa bgm_calcular_precio_promo(). Lo consumen el filtro de price_html (abajo)
+// y el tema (Parte B: badge), siempre con function_exists().
+function bgm_get_promo_info( $product ) {
+    if ( ! bgm_es_producto_valido( $product ) ) return null;
+    if ( ! bgm_promo_activa_ahora() )           return null;
+
+    $qmin         = max( 1, absint( bgm_get_setting( 'bgm_promo_qty_min', 1 ) ) );
+    $precio_promo = bgm_calcular_precio_promo( $product, $qmin );
+    if ( $precio_promo === null ) return null;
+
+    $base = bgm_get_precio_base( $product );
+    if ( $base <= 0 ) return null;
+
+    $ahorro = $base - $precio_promo;
+    if ( $ahorro <= 0 ) return null;
+
+    return [
+        'precio_base'  => (float) $base,
+        'precio_promo' => (int) $precio_promo,
+        'ahorro'       => (float) $ahorro,
+        'pct'          => (int) round( $ahorro / $base * 100 ),
+        'qty_min'      => $qmin,
+    ];
+}
+
+// ─── Mostrar el precio promo (tachado) en tarjetas / producto / relacionados ──
+//
+// Engancha get_price_html para que el cliente vea «~precio normal~ → precio promo»
+// SIN tocar el tema (las plantillas de bgmg-landing ya usan get_price_html).
+// Solo SIMPLES: en variables el precio es un rango → eso lo cubre el badge (Parte B).
+add_filter( 'woocommerce_get_price_html', 'bgm_promo_price_html', 20, 2 );
+function bgm_promo_price_html( $price_html, $product ) {
+    if ( is_admin() && ! wp_doing_ajax() )  return $price_html;
+    if ( ! $product instanceof WC_Product ) return $price_html;
+    if ( ! $product->is_type( 'simple' ) )  return $price_html;
+
+    $info = bgm_get_promo_info( $product );
+    if ( ! $info ) return $price_html;
+
+    return wc_format_sale_price( $info['precio_base'], $info['precio_promo'] ) . $product->get_price_suffix();
+}
