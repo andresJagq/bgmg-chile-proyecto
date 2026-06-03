@@ -261,3 +261,25 @@ function bgm_promo_price_html( $price_html, $product ) {
 
     return wc_format_sale_price( $info['precio_base'], $info['precio_promo'] ) . $product->get_price_suffix();
 }
+
+// ─── Badge "Promo −X%" para el CLIENTE (Parte B; lo consume el tema) ──────────
+//
+// Funciona para SIMPLES y VARIABLES (en variables el % es sobre el precio mínimo).
+// El tema lo llama con function_exists() en sus tarjetas y la página de producto.
+// El estilo .bgm-promo-badge vive en bgmg-landing (bgmg-global.css, cargado en
+// todas las páginas). Ver CONTRATO-PLUGIN-TEMA.md §2 y §7.
+function bgm_promo_badge_html( $product ) {
+    if ( is_string( $product ) || is_numeric( $product ) ) {
+        $product = wc_get_product( $product );
+    }
+
+    $info = bgm_get_promo_info( $product );
+    if ( ! $info ) return '';
+
+    $tipo  = bgm_get_setting( 'bgm_promo_tipo', 'porcentaje' );
+    $label = ( $tipo === 'porcentaje' && $info['pct'] > 0 )
+        ? sprintf( '-%d%%', $info['pct'] )
+        : __( 'Promo', 'beautygirlmg-mayorista' );
+
+    return '<span class="bgm-promo-badge">' . esc_html( $label ) . '</span>';
+}

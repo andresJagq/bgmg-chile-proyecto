@@ -19,8 +19,8 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.2** |
-| bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.9** |
+| bgmg-landing | **6.5.6** |
+| beautygirlmg-mayorista | **2.6.0** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -236,9 +236,12 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   **SIN tocar bgmg-landing**. Helper `bgm_get_promo_info($product)` (fuente única: `bgm_calcular_precio_promo`).
   Solo simples (en variables el precio es rango). **Quirk menor:** en "relacionados" (`bgmg-product.php`
   L476) el HTML pasa por `wp_strip_all_tags` → ahí el tachado se ve como 2 números; lo arregla la Parte B.
-- **Parte B — PENDIENTE (cross-plugin): badge "Promo −X%"** en tarjetas y producto (cubre también
-  **variables**). Helper `bgm_promo_badge_html()` en el mayorista + llamarlo con `function_exists()` en
-  `bgmg_product_card_html` y `bgmg-product.php`. Requiere bump de **bgmg-landing** + anotar el contrato.
+- **Parte B — HECHA (mayorista 2.6.0 + bgmg-landing 6.5.6): badge "Promo −X%"** en tarjetas y
+  producto (simples **y variables**). Helper `bgm_promo_badge_html()` (mayorista) llamado con
+  `function_exists()` en `bgmg_product_card_html` y `bgmg-product.php`. Estilo `.bgm-promo-badge` en
+  `bgmg-global.css` (cargado en todas las páginas). Contrato actualizado (§2 funciones + §7 selector).
+  **Validar en staging** (tarjetas tienda/categoría + página de producto, simples y variables).
+  Quirk de relacionados (strip de tags) deja de molestar: ahí igual aparece el badge.
 - **Fase 2 — productos variables: HECHA (2.5.7, lint 0 errores).** Cuenta por **TOTAL del producto**
   (`qty_total`, consistente con el mayorista). En `carrito.php`: (a) la agrupación incluye padres en
   promo aunque NO tengan mayorista (`bgm_promo_activa_ahora() && bgm_producto_en_promo($padre)`);

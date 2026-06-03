@@ -47,6 +47,8 @@ Funciones globales del plugin que el tema (o cualquier otro plugin) puede llamar
 | `bgm_capacidades_variaciones( $product )` | Devuelve `[vid => stock_max]` por variación | Usado en evaluación; disponible para el tema si lo necesita |
 | `bgm_evaluar_distribucion( $product_id, $cantidades, $n_disponibles = null, $stocks = null )` | Evalúa si una distribución cumple la regla de surtido. Devuelve `true` o `WP_Error`. **Centralizado**: única fuente de verdad de la regla | Plugin solo, pero expuesto si el tema lo necesita |
 | `bgm_get_min_1` / `min_2` / `descuento_1` / `descuento_2` ( $product_id, $variation_id = 0 ) | Getters de config del producto | Tema podría usarlos para badges custom |
+| `bgm_get_promo_info( $product )` | Devuelve `['precio_base','precio_promo','ahorro','pct','qty_min']` o `null` si la promo no está activa/elegible. Para mostrar el descuento al cliente | `woocommerce_get_price_html` (precio tachado, Parte A) |
+| `bgm_promo_badge_html( $product )` | HTML del badge "−X% / Promo" o `''`. Funciona en simples **y** variables | `bgmg_product_card_html` + `bgmg-product.php` (Parte B) |
 
 **Buena práctica**: el tema siempre debe envolver con `function_exists( 'bgm_xxx' )` para que el sitio no se rompa si el plugin se desactiva.
 
@@ -185,6 +187,7 @@ Selectores que ambos lados conocen. Cambiar uno requiere cambiar el otro.
 | `.bgm-variacion-row[data-vid][data-stock]` | Plugin (render manual) | Plugin (frontend-manual.js) |
 | `form.cart input[name="quantity"]` | WC core | Plugin (`frontend-simple.js` para preview en vivo) |
 | `form.variations_form table.variations select` | WC core | Plugin (`frontend-swatches.js` los convierte en pills) |
+| `.bgm-promo-badge` | Plugin (HTML vía `bgm_promo_badge_html`) | Tema (estilo en `assets/bgmg-global.css`, cargado en todas las páginas) |
 
 ---
 

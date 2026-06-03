@@ -322,7 +322,10 @@ img { max-width: 100%; height: auto; display: block; }
             $bgm_tiene_mayorista = bgm_variable_tiene_mayorista( $product );
         }
       ?>
-      <div class="bgmg-prod-price"><?php echo $product->get_price_html(); ?></div>
+      <div class="bgmg-prod-price"><?php
+        if ( function_exists( 'bgm_promo_badge_html' ) ) echo bgm_promo_badge_html( $product );
+        echo $product->get_price_html();
+      ?></div>
       <?php if ( $bgm_tiene_mayorista ) : ?>
       <div class="bgmg-prod-price-label">Precio detalle · por unidad</div>
       <?php endif; ?>

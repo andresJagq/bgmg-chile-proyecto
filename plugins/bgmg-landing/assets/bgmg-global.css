@@ -1,3 +1,7 @@
+/* ── Badge de promo minorista (contrato con beautygirlmg-mayorista) ── */
+.bgm-promo-badge{display:inline-block;background:var(--pink-dark,#e0218a);color:#fff;font-size:12px;font-weight:700;line-height:1;padding:4px 8px;border-radius:999px;letter-spacing:.02em;vertical-align:middle;margin:0 8px 6px 0}
+.bgmg-prod-price .bgm-promo-badge{font-size:13px;padding:5px 10px}
+
 /* ── Header ── */
 .bgmg-header{position:fixed;top:0;left:0;right:0;z-index:1000;background:#fff;border-bottom:1px solid var(--border);height:64px;box-shadow:0 1px 12px rgba(0,0,0,.04)}
 .bgmg-header-inner{max-width:1200px;margin:0 auto;height:100%;padding:0 20px;display:flex;align-items:center;justify-content:space-between;gap:16px}

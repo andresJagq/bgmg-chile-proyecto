@@ -2,14 +2,14 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.5.5
+ * Version:     6.5.6
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.5.5' );
+define( 'BGMG_LANDING_VERSION', '6.5.6' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
@@ -968,7 +968,8 @@ function bgmg_product_card_html($p_id) {
     $h .= '<img class="bgmg-card-img" src="' . esc_url($img) . '" alt="' . $name . '" loading="lazy">';
     $h .= '<div class="bgmg-card-body">' . $badge;
     $h .= '<div class="bgmg-card-name">' . $name . '</div>';
-    $h .= '<div class="bgmg-card-price">' . $prod->get_price_html() . '</div>';
+    $promo_badge = function_exists( 'bgm_promo_badge_html' ) ? bgm_promo_badge_html( $prod ) : '';
+    $h .= '<div class="bgmg-card-price">' . $promo_badge . $prod->get_price_html() . '</div>';
     $h .= '</div></a>';
     $h .= '<a href="' . esc_url($prod->add_to_cart_url()) . '" class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"';
     $h .= ' data-product_id="' . esc_attr($p_id) . '" data-product_type="' . esc_attr($prod->get_type()) . '" data-quantity="1" rel="nofollow">+</a>';
