@@ -20,7 +20,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.2** |
 | bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.7** |
+| beautygirlmg-mayorista | **2.5.8** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -245,6 +245,9 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   nivel>0) y, si NO aplicó (surtido falla o `qty_total` bajo umbral), intenta **promo ignorando el
   surtido** → mutuamente excluyentes. `bgm_calcular_precio_promo($variacion, $qty_total)`: elegibilidad
   por el **padre**, precio base por **variación**. **Validar en staging.**
+- **Tope de la promo (2.5.8):** `bgm_promo_qty_max` default = **2** (la promo es al detalle: 1–2 uds,
+  **sumando variaciones**). Es un tope **plano y global**, NO atado al umbral mayorista. Migración
+  una vez (0→2, flag `bgm_promo_qty_max_migrado`) para instalaciones que ya habían guardado 0.
 - Pendiente menor (fuera de alcance inicial): **aviso visual propio del promo** en
   `includes/frontend/avisos-carrito.php` (hoy esos avisos son solo de mayorista).
 - Cierre: **bump `BGM_VERSION` en 2 sitios**, escribir sin BOM, `php -l` antes de subir.

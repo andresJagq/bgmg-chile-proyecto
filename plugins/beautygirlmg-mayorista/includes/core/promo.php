@@ -120,7 +120,7 @@ function bgm_calcular_precio_promo( $product, $qty ) {
 
     // Límites de cantidad opcionales (0 = sin límite).
     $qmin = absint( bgm_get_setting( 'bgm_promo_qty_min', 1 ) );
-    $qmax = absint( bgm_get_setting( 'bgm_promo_qty_max', 0 ) );
+    $qmax = absint( bgm_get_setting( 'bgm_promo_qty_max', 2 ) );
     if ( $qmin > 0 && $qty < $qmin ) return null;
     if ( $qmax > 0 && $qty > $qmax ) return null;
 
@@ -203,4 +203,15 @@ add_action( 'save_post_product', 'bgm_promo_invalidar_afectados' );
 add_action( 'woocommerce_update_options_bgm_mayorista', 'bgm_promo_invalidar_afectados' );
 function bgm_promo_invalidar_afectados() {
     delete_transient( 'bgm_promo_afectados' );
+}
+
+// ─── Migración: el tope de la promo pasó a 2 por defecto (antes 0 = sin límite) ─
+// Sube de 0 → 2 una sola vez, para instalaciones que ya guardaron el ajuste viejo.
+add_action( 'admin_init', 'bgm_promo_migrar_qty_max' );
+function bgm_promo_migrar_qty_max() {
+    if ( get_option( 'bgm_promo_qty_max_migrado' ) ) return;
+    if ( (int) get_option( 'bgm_promo_qty_max', 0 ) === 0 ) {
+        update_option( 'bgm_promo_qty_max', 2 );
+    }
+    update_option( 'bgm_promo_qty_max_migrado', '1' );
 }

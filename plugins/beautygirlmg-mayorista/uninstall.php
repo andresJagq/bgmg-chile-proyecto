@@ -39,6 +39,7 @@ $opciones = [
     'bgm_promo_valor',
     'bgm_promo_qty_min',
     'bgm_promo_qty_max',
+    'bgm_promo_qty_max_migrado',
     'bgm_promo_categorias',
     'bgm_promo_productos', // huérfana desde 2.5.6 (textarea retirado); se limpia igual
 ];

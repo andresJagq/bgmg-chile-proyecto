@@ -172,10 +172,10 @@ function bgm_registrar_pagina_settings( $pages ) {
                     ],
                     [
                         'title'             => __( 'Cantidad máxima', 'beautygirlmg-mayorista' ),
-                        'desc'              => __( '0 = sin límite. La promo nunca pisa al mayorista: si se alcanza el umbral mayorista, gana el mayorista.', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Tope de unidades para la promo, sumando variaciones en productos variables. Es un descuento al detalle (recomendado: 2). 0 = sin límite.', 'beautygirlmg-mayorista' ),
                         'id'                => 'bgm_promo_qty_max',
                         'type'              => 'number',
-                        'default'           => 0,
+                        'default'           => 2,
                         'desc_tip'          => true,
                         'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
                     ],
