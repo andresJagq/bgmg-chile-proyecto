@@ -42,14 +42,23 @@ function bgm_promo_activa_ahora() {
     return $cache = true;
 }
 
-// ─── IDs de productos en promo (lista manual de IDs) ─────────────────────────
-function bgm_promo_ids_productos() {
-    static $cache = null;
-    if ( $cache !== null ) return $cache;
+// ─── Modo de la promo por producto: '' (heredar) | 'custom' | 'excluir' ──────
+function bgm_get_promo_modo( $product_id ) {
+    $val = get_post_meta( (int) $product_id, '_bgm_promo_modo', true );
+    return ( $val === 'custom' || $val === 'excluir' ) ? $val : '';
+}
 
-    $raw = (string) bgm_get_setting( 'bgm_promo_productos', '' );
-    $ids = array_filter( array_map( 'absint', preg_split( '/[\s,]+/', $raw ) ) );
-    return $cache = array_values( array_unique( $ids ) );
+// ─── Valor del descuento promo para un producto (per-product → fallback global)
+//
+// Solo el modo 'custom' usa valor propio; en cualquier otro caso, el global.
+function bgm_get_promo_valor( $product_id ) {
+    if ( bgm_get_promo_modo( $product_id ) === 'custom' ) {
+        $val = get_post_meta( (int) $product_id, '_bgm_promo_valor', true );
+        if ( $val !== '' && is_numeric( $val ) && (float) $val > 0 ) {
+            return (float) $val;
+        }
+    }
+    return (float) bgm_get_setting( 'bgm_promo_valor', 0 );
 }
 
 // ─── term IDs de categorías en promo ─────────────────────────────────────────
@@ -64,6 +73,8 @@ function bgm_promo_ids_categorias() {
 
 // ─── ¿Este producto (padre) participa en la promo? ───────────────────────────
 //
+// Precedencia: el modo por producto MANDA sobre lo global.
+//   excluir → nunca · custom → siempre · '' (heredar) → según categorías.
 // Cache estático por request: el carrito recalcula varias veces por request.
 function bgm_producto_en_promo( $product_id ) {
     static $cache = [];
@@ -72,12 +83,12 @@ function bgm_producto_en_promo( $product_id ) {
     if ( $product_id <= 0 ) return false;
     if ( isset( $cache[ $product_id ] ) ) return $cache[ $product_id ];
 
-    // Por ID directo
-    if ( in_array( $product_id, bgm_promo_ids_productos(), true ) ) {
-        return $cache[ $product_id ] = true;
-    }
+    $modo = bgm_get_promo_modo( $product_id );
 
-    // Por categoría
+    if ( $modo === 'excluir' ) return $cache[ $product_id ] = false;
+    if ( $modo === 'custom' )  return $cache[ $product_id ] = true;
+
+    // Heredar: participa si pertenece a alguna categoría en promo.
     $cats_promo = bgm_promo_ids_categorias();
     if ( ! empty( $cats_promo ) && function_exists( 'wc_get_product_term_ids' ) ) {
         $term_ids = wc_get_product_term_ids( $product_id, 'product_cat' );
@@ -118,7 +129,7 @@ function bgm_calcular_precio_promo( $product, $qty ) {
     if ( $base <= 0 ) return null;
 
     $tipo  = bgm_get_setting( 'bgm_promo_tipo', 'porcentaje' );
-    $valor = (float) bgm_get_setting( 'bgm_promo_valor', 0 );
+    $valor = bgm_get_promo_valor( $pid ); // per-product (custom) → fallback global
     if ( $valor <= 0 ) return null;
 
     if ( $tipo === 'monto' ) {
@@ -134,4 +145,62 @@ function bgm_calcular_precio_promo( $product, $qty ) {
     if ( $precio >= (int) round( $base ) ) return null;
 
     return $precio;
+}
+
+// ─── Conteo de productos afectados por la promo (panel de Ajustes) ───────────
+//
+// total = (productos en categorías ∪ personalizados) − excluidos.
+// Cacheado en transient 5 min; se invalida al guardar un producto o los ajustes.
+function bgm_promo_contar_afectados() {
+    $cache = get_transient( 'bgm_promo_afectados' );
+    if ( is_array( $cache ) ) return $cache;
+
+    $cats = bgm_promo_ids_categorias();
+
+    $por_categoria = [];
+    if ( ! empty( $cats ) ) {
+        $por_categoria = get_posts( [
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'fields'         => 'ids',
+            'posts_per_page' => -1,
+            'no_found_rows'  => true,
+            'tax_query'      => [ [
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $cats,
+            ] ],
+        ] );
+    }
+
+    $base_meta = [
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'fields'         => 'ids',
+        'posts_per_page' => -1,
+        'no_found_rows'  => true,
+    ];
+    $custom  = get_posts( $base_meta + [ 'meta_key' => '_bgm_promo_modo', 'meta_value' => 'custom' ] );
+    $excluir = get_posts( $base_meta + [ 'meta_key' => '_bgm_promo_modo', 'meta_value' => 'excluir' ] );
+
+    $afectados = array_diff( array_unique( array_merge( $por_categoria, $custom ) ), $excluir );
+
+    $res = [
+        'total'           => count( $afectados ),
+        'por_categoria'   => count( $por_categoria ),
+        'personalizados'  => count( $custom ),
+        'excluidos'       => count( $excluir ),
+        'cat_con_custom'  => count( array_intersect( $por_categoria, $custom ) ),
+        'cat_con_excluir' => count( array_intersect( $por_categoria, $excluir ) ),
+    ];
+
+    set_transient( 'bgm_promo_afectados', $res, 5 * MINUTE_IN_SECONDS );
+    return $res;
+}
+
+// Invalidar el conteo cacheado cuando cambie algo relevante.
+add_action( 'save_post_product', 'bgm_promo_invalidar_afectados' );
+add_action( 'woocommerce_update_options_bgm_mayorista', 'bgm_promo_invalidar_afectados' );
+function bgm_promo_invalidar_afectados() {
+    delete_transient( 'bgm_promo_afectados' );
 }

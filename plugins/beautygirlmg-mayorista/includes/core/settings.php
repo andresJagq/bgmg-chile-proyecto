@@ -35,6 +35,24 @@ function bgm_registrar_pagina_settings( $pages ) {
                     foreach ( $terms as $t ) { $cat_options[ $t->term_id ] = $t->name; }
                 }
 
+                // Resumen de productos afectados por la promo (contador + solapamiento)
+                $af = function_exists( 'bgm_promo_contar_afectados' )
+                    ? bgm_promo_contar_afectados()
+                    : [ 'total' => 0, 'por_categoria' => 0, 'personalizados' => 0, 'excluidos' => 0, 'cat_con_custom' => 0, 'cat_con_excluir' => 0 ];
+
+                $resumen_desc = sprintf(
+                    /* translators: 1: total, 2: por categoría, 3: personalizados, 4: excluidos */
+                    __( '<strong>%1$d productos</strong> recibirían esta promo (categorías ∪ personalizados − excluidos).<br>Detalle: %2$d por categoría · %3$d personalizados · %4$d excluidos.', 'beautygirlmg-mayorista' ),
+                    (int) $af['total'], (int) $af['por_categoria'], (int) $af['personalizados'], (int) $af['excluidos']
+                );
+                if ( $af['cat_con_custom'] > 0 || $af['cat_con_excluir'] > 0 ) {
+                    $resumen_desc .= '<br>⚠️ ' . sprintf(
+                        /* translators: 1: con valor propio, 2: excluidos */
+                        __( 'Solapamiento: %1$d productos de las categorías usan su <strong>valor personalizado</strong> y %2$d están <strong>excluidos</strong> (el ajuste del producto manda sobre el global).', 'beautygirlmg-mayorista' ),
+                        (int) $af['cat_con_custom'], (int) $af['cat_con_excluir']
+                    );
+                }
+
                 return [
                     // ─── Defaults globales ───────────────────────────
                     [
@@ -98,7 +116,7 @@ function bgm_registrar_pagina_settings( $pages ) {
                     [
                         'title' => __( 'Descuento promocional minorista', 'beautygirlmg-mayorista' ),
                         'type'  => 'title',
-                        'desc'  => __( 'Descuento por ocasión especial (ej. Cyber) para compras al detalle. Solo aplica BAJO el umbral mayorista: si el cliente alcanza la cantidad mayorista, gana el precio mayorista (no se suman). Fase 1: solo productos simples.', 'beautygirlmg-mayorista' ),
+                        'desc'  => __( 'Descuento por ocasión especial (ej. Cyber) para compras al detalle. Solo aplica BAJO el umbral mayorista: si el cliente alcanza la cantidad mayorista, gana el precio mayorista (no se suman). Estos valores son el DEFAULT global; cada producto puede heredarlo, personalizarlo o excluirse desde su pestaña Mayorista. Fase 1: productos simples.', 'beautygirlmg-mayorista' ),
                         'id'    => 'bgm_section_promo',
                     ],
                     [
@@ -135,8 +153,8 @@ function bgm_registrar_pagina_settings( $pages ) {
                         ],
                     ],
                     [
-                        'title'             => __( 'Valor del descuento', 'beautygirlmg-mayorista' ),
-                        'desc'              => __( 'Porcentaje: 1–100. Monto fijo: pesos a descontar por unidad.', 'beautygirlmg-mayorista' ),
+                        'title'             => __( 'Valor del descuento (global)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Valor por defecto. Porcentaje: 1–100. Monto fijo: pesos a descontar por unidad. Cada producto puede sobreescribirlo (modo Personalizado en su pestaña Mayorista).', 'beautygirlmg-mayorista' ),
                         'id'                => 'bgm_promo_valor',
                         'type'              => 'number',
                         'default'           => 0,
@@ -170,14 +188,16 @@ function bgm_registrar_pagina_settings( $pages ) {
                         'options'  => $cat_options,
                         'desc_tip' => true,
                     ],
-                    [
-                        'title'    => __( 'Productos en promo (IDs)', 'beautygirlmg-mayorista' ),
-                        'desc'     => __( 'IDs de productos separados por coma o espacio. Se suman a las categorías de arriba.', 'beautygirlmg-mayorista' ),
-                        'id'       => 'bgm_promo_productos',
-                        'type'     => 'textarea',
-                        'desc_tip' => true,
-                    ],
                     [ 'type' => 'sectionend', 'id' => 'bgm_section_promo' ],
+
+                    // ─── Resumen de la promo (solo lectura) ──────────
+                    [
+                        'title' => __( 'Resumen de la promo', 'beautygirlmg-mayorista' ),
+                        'type'  => 'title',
+                        'desc'  => $resumen_desc,
+                        'id'    => 'bgm_section_promo_resumen',
+                    ],
+                    [ 'type' => 'sectionend', 'id' => 'bgm_section_promo_resumen' ],
 
                     // ─── Debug ───────────────────────────────────────
                     [

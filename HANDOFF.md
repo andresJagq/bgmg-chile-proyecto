@@ -20,7 +20,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.2** |
 | bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.5** |
+| beautygirlmg-mayorista | **2.5.6** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -208,22 +208,28 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   promo va en un helper **aislado** `bgm_calcular_precio_promo($product, $qty)` → devuelve precio o `null`.
 - **Precedencia en `includes/frontend/carrito.php`**: primero mayorista; **solo si el mayorista NO
   aplicó (nivel 0)** se intenta el promo → mutuamente excluyentes por construcción (cero stacking).
-- Config nueva en `wp_options`: `bgm_promo_activa`, `bgm_promo_fecha_inicio`/`_fin`, `bgm_promo_tipo`
-  (% | monto), `bgm_promo_valor`, `bgm_promo_qty_min`/`_qty_max`, `bgm_promo_productos` (IDs),
-  `bgm_promo_categorias` (term IDs). UI en `includes/admin/`.
+- Config en `wp_options`: `bgm_promo_activa`, `bgm_promo_fecha_inicio`/`_fin`, `bgm_promo_tipo`
+  (% | monto), `bgm_promo_valor` (default global), `bgm_promo_qty_min`/`_qty_max`,
+  `bgm_promo_categorias` (term IDs). Por producto (meta): `_bgm_promo_modo` + `_bgm_promo_valor`.
 - Helpers soporte: `bgm_promo_activa_ahora()` (toggle + fechas) y `bgm_producto_en_promo($product_id)`
-  (ID en lista **o** categoría coincide; para variaciones resuelve al **padre**). Con **cache
+  (modo del producto **o** categoría coincide; para variaciones resuelve al **padre**). Con **cache
   estático por request** (el carrito recalcula muchas veces).
 - Ajustes en `carrito.php`: ampliar el gate de `bgm_aplicar_precio_simple` (~L110) para dejar pasar
   productos **solo-promo** (sin mayorista); para variables, ampliar la agrupación (~L84) e intentar
   promo cuando el surtido falla o `qty_total < umbral` (**el promo ignora la regla de surtido**).
 
 *Entrega poco a poco (el usuario quiere ambos tipos, bien hechos):*
-- **Fase 1 — productos simples: HECHA (2.5.5).** Módulo aislado `includes/core/promo.php`
-  (`bgm_promo_activa_ahora` toggle+fechas, `bgm_producto_en_promo` ID/categoría, `bgm_calcular_precio_promo`)
-  + sección de config en **WC → Ajustes → Mayorista** + fallback en `bgm_aplicar_precio_simple`
-  (mayorista primero; promo solo si nivel 0, mutuamente excluyentes). `bgm_calcular_precio()` **intacta**.
-  Lint 19/19 OK, sin BOM. **Validar en staging antes de Fase 2.**
+- **Fase 1 — productos simples: HECHA y VALIDADA (2.5.5).** Módulo aislado `includes/core/promo.php`
+  + config en **WC → Ajustes → Mayorista** + fallback en `bgm_aplicar_precio_simple` (mayorista primero;
+  promo solo si nivel 0). `bgm_calcular_precio()` **intacta**.
+- **Per-producto: HECHA (2.5.6, lint 0 errores).** Control en la pestaña Mayorista del producto:
+  meta `_bgm_promo_modo` (heredar / `custom` / `excluir`) + `_bgm_promo_valor`. **Precedencia:** el
+  producto manda sobre lo global (`excluir` > `custom` > categoría). Getters `bgm_get_promo_modo()` /
+  `bgm_get_promo_valor()` (fallback global). **Quitado** el textarea global de IDs (`bgm_promo_productos`);
+  la inclusión es por **categorías globales** (ocasiones) **o** modo `custom`. En el panel global:
+  **contador de afectados** (`bgm_promo_contar_afectados()`, transient 5 min, invalidado en
+  `save_post_product` + guardar ajustes) + **alerta de solapamiento**. Badge de estado en el producto.
+  **Tipo (%/monto) sigue global.** Preview en vivo en `admin.js`. **Validar en staging.**
 - **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
   **Decisión confirmada (2026-06-03): contar por TOTAL del producto** (suma de variaciones = `qty_total`,
   consistente con el mayorista). Plan: ampliar la agrupación (incluir padres en promo aunque no tengan

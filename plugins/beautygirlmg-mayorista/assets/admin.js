@@ -114,4 +114,33 @@
         $preview.html( '→ ' + formatPrecio( Math.max( 0, precioBase - descuento ) ) );
     } );
 
+    // ─── Promo minorista: mostrar/ocultar el valor según el modo ─────────────
+    $( document ).on( 'change', '#_bgm_promo_modo', function() {
+        $( '#bgm-promo-valor-row' ).toggle( $( this ).val() === 'custom' );
+    } );
+
+    // ─── Promo minorista: preview del precio (usa tipo/valor global del JS) ───
+    $( document ).on( 'input change', '.bgm-input-promo', function() {
+        var precioBase = parseFloat( BGM_ADMIN.precio_base ) || 0;
+        var $preview   = $( '.bgm-preview-promo' );
+
+        var valor = parseFloat( $( this ).val() );
+        if ( isNaN( valor ) ) valor = parseFloat( BGM_ADMIN.promo_valor_global ) || 0;
+
+        if ( precioBase <= 0 || valor <= 0 ) {
+            $preview.html( '' );
+            return;
+        }
+
+        var precioFinal;
+        if ( BGM_ADMIN.promo_tipo === 'monto' ) {
+            precioFinal = Math.max( 0, precioBase - valor );
+        } else {
+            if ( valor > 100 ) valor = 100;
+            precioFinal = Math.max( 0, precioBase - ( precioBase * valor / 100 ) );
+        }
+
+        $preview.html( '→ ' + BGM_ADMIN.txt_precio_final + ': <strong>' + formatPrecio( precioFinal ) + '</strong>' );
+    } );
+
 } )( jQuery );

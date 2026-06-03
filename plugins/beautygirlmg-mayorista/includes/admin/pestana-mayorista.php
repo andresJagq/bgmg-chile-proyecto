@@ -47,9 +47,11 @@ function bgm_admin_enqueue( $hook ) {
     $precio_base   = $product ? bgm_get_precio_base( $product ) : 0;
 
     wp_localize_script( 'bgm-admin', 'BGM_ADMIN', [
-        'precio_base'      => $precio_base,
-        'min_global_1'     => bgm_get_min_global_1(),
-        'min_global_2'     => bgm_get_min_global_2(),
+        'precio_base'        => $precio_base,
+        'min_global_1'       => bgm_get_min_global_1(),
+        'min_global_2'       => bgm_get_min_global_2(),
+        'promo_tipo'         => bgm_get_setting( 'bgm_promo_tipo', 'porcentaje' ),
+        'promo_valor_global' => (float) bgm_get_setting( 'bgm_promo_valor', 0 ),
         'currency_symbol'  => function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$',
         'thousand_sep'     => function_exists( 'wc_get_price_thousand_separator' ) ? wc_get_price_thousand_separator() : '.',
         'decimal_sep'      => function_exists( 'wc_get_price_decimal_separator' ) ? wc_get_price_decimal_separator() : ',',
@@ -211,6 +213,72 @@ function bgm_render_panel_mayorista() {
             </p>
         </div>
 
+        <!-- ─── Promo minorista ──────────────────────────────────────────── -->
+        <?php
+        $promo_modo         = get_post_meta( $post->ID, '_bgm_promo_modo', true ); // '' | custom | excluir
+        $promo_valor        = get_post_meta( $post->ID, '_bgm_promo_valor', true );
+        $promo_tipo_global  = bgm_get_setting( 'bgm_promo_tipo', 'porcentaje' );
+        $promo_valor_global = (float) bgm_get_setting( 'bgm_promo_valor', 0 );
+        $es_monto           = ( $promo_tipo_global === 'monto' );
+        $sym                = function_exists( 'get_woocommerce_currency_symbol' ) ? get_woocommerce_currency_symbol() : '$';
+        $global_legible     = $es_monto ? ( $sym . number_format_i18n( $promo_valor_global ) ) : ( (float) $promo_valor_global . '%' );
+
+        // Badge de estado efectivo: la validación "qué le pasa a ESTE producto".
+        if ( $promo_modo === 'excluir' ) {
+            $badge_clase = 'bgm-badge-estatico';
+            $badge_texto = __( 'Excluido', 'beautygirlmg-mayorista' );
+            $badge_desc  = __( 'No recibe la promo, aunque su categoría esté en promo.', 'beautygirlmg-mayorista' );
+        } elseif ( $promo_modo === 'custom' ) {
+            $val_efectivo   = ( $promo_valor !== '' && is_numeric( $promo_valor ) ) ? (float) $promo_valor : $promo_valor_global;
+            $custom_legible = $es_monto ? ( $sym . number_format_i18n( $val_efectivo ) ) : ( $val_efectivo . '%' );
+            $badge_clase = 'bgm-badge-estatico';
+            $badge_texto = __( 'Personalizado', 'beautygirlmg-mayorista' );
+            $badge_desc  = sprintf( __( 'Usa su propio valor (%s), no el global.', 'beautygirlmg-mayorista' ), $custom_legible );
+        } elseif ( bgm_producto_en_promo( $post->ID ) ) {
+            $badge_clase = 'bgm-badge-global';
+            $badge_texto = __( 'Global', 'beautygirlmg-mayorista' );
+            $badge_desc  = sprintf( __( 'Está en una categoría en promo: usa el valor global (%s).', 'beautygirlmg-mayorista' ), $global_legible );
+        } else {
+            $badge_clase = 'bgm-badge-global';
+            $badge_texto = __( 'Sin promo', 'beautygirlmg-mayorista' );
+            $badge_desc  = __( 'No está en ninguna categoría en promo; no recibe descuento promocional.', 'beautygirlmg-mayorista' );
+        }
+        ?>
+        <div class="options_group bgm-grupo bgm-grupo-promo">
+            <h4 class="bgm-tier-titulo"><?php esc_html_e( 'Promo minorista', 'beautygirlmg-mayorista' ); ?></h4>
+
+            <p class="form-field bgm-field-row">
+                <label for="_bgm_promo_modo"><?php esc_html_e( 'Promo para este producto', 'beautygirlmg-mayorista' ); ?></label>
+                <select id="_bgm_promo_modo" name="_bgm_promo_modo">
+                    <option value=""        <?php selected( $promo_modo, '' ); ?>><?php esc_html_e( 'Heredar global (según categorías)', 'beautygirlmg-mayorista' ); ?></option>
+                    <option value="custom"  <?php selected( $promo_modo, 'custom' ); ?>><?php esc_html_e( 'Personalizado (valor propio)', 'beautygirlmg-mayorista' ); ?></option>
+                    <option value="excluir" <?php selected( $promo_modo, 'excluir' ); ?>><?php esc_html_e( 'Excluir (nunca recibe la promo)', 'beautygirlmg-mayorista' ); ?></option>
+                </select>
+                <span class="bgm-max-info">
+                    <span class="bgm-badge-modo <?php echo esc_attr( $badge_clase ); ?>"><?php echo esc_html( $badge_texto ); ?></span>
+                    <?php echo esc_html( $badge_desc ); ?>
+                </span>
+            </p>
+
+            <p class="form-field bgm-field-row bgm-promo-valor-row" id="bgm-promo-valor-row" style="<?php echo $promo_modo === 'custom' ? '' : 'display:none;'; ?>">
+                <label for="_bgm_promo_valor">
+                    <?php echo $es_monto ? esc_html__( 'Descuento promo $', 'beautygirlmg-mayorista' ) : esc_html__( 'Descuento promo %', 'beautygirlmg-mayorista' ); ?>
+                </label>
+                <input type="number"
+                       id="_bgm_promo_valor"
+                       name="_bgm_promo_valor"
+                       class="bgm-input-promo"
+                       value="<?php echo esc_attr( $promo_valor ); ?>"
+                       placeholder="<?php echo esc_attr( $promo_valor_global ); ?>"
+                       min="0" step="1" <?php echo $es_monto ? '' : 'max="100"'; ?> />
+                <span class="bgm-preview-precio bgm-preview-promo"></span>
+            </p>
+
+            <p class="description bgm-promo-help">
+                <?php esc_html_e( 'Heredar = usa el global si el producto está en una categoría en promo. Personalizado = define su propio descuento abajo. Excluir = lo deja fuera aunque su categoría esté en promo. El tipo (% o monto) se define en Ajustes globales.', 'beautygirlmg-mayorista' ); ?>
+            </p>
+        </div>
+
         <?php if ( $es_variable ) : ?>
         <!-- ─── Tolerancia de diferencia (solo variables) ────────────────── -->
         <?php
@@ -356,8 +424,18 @@ function bgm_guardar_panel_mayorista( $post_id ) {
         update_post_meta( $post_id, '_bgm_usar_swatches', $valor );
     }
 
+    // Modo de promo por producto: '' (heredar) | custom | excluir
+    if ( isset( $_POST['_bgm_promo_modo'] ) ) {
+        $promo_modo = sanitize_key( wp_unslash( $_POST['_bgm_promo_modo'] ) );
+        if ( $promo_modo === 'custom' || $promo_modo === 'excluir' ) {
+            update_post_meta( $post_id, '_bgm_promo_modo', $promo_modo );
+        } else {
+            delete_post_meta( $post_id, '_bgm_promo_modo' ); // heredar = sin meta
+        }
+    }
+
     // Campos numéricos: vacío = borrar meta (usa default global)
-    $campos = [ '_bgm_min_1', '_bgm_descuento_1', '_bgm_min_2', '_bgm_descuento_2', '_bgm_tolerancia_porcentaje' ];
+    $campos = [ '_bgm_min_1', '_bgm_descuento_1', '_bgm_min_2', '_bgm_descuento_2', '_bgm_tolerancia_porcentaje', '_bgm_promo_valor' ];
 
     foreach ( $campos as $campo ) {
         if ( ! isset( $_POST[ $campo ] ) ) continue;

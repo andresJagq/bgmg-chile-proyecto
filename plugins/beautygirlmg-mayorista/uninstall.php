@@ -31,6 +31,16 @@ $opciones = [
     'bgm_tolerancia_porcentaje',
     'bgm_modo_surtido',
     'bgm_debug_activo',
+    // Promo minorista
+    'bgm_promo_activa',
+    'bgm_promo_fecha_inicio',
+    'bgm_promo_fecha_fin',
+    'bgm_promo_tipo',
+    'bgm_promo_valor',
+    'bgm_promo_qty_min',
+    'bgm_promo_qty_max',
+    'bgm_promo_categorias',
+    'bgm_promo_productos', // huérfana desde 2.5.6 (textarea retirado); se limpia igual
 ];
 foreach ( $opciones as $opt ) {
     delete_option( $opt );
