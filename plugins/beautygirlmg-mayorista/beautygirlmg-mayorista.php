@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BeautyGirlMG Mayorista v2
  * Description: Sistema de precios mayorista con tiered pricing (2 niveles) y surtido automático/manual para beautygirlmg.cl
- * Version: 2.5.4
+ * Version: 2.5.5
  * Author: BeautyGirlMG
  * Text Domain: beautygirlmg-mayorista
  * Requires WooCommerce: 6.0
@@ -11,7 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // ─── Constantes globales ─────────────────────────────────────────────────────
-define( 'BGM_VERSION',  '2.5.4' );
+define( 'BGM_VERSION',  '2.5.5' );
 define( 'BGM_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'BGM_URL',      plugin_dir_url( __FILE__ ) );
 define( 'BGM_BASENAME', plugin_basename( __FILE__ ) );
@@ -26,6 +26,7 @@ define( 'BGM_DEFAULT_DEBUG',           '0' );
 // ─── Núcleo (siempre activo) ─────────────────────────────────────────────────
 require_once BGM_PATH . 'includes/core/logger.php';
 require_once BGM_PATH . 'includes/core/helpers.php';
+require_once BGM_PATH . 'includes/core/promo.php';
 require_once BGM_PATH . 'includes/core/ajax-helpers.php';
 require_once BGM_PATH . 'includes/core/settings.php';
 
@@ -67,6 +68,13 @@ function bgm_activar_plugin() {
     add_option( 'bgm_tolerancia_porcentaje',    BGM_DEFAULT_TOLERANCIA );
     add_option( 'bgm_modo_surtido',             BGM_DEFAULT_MODO_SURTIDO );
     add_option( 'bgm_debug_activo',             BGM_DEFAULT_DEBUG );
+
+    // Promo minorista (apagada por defecto)
+    add_option( 'bgm_promo_activa',             'no' );
+    add_option( 'bgm_promo_tipo',               'porcentaje' );
+    add_option( 'bgm_promo_valor',              0 );
+    add_option( 'bgm_promo_qty_min',            1 );
+    add_option( 'bgm_promo_qty_max',            0 );
 
     bgm_logger_crear_directorio();
     bgm_log( 'core', 'Plugin activado', [ 'version' => BGM_VERSION ] );

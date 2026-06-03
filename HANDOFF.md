@@ -20,12 +20,16 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.2** |
 | bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.4** |
+| beautygirlmg-mayorista | **2.5.5** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
 **privado** (`andresJagq/bgmg-chile-proyecto`). Checkpoint pre-promo = commit `618f00a`. Flujo de
 trabajo con 2 PCs + Drive en **§5.18**.
+
+> ✅ **Commit/push de la sesión 2026-06-02 HECHO (2026-06-03).** Subido a `origin/main`: promo
+> minorista Fase 1 (v2.5.5), las 8 planillas de migración + `generar-chunks.ps1`, y los docs. Repo
+> y working tree en sync.
 
 **Hecho y VERIFICADO en vivo:**
 - **bgmg-chile 1.18.1** — BC-01 (checkbox "Necesito factura" se desmarca) + BC-02 (estado retiro
@@ -81,6 +85,16 @@ globalizó). Después, lo de mayor valor para *lanzar*: los 2 ajustes 🔴 de wp
 
 > **BL-01c quedó CERRADO** (Fase 1 CSS+markup + Fase 2 JS). El minicart/lupa están 100% globales,
 > de 8 copias a 1. Detalle en §3.
+
+**Migración V1→V2 — TRABAJO ACTIVO (2026-06-02).** Pipeline construido y **piloto validada en vivo**.
+- Workspace `poblacion-bd-v2/` con scripts reusables: `generar-import.ps1` (export WC + columnas
+  `Meta: _bgm_*` cruzadas por SKU, recorte limpio) y `generar-chunks.ps1` (trocea por producto).
+- Datos 2-jun: **1237 productos con escalones mayoristas** mapeados · 663 reglas huérfanas
+  descartadas · 0 ambiguos. Salida: **8 planillas de 200 productos** en `poblacion-bd-v2/planillas/`
+  + `_MANIFIESTO.txt` (checklist).
+- **planilla-01 subida — se ve bien.** Falta **subir 02–08** marcando "Actualizar productos
+  existentes"; al terminar: Enlaces permanentes → Guardar + spot-check de un escalón en el carrito.
+- Fundamentos durables del mapeo en §5 (items 19–23).
 
 **Nuevo feature pedido (2026-06-02): descuento promocional minorista** en el plugin mayorista.
 Diseño YA acordado con el usuario; falta implementar. Empezar por **Fase 1 (productos simples)**.
@@ -170,13 +184,14 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
 **🟡 Optimización / próximas tareas:**
 - Resto de quick wins de la auditoría + **BC-03 caché de stats** (transient 5 min; difería a
   post-deploy, adelantar si se quiere). Ver `AUDITORIA-OPTIMIZACION.md` §4.4.
-- **Script de migración manual V1 → V2** (el usuario lo pidió). A definir en conjunto: cómo exporta
-  el V1, qué datos trasladar (precios, stock, mayoristas, imágenes, categorías, atributos), formato
-  de salida (CSV para WP All Import / JSON / SQL).
+- **Migración manual V1 → V2: pipeline CONSTRUIDO y piloto validada** (`poblacion-bd-v2/`, ver §2 +
+  §5 items 19–23). Pendiente: subir planillas 02–08. **Clientes (opción B, acordado):** migrar solo
+  los que ya compraron (email + RUT + ≥1 pedido), conservando el hash de contraseña (WP→WP); mapear
+  la meta-key del RUT de V1 → `_bgmg_rut` cuando toque.
 - **LiteSpeed Cache presets para WC**: qué cachear, qué excluir (carrito, checkout, mi cuenta, ajax),
   cómo invalidar tras deploy.
 
-**🟡 NUEVO — Descuento promocional minorista (plugin mayorista). Diseño acordado 2026-06-02, PENDIENTE implementar:**
+**🟡 Descuento promocional minorista (plugin mayorista) — FASE 1 (simples) HECHA en 2.5.5 (zip listo, PENDIENTE validar en staging). Fase 2 (variables) pendiente:**
 
 *Reglas de negocio:*
 - Aplica solo a **productos o categorías seleccionables en admin**.
@@ -204,7 +219,11 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   promo cuando el surtido falla o `qty_total < umbral` (**el promo ignora la regla de surtido**).
 
 *Entrega poco a poco (el usuario quiere ambos tipos, bien hechos):*
-- **Fase 1 — productos simples** (limpia, bajo riesgo). Validar en staging antes de seguir.
+- **Fase 1 — productos simples: HECHA (2.5.5).** Módulo aislado `includes/core/promo.php`
+  (`bgm_promo_activa_ahora` toggle+fechas, `bgm_producto_en_promo` ID/categoría, `bgm_calcular_precio_promo`)
+  + sección de config en **WC → Ajustes → Mayorista** + fallback en `bgm_aplicar_precio_simple`
+  (mayorista primero; promo solo si nivel 0, mutuamente excluyentes). `bgm_calcular_precio()` **intacta**.
+  Lint 19/19 OK, sin BOM. **Validar en staging antes de Fase 2.**
 - **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
 - Pendiente menor (fuera de alcance inicial): **aviso visual propio del promo** en
   `includes/frontend/avisos-carrito.php` (hoy esos avisos son solo de mayorista).
@@ -260,6 +279,19 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
     Drive) → el primer `push` en cada PC abre el navegador una vez. **GitHub es la fuente de verdad:**
     si Drive corrompe `.git`, re-clonar con `git clone https://github.com/andresJagq/bgmg-chile-proyecto.git`.
     Flujo normal: `commit` → `push`.
+
+**Migración V1→V2 — pipeline (`poblacion-bd-v2/`):**
+19. Fuente: export nativo de WC + export de **Advanced Woo Discount Rules**, cruzados por **SKU**.
+20. Precio mayorista V1 = reglas `wdr_bulk_discount` tipo **`flat` (pesos/unidad)** → mapean directo a
+    `_bgm_descuento_*` (sin conversión de %). Corte de escalón: `from<12`→Nivel I, `≥12`→Nivel II.
+21. CSV de importación = export de WC **recortado limpio** (se botan `ID`, `Swatches Attributes` y las
+    ~107 `Meta:` de plugins de V1: Elementor/Facebook/Google/Yoast/woosea/Neve…) + 5 columnas
+    `Meta: _bgm_*`, con `_bgm_modo_descuento=unico` (config en el padre; las variaciones heredan).
+22. **663 reglas huérfanas** (SKU sin producto en el catálogo) se **descartan** (no son productos, no
+    se pierde nada); si faltan productos, se re-exporta y re-corre. **340 productos sin regla** = solo-detalle.
+23. Subida por **planillas de 200 productos** (Ruta C): variaciones siempre con su padre, header con
+    BOM en cada una, importar con "Actualizar productos existentes". Scripts reusables
+    `generar-import.ps1` + `generar-chunks.ps1` regeneran todo si cambia el export.
 
 ---
 

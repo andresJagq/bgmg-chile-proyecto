@@ -107,18 +107,34 @@ function bgm_aplicar_precio_simple( $cart, $key ) {
     $producto = $item['data'];
     $qty      = (int) $item['quantity'];
 
-    if ( ! bgm_tiene_precio_mayorista( $producto->get_id() ) ) return;
+    // 1) Mayorista PRIMERO (lógica intacta). Si aplica, gana y no se evalúa promo.
+    if ( bgm_tiene_precio_mayorista( $producto->get_id() ) ) {
+        $resultado = bgm_calcular_precio( $producto, $qty );
 
-    $resultado = bgm_calcular_precio( $producto, $qty );
+        if ( $resultado['nivel'] > 0 ) {
+            $producto->set_price( $resultado['precio'] );
+            bgm_log( 'cart', 'Simple tiered aplicado', [
+                'product_id' => $producto->get_id(),
+                'qty'        => $qty,
+                'nivel'      => $resultado['nivel'],
+                'precio'     => $resultado['precio'],
+            ] );
+            return; // mayorista aplicó → mutuamente excluyente con la promo
+        }
+    }
 
-    if ( $resultado['nivel'] > 0 ) {
-        $producto->set_price( $resultado['precio'] );
-        bgm_log( 'cart', 'Simple tiered aplicado', [
-            'product_id' => $producto->get_id(),
-            'qty'        => $qty,
-            'nivel'      => $resultado['nivel'],
-            'precio'     => $resultado['precio'],
-        ] );
+    // 2) Promo minorista (solo si el mayorista NO aplicó). Aislada; puede aplicar
+    //    incluso a productos sin configuración mayorista. Devuelve null si no toca.
+    if ( function_exists( 'bgm_calcular_precio_promo' ) ) {
+        $precio_promo = bgm_calcular_precio_promo( $producto, $qty );
+        if ( $precio_promo !== null ) {
+            $producto->set_price( $precio_promo );
+            bgm_log( 'cart', 'Promo minorista aplicada', [
+                'product_id' => $producto->get_id(),
+                'qty'        => $qty,
+                'precio'     => $precio_promo,
+            ] );
+        }
     }
 }
 

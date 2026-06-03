@@ -28,6 +28,13 @@ function bgm_registrar_pagina_settings( $pages ) {
             }
 
             public function get_settings() {
+                // Opciones de categorías para el multiselect de la promo
+                $cat_options = [];
+                $terms = get_terms( [ 'taxonomy' => 'product_cat', 'hide_empty' => false ] );
+                if ( ! is_wp_error( $terms ) && is_array( $terms ) ) {
+                    foreach ( $terms as $t ) { $cat_options[ $t->term_id ] = $t->name; }
+                }
+
                 return [
                     // ─── Defaults globales ───────────────────────────
                     [
@@ -86,6 +93,91 @@ function bgm_registrar_pagina_settings( $pages ) {
                         ],
                     ],
                     [ 'type' => 'sectionend', 'id' => 'bgm_section_modo' ],
+
+                    // ─── Descuento promocional minorista ─────────────
+                    [
+                        'title' => __( 'Descuento promocional minorista', 'beautygirlmg-mayorista' ),
+                        'type'  => 'title',
+                        'desc'  => __( 'Descuento por ocasión especial (ej. Cyber) para compras al detalle. Solo aplica BAJO el umbral mayorista: si el cliente alcanza la cantidad mayorista, gana el precio mayorista (no se suman). Fase 1: solo productos simples.', 'beautygirlmg-mayorista' ),
+                        'id'    => 'bgm_section_promo',
+                    ],
+                    [
+                        'title'   => __( 'Activar promoción', 'beautygirlmg-mayorista' ),
+                        'desc'    => __( 'Interruptor maestro. Además debe estar dentro del rango de fechas para aplicar.', 'beautygirlmg-mayorista' ),
+                        'id'      => 'bgm_promo_activa',
+                        'type'    => 'checkbox',
+                        'default' => 'no',
+                    ],
+                    [
+                        'title'    => __( 'Fecha de inicio', 'beautygirlmg-mayorista' ),
+                        'desc'     => __( 'Desde las 00:00 de este día (zona horaria del sitio). Vacío = sin límite inferior.', 'beautygirlmg-mayorista' ),
+                        'id'       => 'bgm_promo_fecha_inicio',
+                        'type'     => 'date',
+                        'desc_tip' => true,
+                    ],
+                    [
+                        'title'    => __( 'Fecha de fin', 'beautygirlmg-mayorista' ),
+                        'desc'     => __( 'Hasta las 23:59 de este día, inclusive. Vacío = sin límite superior.', 'beautygirlmg-mayorista' ),
+                        'id'       => 'bgm_promo_fecha_fin',
+                        'type'     => 'date',
+                        'desc_tip' => true,
+                    ],
+                    [
+                        'title'    => __( 'Tipo de descuento', 'beautygirlmg-mayorista' ),
+                        'desc'     => __( 'Siempre se calcula sobre el precio normal del producto.', 'beautygirlmg-mayorista' ),
+                        'id'       => 'bgm_promo_tipo',
+                        'type'     => 'select',
+                        'default'  => 'porcentaje',
+                        'desc_tip' => true,
+                        'options'  => [
+                            'porcentaje' => __( 'Porcentaje (%)', 'beautygirlmg-mayorista' ),
+                            'monto'      => __( 'Monto fijo ($)', 'beautygirlmg-mayorista' ),
+                        ],
+                    ],
+                    [
+                        'title'             => __( 'Valor del descuento', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Porcentaje: 1–100. Monto fijo: pesos a descontar por unidad.', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_promo_valor',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
+                    ],
+                    [
+                        'title'             => __( 'Cantidad mínima', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Cantidad mínima del ítem para aplicar la promo. Default 1.', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_promo_qty_min',
+                        'type'              => 'number',
+                        'default'           => 1,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '1', 'step' => '1' ],
+                    ],
+                    [
+                        'title'             => __( 'Cantidad máxima', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( '0 = sin límite. La promo nunca pisa al mayorista: si se alcanza el umbral mayorista, gana el mayorista.', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_promo_qty_max',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
+                    ],
+                    [
+                        'title'    => __( 'Categorías en promo', 'beautygirlmg-mayorista' ),
+                        'desc'     => __( 'Todos los productos de estas categorías entran en la promo.', 'beautygirlmg-mayorista' ),
+                        'id'       => 'bgm_promo_categorias',
+                        'type'     => 'multiselect',
+                        'class'    => 'wc-enhanced-select',
+                        'options'  => $cat_options,
+                        'desc_tip' => true,
+                    ],
+                    [
+                        'title'    => __( 'Productos en promo (IDs)', 'beautygirlmg-mayorista' ),
+                        'desc'     => __( 'IDs de productos separados por coma o espacio. Se suman a las categorías de arriba.', 'beautygirlmg-mayorista' ),
+                        'id'       => 'bgm_promo_productos',
+                        'type'     => 'textarea',
+                        'desc_tip' => true,
+                    ],
+                    [ 'type' => 'sectionend', 'id' => 'bgm_section_promo' ],
 
                     // ─── Debug ───────────────────────────────────────
                     [
