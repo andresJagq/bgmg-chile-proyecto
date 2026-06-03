@@ -14,7 +14,7 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Este módulo es AISLADO: `bgm_calcular_precio()` (lógica mayorista pura)
  * queda intacta. Config global en wp_options con prefijo `bgm_promo_`.
  *
- * Fase 1: productos SIMPLES. (Fase 2: variables.)
+ * Aplica a productos SIMPLES y VARIABLES (la precedencia vive en carrito.php).
  * =========================================================
  */
 

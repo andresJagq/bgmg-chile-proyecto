@@ -20,7 +20,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.2** |
 | bgmg-landing | **6.5.5** |
-| beautygirlmg-mayorista | **2.5.6** |
+| beautygirlmg-mayorista | **2.5.7** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -238,12 +238,13 @@ button.bgmg-mc-clear`. **El JS de cantidades/eliminar/vaciar YA es global** vía
   `bgm_calcular_precio_promo($p, 1)` como fuente única de verdad) y **bgmg-landing** lo pinta en sus
   templates (ver `CONTRATO-PLUGIN-TEMA.md`). Decidir dónde va el badge según si los templates usan
   hooks WC o markup propio. Cuidar que NO choque con el display "precio mayorista desde X uds".
-- **Fase 2 — productos variables** (delicada: interacción con el surtido + early-return del conjunto).
-  **Decisión confirmada (2026-06-03): contar por TOTAL del producto** (suma de variaciones = `qty_total`,
-  consistente con el mayorista). Plan: ampliar la agrupación (incluir padres en promo aunque no tengan
-  mayorista) y reestructurar `bgm_aplicar_precio_conjunto_variaciones` para que, si el surtido falla o
-  `qty_total` queda bajo el umbral mayorista, se intente el promo **ignorando la regla de surtido**.
-  `bgm_calcular_precio_promo()` ya soporta variaciones (elegibilidad por el padre).
+- **Fase 2 — productos variables: HECHA (2.5.7, lint 0 errores).** Cuenta por **TOTAL del producto**
+  (`qty_total`, consistente con el mayorista). En `carrito.php`: (a) la agrupación incluye padres en
+  promo aunque NO tengan mayorista (`bgm_promo_activa_ahora() && bgm_producto_en_promo($padre)`);
+  (b) `bgm_aplicar_precio_conjunto_variaciones` aplica **mayorista primero** (surtido OK + algún
+  nivel>0) y, si NO aplicó (surtido falla o `qty_total` bajo umbral), intenta **promo ignorando el
+  surtido** → mutuamente excluyentes. `bgm_calcular_precio_promo($variacion, $qty_total)`: elegibilidad
+  por el **padre**, precio base por **variación**. **Validar en staging.**
 - Pendiente menor (fuera de alcance inicial): **aviso visual propio del promo** en
   `includes/frontend/avisos-carrito.php` (hoy esos avisos son solo de mayorista).
 - Cierre: **bump `BGM_VERSION` en 2 sitios**, escribir sin BOM, `php -l` antes de subir.

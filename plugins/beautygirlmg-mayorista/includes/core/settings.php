@@ -116,7 +116,7 @@ function bgm_registrar_pagina_settings( $pages ) {
                     [
                         'title' => __( 'Descuento promocional minorista', 'beautygirlmg-mayorista' ),
                         'type'  => 'title',
-                        'desc'  => __( 'Descuento por ocasión especial (ej. Cyber) para compras al detalle. Solo aplica BAJO el umbral mayorista: si el cliente alcanza la cantidad mayorista, gana el precio mayorista (no se suman). Estos valores son el DEFAULT global; cada producto puede heredarlo, personalizarlo o excluirse desde su pestaña Mayorista. Fase 1: productos simples.', 'beautygirlmg-mayorista' ),
+                        'desc'  => __( 'Descuento por ocasión especial (ej. Cyber) para compras al detalle. Solo aplica BAJO el umbral mayorista: si el cliente alcanza la cantidad mayorista, gana el precio mayorista (no se suman). Estos valores son el DEFAULT global; cada producto puede heredarlo, personalizarlo o excluirse desde su pestaña Mayorista. Aplica a productos simples y variables.', 'beautygirlmg-mayorista' ),
                         'id'    => 'bgm_section_promo',
                     ],
                     [

@@ -2,7 +2,7 @@
 /**
  * Plugin Name: BeautyGirlMG Mayorista v2
  * Description: Sistema de precios mayorista con tiered pricing (2 niveles) y surtido automático/manual para beautygirlmg.cl
- * Version: 2.5.6
+ * Version: 2.5.7
  * Author: BeautyGirlMG
  * Text Domain: beautygirlmg-mayorista
  * Requires WooCommerce: 6.0
@@ -11,7 +11,7 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 // ─── Constantes globales ─────────────────────────────────────────────────────
-define( 'BGM_VERSION',  '2.5.6' );
+define( 'BGM_VERSION',  '2.5.7' );
 define( 'BGM_PATH',     plugin_dir_path( __FILE__ ) );
 define( 'BGM_URL',      plugin_dir_url( __FILE__ ) );
 define( 'BGM_BASENAME', plugin_basename( __FILE__ ) );

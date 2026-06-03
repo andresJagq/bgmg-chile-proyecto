@@ -17,7 +17,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *    conjunto, sin importar si vinieron de modo Auto, Manual o del botón
  *    nativo de WC. Si el conjunto cumple la regla de surtido equilibrado
  *    (con la relajación de "atrancadas no cuentan"), se aplica precio
- *    mayorista. Si no, queda a precio detalle.
+ *    mayorista. Si NO aplica mayorista (surtido no cumple o qty bajo el
+ *    umbral), se intenta la PROMO minorista (no exige surtido). Si tampoco,
+ *    queda a precio detalle.
  *
  * El flag bgm_origen ('auto' | 'manual') se guarda en cart_item_data al
  * agregar, pero NO afecta la lógica de precio: se usa solo para distinguir
@@ -81,7 +83,11 @@ function bgm_aplicar_precios_carrito( $cart ) {
 
         if ( $producto->is_type( 'variation' ) ) {
             $padre_id = $producto->get_parent_id();
-            if ( bgm_tiene_precio_mayorista( $padre_id ) || bgm_variacion_padre_tiene_mayorista( $padre_id ) ) {
+            // Promo (Fase 2): incluir también padres en promo aunque NO tengan mayorista.
+            $promo_ok = function_exists( 'bgm_calcular_precio_promo' )
+                && bgm_promo_activa_ahora()
+                && bgm_producto_en_promo( $padre_id );
+            if ( bgm_tiene_precio_mayorista( $padre_id ) || bgm_variacion_padre_tiene_mayorista( $padre_id ) || $promo_ok ) {
                 $por_padre[ $padre_id ][] = $key;
             }
         } elseif ( $producto->is_type( 'simple' ) ) {
@@ -169,34 +175,67 @@ function bgm_aplicar_precio_conjunto_variaciones( $cart, $padre_id, $keys ) {
 
     $evaluacion = bgm_evaluar_distribucion( $padre_id, $por_variacion, null, $stocks );
 
-    if ( is_wp_error( $evaluacion ) ) {
-        bgm_log( 'cart', 'Conjunto variaciones: no cumple regla → precio detalle', [
-            'padre_id'   => $padre_id,
-            'qty_total'  => $qty_total,
-            'razon'      => $evaluacion->get_error_code(),
-            'mensaje'    => $evaluacion->get_error_message(),
-            'cantidades' => $por_variacion,
-        ] );
-        return;
-    }
+    // 1) MAYORISTA primero: requiere surtido equilibrado (evaluacion OK) Y que el
+    //    qty_total alcance algún nivel. Si algún ítem entra a nivel mayorista, el
+    //    conjunto se considera mayorista → mutuamente excluyente con la promo.
+    if ( ! is_wp_error( $evaluacion ) ) {
+        $mayorista_aplico = false;
 
-    // Cumple la regla → aplicar tiered según qty total
-    foreach ( $keys as $key ) {
-        if ( ! isset( $items[ $key ] ) ) continue;
+        foreach ( $keys as $key ) {
+            if ( ! isset( $items[ $key ] ) ) continue;
 
-        $producto  = $items[ $key ]['data'];
-        $resultado = bgm_calcular_precio( $producto, $qty_total, $padre_id );
+            $producto  = $items[ $key ]['data'];
+            $resultado = bgm_calcular_precio( $producto, $qty_total, $padre_id );
 
-        if ( $resultado['nivel'] > 0 ) {
-            $producto->set_price( $resultado['precio'] );
+            if ( $resultado['nivel'] > 0 ) {
+                $producto->set_price( $resultado['precio'] );
+                $mayorista_aplico = true;
+            }
+        }
+
+        if ( $mayorista_aplico ) {
+            bgm_log( 'cart', 'Conjunto variaciones: precio mayorista aplicado', [
+                'padre_id'  => $padre_id,
+                'qty_total' => $qty_total,
+                'items'     => count( $keys ),
+            ] );
+            return; // mayorista ganó → no se evalúa promo
         }
     }
 
-    bgm_log( 'cart', 'Conjunto variaciones: precio mayorista aplicado', [
-        'padre_id'  => $padre_id,
-        'qty_total' => $qty_total,
-        'items'     => count( $keys ),
-    ] );
+    // 2) PROMO minorista (Fase 2): solo si el mayorista NO aplicó (surtido no
+    //    cumple, o qty_total por debajo del umbral). NO exige surtido equilibrado
+    //    (es un descuento al detalle). Se cuenta por el TOTAL del producto, igual
+    //    que el mayorista mide los variables; el precio base es el de cada variación.
+    if ( ! function_exists( 'bgm_calcular_precio_promo' ) ) return;
+
+    $promo_aplico = false;
+    foreach ( $keys as $key ) {
+        if ( ! isset( $items[ $key ] ) ) continue;
+
+        $producto     = $items[ $key ]['data'];
+        $precio_promo = bgm_calcular_precio_promo( $producto, $qty_total );
+
+        if ( $precio_promo !== null ) {
+            $producto->set_price( $precio_promo );
+            $promo_aplico = true;
+        }
+    }
+
+    if ( $promo_aplico ) {
+        bgm_log( 'cart', 'Conjunto variaciones: promo minorista aplicada', [
+            'padre_id'  => $padre_id,
+            'qty_total' => $qty_total,
+            'items'     => count( $keys ),
+        ] );
+    } elseif ( is_wp_error( $evaluacion ) ) {
+        bgm_log( 'cart', 'Conjunto variaciones: sin mayorista ni promo → precio detalle', [
+            'padre_id'   => $padre_id,
+            'qty_total'  => $qty_total,
+            'razon'      => $evaluacion->get_error_code(),
+            'cantidades' => $por_variacion,
+        ] );
+    }
 }
 
 // ─── Helper: el padre tiene mayorista en alguna variación (modo individual) ──
