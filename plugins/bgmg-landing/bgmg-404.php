@@ -23,16 +23,16 @@ $bgmg_shop_url = function_exists( 'wc_get_page_id' ) ? get_permalink( wc_get_pag
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <?php wp_head(); ?>
 <style>
 :root{--pink:#F2C4CE;--pink-soft:#FBF0F2;--pink-dark:#C4728A;--cream:#FDF7F4;--dark:#1A1015;--mid:#7A5060;--border:#f0e0e5;}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--dark);}
+body{font-family:'Poppins',sans-serif;background:var(--cream);color:var(--dark);}
 .bgmg-404{min-height:62vh;display:flex;align-items:center;justify-content:center;text-align:center;padding:104px 20px 120px;}
 .bgmg-404-inner{max-width:540px;}
-.bgmg-404-code{font-family:'Cormorant Garamond',serif;font-size:104px;font-weight:600;color:var(--pink-dark);line-height:1;letter-spacing:4px;}
-.bgmg-404-title{font-family:'Cormorant Garamond',serif;font-size:32px;font-weight:600;color:var(--dark);margin:6px 0 12px;line-height:1.2;}
+.bgmg-404-code{font-family:'Alice',serif;font-size:104px;font-weight:600;color:var(--pink-dark);line-height:1;letter-spacing:4px;}
+.bgmg-404-title{font-family:'Alice',serif;font-size:32px;font-weight:600;color:var(--dark);margin:6px 0 12px;line-height:1.2;}
 .bgmg-404-text{font-size:15px;color:var(--mid);line-height:1.6;margin-bottom:28px;}
 .bgmg-404-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
 .bgmg-404-btn{display:inline-block;padding:13px 30px;border-radius:30px;font-size:14px;font-weight:500;text-decoration:none;transition:opacity .2s,background .2s,border-color .2s;}

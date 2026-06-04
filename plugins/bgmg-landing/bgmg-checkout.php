@@ -7,7 +7,7 @@
 <title>Finalizar compra — BeautyGirlMG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <?php wp_head(); ?>
 <style>
 /* ── RESET + BASE ───────────────────────────────────────────── */
@@ -23,7 +23,7 @@
 }
 html, body { overflow-x: clip; }
 html { scroll-behavior: auto; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--dark); }
 .bgmg-co-wrap, .bgmg-co-wrap * { max-width: 100%; }
 
 /* ── MINI CART ── CSS estructural movido a assets/bgmg-global.css (BL-01c). ── */
@@ -44,7 +44,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-breadcrumb {
   display: flex; align-items: center; gap: 6px; flex-wrap: wrap;
   margin-bottom: 16px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid);
 }
 .bgmg-breadcrumb a { color: var(--mid); text-decoration: none; transition: color .2s; }
 .bgmg-breadcrumb a:hover { color: var(--pink-dark); }
@@ -59,7 +59,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   border-radius: 24px;
   background: var(--pink-soft);
   color: var(--mid);
-  font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500;
+  font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500;
   text-decoration: none;
   transition: background .2s, color .2s, transform .15s;
 }
@@ -68,7 +68,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 
 /* ── TÍTULO ─────────────────────────────────────────────────── */
 .bgmg-co-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 32px; font-weight: 400; color: var(--dark);
   margin-bottom: 28px;
 }
@@ -84,7 +84,7 @@ ul.woocommerce-error::before { display: none !important; }
 .woocommerce-message,
 .woocommerce-error,
 ul.woocommerce-error {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 14px !important; border-radius: 12px !important;
   padding: 14px 18px !important; margin-bottom: 16px !important;
   list-style: none !important; border-top: none !important;
@@ -160,7 +160,7 @@ form.woocommerce-checkout > #order_review_heading,
 .woocommerce-shipping-fields h3,
 .woocommerce-additional-fields h3,
 #order_review_heading {
-  font-family: 'Cormorant Garamond', serif !important;
+  font-family: 'Alice', serif !important;
   font-size: 22px !important; font-weight: 600 !important; color: var(--dark) !important;
   margin: 28px 0 16px !important; padding-bottom: 12px !important;
   border-bottom: 1px solid var(--border) !important;
@@ -169,7 +169,7 @@ form.woocommerce-checkout > #order_review_heading,
 
 /* ── LABELS ─────────────────────────────────────────────────── */
 form.woocommerce-checkout label {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 12px !important; font-weight: 500 !important;
   text-transform: uppercase !important; letter-spacing: 1px !important;
   color: var(--mid) !important; margin-bottom: 6px !important;
@@ -198,7 +198,7 @@ form.woocommerce-checkout .input-text,
 form.woocommerce-checkout textarea {
   width: 100% !important; padding: 13px 16px !important;
   border: 1.5px solid var(--border) !important; border-radius: 12px !important;
-  font-family: 'DM Sans', sans-serif !important; font-size: 16px !important;
+  font-family: 'Poppins', sans-serif !important; font-size: 16px !important;
   color: var(--dark) !important; background: #fff !important;
   outline: none !important; box-shadow: none !important;
   -webkit-appearance: none !important; appearance: none !important;
@@ -214,7 +214,7 @@ form.woocommerce-checkout textarea:focus {
 form.woocommerce-checkout select {
   width: 100% !important; padding: 13px 16px !important;
   border: 1.5px solid var(--border) !important; border-radius: 12px !important;
-  font-family: 'DM Sans', sans-serif !important; font-size: 16px !important;
+  font-family: 'Poppins', sans-serif !important; font-size: 16px !important;
   color: var(--dark) !important; background: #fff !important;
   outline: none !important; cursor: pointer !important;
 }
@@ -227,7 +227,7 @@ form.woocommerce-checkout select {
   display: flex !important; align-items: center !important; overflow: hidden !important;
 }
 .select2-container--default .select2-selection--single .select2-selection__rendered {
-  font-family: 'DM Sans', sans-serif !important; font-size: 16px !important;
+  font-family: 'Poppins', sans-serif !important; font-size: 16px !important;
   color: var(--dark) !important; line-height: 50px !important;
   padding: 0 40px 0 16px !important;
   overflow: hidden !important; text-overflow: ellipsis !important; white-space: nowrap !important;
@@ -242,9 +242,9 @@ form.woocommerce-checkout select {
   box-shadow: 0 0 0 3px rgba(196,114,138,.1) !important;
 }
 .select2-dropdown { border: 1px solid var(--border) !important; border-radius: 12px !important; box-shadow: 0 8px 32px rgba(0,0,0,.10) !important; overflow: hidden !important; }
-.select2-results__option { font-family: 'DM Sans', sans-serif !important; font-size: 14px !important; padding: 10px 16px !important; }
+.select2-results__option { font-family: 'Poppins', sans-serif !important; font-size: 14px !important; padding: 10px 16px !important; }
 .select2-results__option--highlighted { background: var(--pink-soft) !important; color: var(--dark) !important; }
-.select2-search--dropdown .select2-search__field { border: 1.5px solid var(--border) !important; border-radius: 8px !important; padding: 8px 12px !important; font-family: 'DM Sans', sans-serif !important; font-size: 14px !important; }
+.select2-search--dropdown .select2-search__field { border: 1.5px solid var(--border) !important; border-radius: 8px !important; padding: 8px 12px !important; font-family: 'Poppins', sans-serif !important; font-size: 14px !important; }
 
 /* ── FORM ROWS ───────────────────────────────────────────────── */
 .form-row { margin-bottom: 16px !important; }
@@ -255,16 +255,16 @@ form.woocommerce-checkout select {
 .woocommerce-form-coupon-toggle {
   background: var(--pink-soft); border-radius: 12px;
   padding: 12px 16px; margin-bottom: 20px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--mid);
 }
 .woocommerce-form-coupon-toggle .showcoupon { color: var(--pink-dark); font-weight: 500; }
 .woocommerce-form-coupon { background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
-.woocommerce-form-coupon p { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--mid); margin-bottom: 12px; }
+.woocommerce-form-coupon p { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--mid); margin-bottom: 12px; }
 .woocommerce-form-coupon .form-row { display: flex; gap: 10px; margin: 0 !important; }
 .woocommerce-form-coupon .button {
   padding: 13px 24px !important; border-radius: 30px !important;
   background: var(--dark) !important; color: #fff !important; border: none !important;
-  font-family: 'DM Sans', sans-serif !important; font-size: 14px !important;
+  font-family: 'Poppins', sans-serif !important; font-size: 14px !important;
   font-weight: 500 !important; cursor: pointer !important; white-space: nowrap !important; transition: opacity .2s !important;
 }
 .woocommerce-form-coupon .button:hover { opacity: .85 !important; }
@@ -273,7 +273,7 @@ form.woocommerce-checkout select {
 #order_review { background: #fff; border: 1px solid var(--border); border-radius: 20px; overflow: hidden; margin-top: 8px; }
 #order_review_heading { padding: 20px 24px 0 !important; border-bottom: none !important; margin-top: 0 !important; }
 
-.woocommerce-checkout-review-order-table { width: 100%; border-collapse: collapse; font-family: 'DM Sans', sans-serif; }
+.woocommerce-checkout-review-order-table { width: 100%; border-collapse: collapse; font-family: 'Poppins', sans-serif; }
 .woocommerce-checkout-review-order-table thead th {
   padding: 12px 24px; font-size: 11px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid);
@@ -297,14 +297,14 @@ form.woocommerce-checkout select {
 #payment .payment_methods li:last-child { border-bottom: none; }
 #payment .payment_methods li label {
   display: flex !important; align-items: center !important; gap: 10px !important;
-  font-family: 'DM Sans', sans-serif !important; font-size: 15px !important;
+  font-family: 'Poppins', sans-serif !important; font-size: 15px !important;
   color: var(--dark) !important; cursor: pointer !important;
   text-transform: none !important; letter-spacing: 0 !important;
 }
 #payment .payment_methods li label img { height: 24px; width: auto; object-fit: contain; }
 #payment .payment_methods input[type="radio"] { width: 18px !important; height: 18px !important; accent-color: var(--pink-dark) !important; }
-#payment .payment_box { background: rgba(255,255,255,.6); border-radius: 10px; padding: 14px 16px; margin-top: 10px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); }
-#payment .terms { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px; }
+#payment .payment_box { background: rgba(255,255,255,.6); border-radius: 10px; padding: 14px 16px; margin-top: 10px; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); }
+#payment .terms { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); margin-bottom: 16px; display: flex; align-items: flex-start; gap: 10px; }
 #payment .terms a { color: var(--pink-dark); }
 
 /* ── BOTÓN PAGAR ─────────────────────────────────────────────── */
@@ -324,7 +324,7 @@ button#place_order {
   background-color: var(--dark) !important;
   color: #fff !important;
   border: none !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   cursor: pointer;
@@ -375,7 +375,7 @@ button#place_order:disabled {
   background-color: #1A1015 !important;
   color: #fff !important;
   border: none !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 16px !important;
   font-weight: 600 !important;
   cursor: pointer;
@@ -422,7 +422,7 @@ button#place_order:disabled {
 @media (min-width: 768px) { .blockUI.blockOverlay { top: 72px !important; } }
 
 /* ── THANK YOU PAGE ──────────────────────────────────────────── */
-.woocommerce-order { font-family: 'DM Sans', sans-serif; }
+.woocommerce-order { font-family: 'Poppins', sans-serif; }
 .woocommerce-order-overview { list-style: none; display: flex; flex-wrap: wrap; gap: 16px; background: var(--pink-soft); border-radius: 16px; padding: 20px; margin-bottom: 24px; }
 .woocommerce-order-overview li { font-size: 14px; color: var(--mid); }
 .woocommerce-order-overview li strong { color: var(--dark); display: block; font-size: 16px; }
@@ -430,7 +430,7 @@ button#place_order:disabled {
 .woocommerce-order-details h2,
 .woocommerce-customer-details h2,
 .bgmg-chile-order-extra h2,
-.bgmg-chile-order-tracking h2 { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--dark); margin: 24px 0 16px; }
+.bgmg-chile-order-tracking h2 { font-family: 'Alice', serif; font-size: 22px; font-weight: 600; color: var(--dark); margin: 24px 0 16px; }
 
 /* Separación visual clara entre los bloques que bgmg-chile inyecta en la
    thank-you (RUT/factura, tracking, retiro). Sin esto pueden verse pegados. */

@@ -47,8 +47,13 @@ Funciones globales del plugin que el tema (o cualquier otro plugin) puede llamar
 | `bgm_capacidades_variaciones( $product )` | Devuelve `[vid => stock_max]` por variación | Usado en evaluación; disponible para el tema si lo necesita |
 | `bgm_evaluar_distribucion( $product_id, $cantidades, $n_disponibles = null, $stocks = null )` | Evalúa si una distribución cumple la regla de surtido. Devuelve `true` o `WP_Error`. **Centralizado**: única fuente de verdad de la regla | Plugin solo, pero expuesto si el tema lo necesita |
 | `bgm_get_min_1` / `min_2` / `descuento_1` / `descuento_2` ( $product_id, $variation_id = 0 ) | Getters de config del producto | Tema podría usarlos para badges custom |
-| `bgm_get_promo_info( $product )` | Devuelve `['precio_base','precio_promo','ahorro','pct','qty_min']` o `null` si la promo no está activa/elegible. Para mostrar el descuento al cliente | `woocommerce_get_price_html` (precio tachado, Parte A) |
-| `bgm_promo_badge_html( $product )` | HTML del badge "−X% / Promo" o `''`. Funciona en simples **y** variables | `bgmg_product_card_html` + `bgmg-product.php` (Parte B) |
+| `bgm_get_promo_info( $product )` | Devuelve `['precio_base','precio_promo','ahorro','pct','qty_min']` o `null` si la promo no está activa/elegible. Fuente del % para el badge unificado | `woocommerce_get_price_html` (precio tachado) + badge unificado del tema (`bgmg_oferta_badge_html`) |
+| `bgm_get_oferta_etiqueta()` | Texto configurable del badge de descuento. Default `'Oferta'`. Config en WC → Ajustes → Mayorista | Badge unificado (`bgmg_oferta_badge_html`) + overlay de la galería |
+| `bgm_get_oferta_descuento_pct( $product )` | `int` con el % de la **oferta nativa de WC** (ej. `17`) o `0`. Soporta simple/variación/variable (mayor % entre variaciones). Solo se usa como fallback si NO hay promo | Badge unificado + overlay |
+| `bgm_promo_ids_afectados()` | `int[]` de IDs de productos en promo (categorías ∪ personalizados − excluidos). Cacheado 5 min. NO filtra por fecha/toggle | Sección "Precios irresistibles" de la home (`bgmg-template.php`) |
+| `bgm_promo_badge_html( $product )` | HTML del badge "−X% / Promo". **OBSOLETO** desde la unificación del badge: el tema ya no lo llama (lo reemplaza el badge unificado `bgmg_oferta_badge_html`). Se mantiene por compatibilidad | — (sin uso en el tema) |
+
+> **Badge UNIFICADO** (decisión 2026-06-03): el tema muestra UN solo badge de descuento `🔥 {etiqueta} -X%` vía `bgmg_oferta_badge_html()`, que cubre **promo** (precede) y **oferta nativa de WC** (fallback). El nombre sale de `bgm_get_oferta_etiqueta()`; el % de `bgm_get_promo_info()` o, si no hay promo, de `bgm_get_oferta_descuento_pct()`. El plugin expone solo DATOS; el markup/CSS del badge (pill `.bgmg-badge-oferta` + overlay `.bgmg-oferta-overlay`) lo arma el tema.
 
 **Buena práctica**: el tema siempre debe envolver con `function_exists( 'bgm_xxx' )` para que el sitio no se rompa si el plugin se desactiva.
 
@@ -188,6 +193,8 @@ Selectores que ambos lados conocen. Cambiar uno requiere cambiar el otro.
 | `form.cart input[name="quantity"]` | WC core | Plugin (`frontend-simple.js` para preview en vivo) |
 | `form.variations_form table.variations select` | WC core | Plugin (`frontend-swatches.js` los convierte en pills) |
 | `.bgm-promo-badge` | Plugin (HTML vía `bgm_promo_badge_html`) | Tema (estilo en `assets/bgmg-global.css`, cargado en todas las páginas) |
+| `.bgmg-badge-oferta` | Tema (HTML vía `bgmg_oferta_badge_html`, texto+% del plugin) | Tema (estilo per-template + `bgmg-global.css`). Badge de oferta nativa de WC en tarjetas |
+| `.bgmg-oferta-overlay`, `.bgmg-card-badges` | Tema | Tema. Overlay del badge sobre la imagen del producto y wrapper categoría+oferta lado a lado |
 
 ---
 

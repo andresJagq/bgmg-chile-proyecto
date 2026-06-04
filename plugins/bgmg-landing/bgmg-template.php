@@ -10,7 +10,7 @@ defined( 'ABSPATH' ) || exit;
 <title>BeautyGirlMG — Tu rutina de belleza natural</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <?php wp_head(); ?>
 <style>
@@ -26,21 +26,21 @@ defined( 'ABSPATH' ) || exit;
   --border:    #f0e0e5;
 }
 html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--dark); }
 
 /* ── SECCIÓN ────────────────────────────────────────────────── */
 .bgmg-sec       { padding: 48px 20px; }
 .bgmg-sec-inner { max-width: 1100px; margin: 0 auto; }
 .bgmg-sec-label {
   display: inline-block;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px; font-weight: 500;
   text-transform: uppercase; letter-spacing: 2px;
   color: var(--pink-dark); background: var(--pink-soft);
   padding: 5px 14px; border-radius: 30px; margin-bottom: 10px;
 }
 .bgmg-sec-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 32px; font-weight: 400;
   color: var(--dark); line-height: 1.2; margin: 4px 0 24px;
 }
@@ -66,7 +66,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-slide-badge {
   position: absolute; top: 22px; right: 20px; z-index: 2;
   background: rgba(255,255,255,.92); color: var(--dark);
-  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500;
+  font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500;
   padding: 8px 16px; border-radius: 30px; border: 1px solid var(--border);
   animation: bgmg-float 3s ease-in-out infinite; white-space: nowrap;
 }
@@ -76,30 +76,30 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 }
 .bgmg-slide-text { flex: 1; }
 .bgmg-slide-label {
-  display: inline-block; font-family: 'DM Sans', sans-serif;
+  display: inline-block; font-family: 'Poppins', sans-serif;
   font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 2px;
   color: var(--pink-dark); background: rgba(255,255,255,.75);
   padding: 5px 14px; border-radius: 30px; margin-bottom: 14px;
 }
 .bgmg-slide-title {
-  font-family: 'Cormorant Garamond', serif; font-size: 44px; font-weight: 400;
+  font-family: 'Alice', serif; font-size: 44px; font-weight: 400;
   color: var(--dark); line-height: 1.15; margin-bottom: 16px;
 }
 .bgmg-slide-title em { font-style: italic; color: var(--pink-dark); }
 .bgmg-slide-sub {
-  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 300;
+  font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 300;
   color: var(--mid); line-height: 1.65; margin-bottom: 28px; max-width: 480px;
 }
 .bgmg-slide-pills { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 28px; }
 .bgmg-slide-pills span {
   background: rgba(255,255,255,.72); border: 1px solid var(--border);
   border-radius: 20px; padding: 6px 14px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid);
 }
 .bgmg-slide-cta {
   display: inline-block; background: var(--dark); color: #fff;
   padding: 16px 36px; border-radius: 30px; text-decoration: none;
-  font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 500;
+  font-family: 'Poppins', sans-serif; font-size: 16px; font-weight: 500;
   transition: opacity .2s, transform .2s;
 }
 .bgmg-slide-cta:hover { opacity: .85; transform: translateY(-1px); }
@@ -147,11 +147,11 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   padding: 2px 8px; border-radius: 20px; align-self: flex-start;
 }
 .bgmg-card-name {
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--dark);
+  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 400; color: var(--dark);
   display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;
   overflow: hidden; line-height: 1.3;
 }
-.bgmg-card-price { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); }
+.bgmg-card-price { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); }
 .bgmg-card-price del { font-size: 12px; color: var(--mid); margin-left: 4px; font-weight: 300; }
 .bgmg-btn-add {
   width: 38px; height: 38px; border-radius: 50%;
@@ -167,7 +167,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   display: inline-flex; align-items: center; gap: 6px;
   padding: 10px 18px; background: #fff; border: 1px solid var(--border);
   border-radius: 30px; text-decoration: none; color: var(--dark);
-  font-family: 'DM Sans', sans-serif; font-size: 14px; transition: background .2s, border-color .2s;
+  font-family: 'Poppins', sans-serif; font-size: 14px; transition: background .2s, border-color .2s;
 }
 .bgmg-cat:hover { background: var(--pink-soft); border-color: var(--pink); }
 .bgmg-cat-icon  { font-size: 18px; }
@@ -188,10 +188,10 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-tips-aqua  { background: #e0f5f0; }
 .bgmg-tips-peach { background: #fdeede; }
 .bgmg-tips-emoji { font-size: 38px; margin-bottom: 2px; }
-.bgmg-tips-tag   { font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid); }
-.bgmg-tips-title { font-family: 'Cormorant Garamond', serif; font-size: 22px; font-weight: 600; color: var(--dark); line-height: 1.2; }
-.bgmg-tips-desc  { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); line-height: 1.55; flex: 1; font-weight: 300; }
-.bgmg-tips-link  { font-family: 'DM Sans', sans-serif; font-size: 13px; font-weight: 500; color: var(--pink-dark); text-decoration: none; margin-top: 4px; }
+.bgmg-tips-tag   { font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid); }
+.bgmg-tips-title { font-family: 'Alice', serif; font-size: 22px; font-weight: 600; color: var(--dark); line-height: 1.2; }
+.bgmg-tips-desc  { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); line-height: 1.55; flex: 1; font-weight: 300; }
+.bgmg-tips-link  { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; color: var(--pink-dark); text-decoration: none; margin-top: 4px; }
 
 /* ── BANNER ─────────────────────────────────────────────────── */
 .bgmg-banner {
@@ -200,9 +200,9 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 }
 .bgmg-banner::before { content: ''; position: absolute; top: -40px; right: -40px; width: 160px; height: 160px; background: rgba(242,196,206,.12); border-radius: 50%; }
 .bgmg-banner::after  { content: ''; position: absolute; bottom: -50px; left: -30px; width: 120px; height: 120px; background: rgba(242,196,206,.07); border-radius: 50%; }
-.bgmg-banner-title { font-family: 'Cormorant Garamond', serif; font-size: 32px; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 8px; position: relative; }
-.bgmg-banner-sub   { color: var(--pink); font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 300; margin-bottom: 24px; position: relative; }
-.bgmg-banner-btn   { display: inline-block; background: var(--pink); color: var(--dark); padding: 14px 32px; border-radius: 30px; text-decoration: none; font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 15px; position: relative; transition: opacity .2s; }
+.bgmg-banner-title { font-family: 'Alice', serif; font-size: 32px; font-weight: 600; color: #fff; line-height: 1.2; margin-bottom: 8px; position: relative; }
+.bgmg-banner-sub   { color: var(--pink); font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 300; margin-bottom: 24px; position: relative; }
+.bgmg-banner-btn   { display: inline-block; background: var(--pink); color: var(--dark); padding: 14px 32px; border-radius: 30px; text-decoration: none; font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 15px; position: relative; transition: opacity .2s; }
 .bgmg-banner-btn:hover { opacity: .88; }
 /* Variante "is-image": el fondo se setea inline desde el Customizer */
 .bgmg-banner.is-image { background: #1a1015; }
@@ -221,21 +221,21 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-trust { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; padding: 32px 20px; background: #fff; border-top: 1px solid var(--border); border-bottom: 1px solid var(--border); }
 .bgmg-trust-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; }
 .bgmg-trust-icon { font-size: 24px; }
-.bgmg-trust-text { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--mid); line-height: 1.4; }
+.bgmg-trust-text { font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--mid); line-height: 1.4; }
 
 /* ── TESTIMONIOS ────────────────────────────────────────────── */
 .bgmg-testi-grid { display: grid; grid-template-columns: 1fr; gap: 16px; }
 .bgmg-testi-card { background: #fff; border: 1px solid var(--border); border-radius: 20px; padding: 24px; }
 .bgmg-testi-stars  { color: var(--pink-dark); font-size: 16px; margin-bottom: 12px; letter-spacing: 2px; }
-.bgmg-testi-text   { font-family: 'Cormorant Garamond', serif; font-style: italic; font-size: 18px; color: var(--dark); line-height: 1.55; margin-bottom: 18px; }
+.bgmg-testi-text   { font-family: 'Alice', serif; font-style: italic; font-size: 18px; color: var(--dark); line-height: 1.55; margin-bottom: 18px; }
 .bgmg-testi-author { display: flex; align-items: center; gap: 10px; }
-.bgmg-testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--pink); color: var(--dark); font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-.bgmg-testi-name   { font-family: 'DM Sans', sans-serif; font-weight: 500; font-size: 14px; color: var(--dark); }
-.bgmg-testi-date   { font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--mid); font-weight: 300; }
+.bgmg-testi-avatar { width: 36px; height: 36px; border-radius: 50%; background: var(--pink); color: var(--dark); font-family: 'Poppins', sans-serif; font-weight: 600; font-size: 15px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+.bgmg-testi-name   { font-family: 'Poppins', sans-serif; font-weight: 500; font-size: 14px; color: var(--dark); }
+.bgmg-testi-date   { font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--mid); font-weight: 300; }
 
 /* ── STICKY CTA ─────────────────────────────────────────────── */
 .bgmg-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #fff; border-top: 1px solid var(--border); padding: 10px 16px 14px; display: flex; gap: 10px; box-shadow: 0 -4px 20px rgba(0,0,0,.06); }
-.bgmg-sticky-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 10px; border-radius: 30px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+.bgmg-sticky-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 10px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s; }
 .bgmg-sticky-btn:hover { opacity: .85; }
 .bgmg-sticky-wa   { background: #25D366; color: #fff; }
 .bgmg-sticky-shop { background: var(--dark); color: #fff; }
@@ -253,14 +253,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 /* Logo */
 .bgmg-logo-link { display: flex; align-items: center; text-decoration: none; flex-shrink: 0; }
 .bgmg-logo-img  { height: 36px; width: auto; display: block; object-fit: contain; }
-.bgmg-logo-text { font-family: 'Cormorant Garamond', serif; font-size: 21px; font-weight: 600; color: var(--dark); white-space: nowrap; }
+.bgmg-logo-text { font-family: 'Alice', serif; font-size: 21px; font-weight: 600; color: var(--dark); white-space: nowrap; }
 .bgmg-logo-text em { font-style: italic; color: var(--pink-dark); }
 /* Desktop nav */
 .bgmg-dnav { display: none; align-items: center; gap: 2px; list-style: none; }
 .bgmg-dnav > li { position: relative; }
 .bgmg-dnav > li > a {
   display: flex; align-items: center; gap: 4px; padding: 8px 12px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--mid);
   text-decoration: none; border-radius: 8px; white-space: nowrap;
   transition: color .2s, background .2s;
 }
@@ -282,14 +282,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 }
 .bgmg-dnav > li:hover .bgmg-drop { display: grid; grid-template-columns: repeat(auto-fill, minmax(130px, 1fr)); }
 .bgmg-drop-col h4 {
-  font-family: 'Cormorant Garamond', serif; font-size: 14px; font-weight: 600;
+  font-family: 'Alice', serif; font-size: 14px; font-weight: 600;
   color: var(--dark); margin-bottom: 6px; padding-bottom: 5px; border-bottom: 1px solid var(--border);
 }
 .bgmg-drop-col h4 a { text-decoration: none; color: inherit; }
 .bgmg-drop-col h4 a:hover { color: var(--pink-dark); }
 .bgmg-drop-col ul { list-style: none; display: flex; flex-direction: column; gap: 2px; }
 .bgmg-drop-col ul li a {
-  font-family: 'DM Sans', sans-serif; font-size: 12px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 12px; color: var(--mid);
   text-decoration: none; padding: 2px 0; display: block; transition: color .2s;
 }
 .bgmg-drop-col ul li a:hover { color: var(--pink-dark); }
@@ -305,7 +305,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-cart-count {
   position: absolute; top: -3px; right: -3px; min-width: 18px; height: 18px; padding: 0 4px;
   border-radius: 9px; background: var(--pink-dark); color: #fff;
-  font-family: 'DM Sans', sans-serif; font-size: 10px; font-weight: 600;
+  font-family: 'Poppins', sans-serif; font-size: 10px; font-weight: 600;
   display: flex; align-items: center; justify-content: center;
 }
 .bgmg-cart-count:empty { display: none; }
@@ -325,13 +325,13 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-mdrawer.is-open { display: block; }
 .bgmg-mdrawer-link {
   display: block; padding: 14px 20px;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--dark);
+  font-family: 'Poppins', sans-serif; font-size: 15px; color: var(--dark);
   text-decoration: none; border-bottom: 1px solid var(--pink-soft); transition: background .2s;
 }
 .bgmg-mdrawer-link:hover { background: var(--pink-soft); }
 .bgmg-mob-toggle {
   display: flex; align-items: center; justify-content: space-between; width: 100%;
-  padding: 14px 20px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500;
+  padding: 14px 20px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500;
   color: var(--dark); background: none; border: none; border-bottom: 1px solid var(--pink-soft);
   cursor: pointer; text-align: left; transition: background .2s;
 }
@@ -342,7 +342,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-mob-children.is-open { display: block; }
 .bgmg-mob-children a {
   display: block; padding: 10px 20px 10px 36px;
-  font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid);
+  font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid);
   text-decoration: none; border-bottom: 1px solid rgba(242,196,206,.4); transition: color .2s;
 }
 .bgmg-mob-children a:hover { color: var(--dark); }
@@ -376,7 +376,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-search-form svg { width: 16px; height: 16px; flex-shrink: 0; opacity: .5; stroke: var(--dark); fill: none; stroke-width: 2; stroke-linecap: round; }
 .bgmg-search-form input[type="search"] {
   flex: 1; border: none; background: none; padding: 13px 0;
-  font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--dark); outline: none;
+  font-family: 'Poppins', sans-serif; font-size: 15px; color: var(--dark); outline: none;
   -webkit-appearance: none;
 }
 .bgmg-search-form input::placeholder { color: var(--mid); }
@@ -414,18 +414,18 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 }
 .bgmg-search-result-item:hover { background: var(--pink-soft); }
 .bgmg-search-result-img { width: 48px; height: 48px; border-radius: 8px; object-fit: cover; flex-shrink: 0; }
-.bgmg-search-result-name { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--dark); line-height: 1.3; }
-.bgmg-search-result-price { font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--pink-dark); font-weight: 500; margin-top: 2px; }
+.bgmg-search-result-name { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--dark); line-height: 1.3; }
+.bgmg-search-result-price { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--pink-dark); font-weight: 500; margin-top: 2px; }
 .bgmg-search-view-all {
   display: block; text-align: center; padding: 12px 16px;
-  font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500;
+  font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500;
   color: var(--pink-dark); text-decoration: none; background: var(--pink-soft);
   transition: background .15s, color .15s;
 }
 .bgmg-search-view-all:hover { background: var(--pink-dark); color: #fff; }
 .bgmg-search-msg {
   padding: 16px; text-align: center; color: var(--mid);
-  font-family: 'DM Sans', sans-serif; font-size: 13px;
+  font-family: 'Poppins', sans-serif; font-size: 13px;
 }
 
 /* ── MINI CART ── El CSS estructural del panel (y los enhancements) ahora viven
@@ -659,7 +659,12 @@ if ($dest_query->have_posts()) :
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
+              <?php $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
+              <div class="bgmg-card-badges">
+                <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
+                <?php echo $bgmg_of; ?>
+              </div>
+              <?php endif; ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>
@@ -731,7 +736,12 @@ if ($nov_query->have_posts()) :
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
+              <?php $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
+              <div class="bgmg-card-badges">
+                <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
+                <?php echo $bgmg_of; ?>
+              </div>
+              <?php endif; ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>
@@ -808,9 +818,14 @@ if ( $bgmg_mb_enabled ) :
 
 <!-- ══ 7. OFERTAS ═══════════════════════════════════════════════ -->
 <?php
-$sale_ids = wc_get_product_ids_on_sale();
+// Candidatos: productos en PROMO (si está activa) ∪ productos en oferta nativa de WC.
+$promo_ids = ( function_exists('bgm_promo_activa_ahora') && bgm_promo_activa_ahora() && function_exists('bgm_promo_ids_afectados') )
+  ? bgm_promo_ids_afectados()
+  : array();
+$sale_ids  = array_merge( (array) $promo_ids, (array) wc_get_product_ids_on_sale() );
+$sale_ids  = array_values( array_unique( array_filter( array_map('absint', $sale_ids) ) ) );
 if (!empty($sale_ids)) :
-  $sale_args = array('post_type' => 'product', 'posts_per_page' => 4, 'post__in' => $sale_ids);
+  $sale_args = array('post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 4, 'post__in' => $sale_ids, 'orderby' => 'date', 'order' => 'DESC');
   $sale_query = new WP_Query($sale_args);
   if ($sale_query->have_posts()) :
 ?>
@@ -830,7 +845,7 @@ if (!empty($sale_ids)) :
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <span class="bgmg-badge-oferta">🔥 Oferta</span>
+              <?php echo bgmg_oferta_badge_html($prod); ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>

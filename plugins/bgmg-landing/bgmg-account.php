@@ -13,7 +13,7 @@ header('X-LiteSpeed-Cache-Control: no-cache');
 <title><?php woocommerce_page_title(); ?> — BeautyGirlMG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <?php wp_head(); ?>
 <style>
 /* ── RESET + BASE ─────────────────────────────────────────── */
@@ -28,7 +28,7 @@ header('X-LiteSpeed-Cache-Control: no-cache');
   --border:    #f0e0e5;
 }
 html, body { overflow-x: clip; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--dark); }
 
 /* ── LAYOUT ───────────────────────────────────────────────── */
 .bgmg-account-wrap {
@@ -42,7 +42,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
   padding: 0 20px;
 }
 .bgmg-account-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 32px;
   font-weight: 600;
   color: var(--dark);
@@ -71,7 +71,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 }
 .woocommerce-form-login h2,
 .woocommerce-form-register h2 {
-  font-family: 'Cormorant Garamond', serif !important;
+  font-family: 'Alice', serif !important;
   font-size: 26px !important;
   font-weight: 600 !important;
   color: var(--dark) !important;
@@ -80,7 +80,7 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .woocommerce-form-row { margin-bottom: 16px !important; }
 .woocommerce-form-row label {
   display: block !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 13px !important;
   font-weight: 500 !important;
   color: var(--mid) !important;
@@ -99,7 +99,7 @@ input[type="tel"].input-text,
   border: 1.5px solid var(--border) !important;
   border-radius: 10px !important;
   padding: 12px 14px !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 15px !important;
   color: var(--dark) !important;
   background: var(--pink-soft) !important;
@@ -146,7 +146,7 @@ button[name="register"] {
   border: none !important;
   background: var(--dark) !important;
   color: #fff !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 15px !important;
   font-weight: 500 !important;
   cursor: pointer !important;
@@ -159,7 +159,7 @@ button[name="register"] {
 
 .woocommerce-LostPassword { margin-top: 14px !important; text-align: center !important; }
 .woocommerce-LostPassword a {
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 13px !important;
   color: var(--pink-dark) !important;
   text-decoration: none !important;
@@ -187,7 +187,7 @@ button[name="register"] {
   border-radius: 30px;
   border: 1.5px solid var(--border);
   background: #fff;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: var(--mid);
@@ -223,7 +223,7 @@ button[name="register"] {
   padding: 28px 24px;
 }
 .woocommerce-MyAccount-content p {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--mid);
   line-height: 1.6;
@@ -231,7 +231,7 @@ button[name="register"] {
 }
 .woocommerce-MyAccount-content h2,
 .woocommerce-MyAccount-content h3 {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 22px;
   font-weight: 600;
   color: var(--dark);
@@ -244,7 +244,7 @@ button[name="register"] {
 .woocommerce-orders-table {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   overflow: hidden;
 }
@@ -306,7 +306,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .woocommerce-EditAccountForm fieldset legend,
 .woocommerce-address-fields fieldset legend {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 18px;
   font-weight: 600;
   color: var(--dark);
@@ -317,7 +317,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 .woocommerce-account .form-row { margin-bottom: 14px !important; }
 .woocommerce-EditAccountForm label,
 .woocommerce-address-fields label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
   font-weight: 500;
   color: var(--mid);
@@ -337,7 +337,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   border: none !important;
   background: var(--dark) !important;
   color: #fff !important;
-  font-family: 'DM Sans', sans-serif !important;
+  font-family: 'Poppins', sans-serif !important;
   font-size: 14px !important;
   font-weight: 500 !important;
   cursor: pointer !important;
@@ -354,7 +354,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 /* ── DETALLES DE ORDEN ────────────────────────────────────── */
 .woocommerce-order-details h2,
 .woocommerce-customer-details h2 {
-  font-family: 'Cormorant Garamond', serif !important;
+  font-family: 'Alice', serif !important;
   font-size: 20px !important;
   font-weight: 600 !important;
   color: var(--dark) !important;
@@ -363,7 +363,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 .woocommerce-table--order-details {
   width: 100%;
   border-collapse: collapse;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
 }
 .woocommerce-table--order-details th,
@@ -392,7 +392,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   border: 1px solid var(--border);
   border-radius: 12px;
   padding: 12px 16px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
   color: var(--mid);
 }
@@ -405,7 +405,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .woocommerce-column--billing-address address,
 .woocommerce-column--shipping-address address {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--mid);
   line-height: 1.7;
@@ -484,7 +484,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   white-space: nowrap;
   color: var(--mid);
   text-decoration: none;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 500;
   border-bottom: 2px solid transparent;
@@ -509,7 +509,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 /* ── Hero saludo (dashboard) ─────────────────────────────────── */
 .bgmg-acc-hero { margin-bottom: 20px; padding: 8px 0 4px; }
 .bgmg-acc-hello {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 30px;
   font-weight: 400;
   color: var(--dark);
@@ -517,7 +517,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   line-height: 1.1;
 }
 .bgmg-acc-hello-sub {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
   margin: 0;
@@ -526,21 +526,21 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 /* ── Headers de página secundaria ────────────────────────────── */
 .bgmg-acc-page-head { margin-bottom: 20px; }
 .bgmg-acc-page-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 28px;
   font-weight: 400;
   color: var(--dark);
   margin: 0 0 4px;
 }
 .bgmg-acc-page-sub {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
   margin: 0;
 }
 .bgmg-acc-back {
   display: inline-block;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
   text-decoration: none;
@@ -589,7 +589,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-card-icon svg { width: 16px; height: 16px; }
 .bgmg-acc-card-title {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--dark);
@@ -601,7 +601,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   gap: 10px;
 }
 .bgmg-acc-card-text {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--dark);
   line-height: 1.5;
@@ -609,7 +609,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-mid { color: var(--mid); font-size: 13px; }
 .bgmg-acc-card-link {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--pink-dark);
   text-decoration: none;
@@ -633,14 +633,14 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-card-stat:hover { box-shadow: 0 6px 20px rgba(26, 16, 21, .25); }
 .bgmg-acc-stat-number {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 48px;
   font-weight: 600;
   line-height: 1;
   color: var(--pink);
 }
 .bgmg-acc-stat-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: rgba(255, 255, 255, .75);
   margin-top: 4px;
@@ -660,7 +660,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   gap: 6px;
   padding: 10px 18px;
   border-radius: 30px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 500;
   text-decoration: none;
@@ -697,7 +697,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   flex-wrap: wrap;
 }
 .bgmg-acc-order-num {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--dark);
@@ -708,7 +708,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   align-items: baseline;
   flex-wrap: wrap;
   gap: 6px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
 }
@@ -724,7 +724,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   align-items: center;
   padding: 4px 10px;
   border-radius: 20px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -762,7 +762,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-order-card-head > div { display: flex; flex-direction: column; gap: 4px; }
 .bgmg-acc-order-date {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 12px;
   color: var(--mid);
 }
@@ -779,7 +779,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   display: flex;
   flex-direction: column;
   gap: 2px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
 }
@@ -799,7 +799,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   flex-wrap: wrap;
 }
 .bgmg-acc-pagination-info {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--mid);
 }
@@ -808,7 +808,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 .bgmg-acc-order-status-banner {
   padding: 12px 16px;
   border-radius: 12px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   margin-bottom: 24px;
   border: 1px solid currentColor;
@@ -828,7 +828,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   margin-bottom: 16px;
 }
 .bgmg-acc-section-title {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 600;
   text-transform: uppercase;
@@ -863,7 +863,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   gap: 2px;
 }
 .bgmg-acc-item-name {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   font-weight: 500;
   color: var(--dark);
@@ -873,7 +873,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 .bgmg-acc-item-name:hover { color: var(--pink-dark); }
 .bgmg-acc-item-qty { font-size: 12px; color: var(--mid); }
 .bgmg-acc-item-price {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   font-weight: 600;
   color: var(--dark);
@@ -886,7 +886,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--dark);
   padding: 4px 0;
@@ -912,7 +912,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   border-radius: 12px;
 }
 .bgmg-acc-address-label {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 11px;
   font-weight: 600;
   text-transform: uppercase;
@@ -922,7 +922,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-address-card address,
 .bgmg-acc-address-text {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 13px;
   color: var(--dark);
   font-style: normal;
@@ -939,13 +939,13 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
 }
 .bgmg-acc-empty-icon { font-size: 48px; margin-bottom: 12px; }
 .bgmg-acc-empty-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 22px;
   color: var(--dark);
   margin: 0 0 8px;
 }
 .bgmg-acc-empty-text {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--mid);
   margin: 0 0 18px;
@@ -963,14 +963,14 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   padding: 0;
 }
 .bgmg-acc-login-title {
-  font-family: 'Cormorant Garamond', serif;
+  font-family: 'Alice', serif;
   font-size: 32px;
   color: var(--dark);
   margin: 0 0 4px;
   text-align: center;
 }
 .bgmg-acc-login-sub {
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 14px;
   color: var(--mid);
   margin: 0 0 28px;
@@ -1000,7 +1000,7 @@ mark.order-status.status-on-hold     { color: #92400e; background: #fef3c7 !impo
   background: transparent;
   border: 0;
   padding: 12px 16px;
-  font-family: 'DM Sans', sans-serif;
+  font-family: 'Poppins', sans-serif;
   font-size: 15px;
   font-weight: 500;
   color: var(--mid);

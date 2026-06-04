@@ -112,6 +112,25 @@ function bgm_registrar_pagina_settings( $pages ) {
                     ],
                     [ 'type' => 'sectionend', 'id' => 'bgm_section_modo' ],
 
+                    // ─── Etiqueta de oferta (badge de precio rebajado) ───
+                    [
+                        'title' => __( 'Etiqueta de oferta', 'beautygirlmg-mayorista' ),
+                        'type'  => 'title',
+                        'desc'  => __( 'Texto del badge que se muestra en los productos con precio rebajado (oferta nativa de WooCommerce). Reemplaza el texto fijo "Oferta" en todo el sitio: tarjetas, listados y sobre la imagen del producto (donde además aparece el % de descuento).', 'beautygirlmg-mayorista' ),
+                        'id'    => 'bgm_section_oferta',
+                    ],
+                    [
+                        'title'             => __( 'Nombre del badge de oferta', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Ejemplos: Oferta, Cyber, Liquidación, Black Friday. Se muestra en productos rebajados. Vacío = "Oferta".', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_oferta_etiqueta',
+                        'type'              => 'text',
+                        'default'           => 'Oferta',
+                        'desc_tip'          => true,
+                        'css'               => 'min-width:260px;',
+                        'custom_attributes' => [ 'maxlength' => '30' ],
+                    ],
+                    [ 'type' => 'sectionend', 'id' => 'bgm_section_oferta' ],
+
                     // ─── Descuento promocional minorista ─────────────
                     [
                         'title' => __( 'Descuento promocional minorista', 'beautygirlmg-mayorista' ),

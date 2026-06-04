@@ -54,7 +54,7 @@ ob_end_clean();
 <title><?php the_title(); ?> — BeautyGirlMG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css">
 <?php wp_head(); ?>
 <style>
@@ -71,7 +71,7 @@ ob_end_clean();
 }
 html, body { overflow-x: clip; }
 html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--dark); }
 img { max-width: 100%; height: auto; display: block; }
 
 /* ── MINICART ── CSS estructural movido a assets/bgmg-global.css (BL-01c). ── */
@@ -99,6 +99,8 @@ img { max-width: 100%; height: auto; display: block; }
 /* ── GALERÍA ──────────────────────────────────── */
 .bgmg-gallery { width: 100%; }
 .bgmg-swiper-wrap { position: relative; width: 100%; padding-bottom: 100%; height: 0; border-radius: 20px; overflow: hidden; background: var(--pink-soft); box-shadow: 0 4px 32px rgba(196,114,138,.10); }
+.bgmg-oferta-overlay { position: absolute; top: 14px; left: 14px; z-index: 5; display: inline-flex; align-items: center; background: var(--pink-dark); color: #fff; font-size: 13px; font-weight: 600; line-height: 1; padding: 7px 13px; border-radius: 999px; box-shadow: 0 2px 10px rgba(0,0,0,.15); pointer-events: none; }
+@media (max-width: 767px) { .bgmg-oferta-overlay { top: 12px; left: 12px; font-size: 12px; padding: 6px 11px; } }
 .bgmg-swiper { position: absolute; inset: 0; width: 100%; height: 100%; }
 .bgmg-swiper .swiper-slide { width: 100%; height: 100%; overflow: hidden; }
 .bgmg-swiper .swiper-slide img { width: 100%; height: 100%; object-fit: cover; display: block; }
@@ -118,7 +120,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* ── INFO DEL PRODUCTO ────────────────────────── */
 .bgmg-prod-info { display: flex; flex-direction: column; gap: 18px; padding-top: 28px; }
 .bgmg-prod-cat { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--pink-dark); text-decoration: none; }
-.bgmg-prod-title { font-family: 'Cormorant Garamond', serif; font-size: 34px; font-weight: 400; line-height: 1.15; color: var(--dark); }
+.bgmg-prod-title { font-family: 'Alice', serif; font-size: 34px; font-weight: 400; line-height: 1.15; color: var(--dark); }
 .bgmg-prod-price { font-size: 26px; font-weight: 500; color: var(--dark); line-height: 1.1; }
 .bgmg-prod-price del { font-size: 17px; color: var(--mid); font-weight: 300; margin-right: 6px; }
 .bgmg-prod-price ins { text-decoration: none; }
@@ -137,13 +139,13 @@ img { max-width: 100%; height: auto; display: block; }
 /* ── FORM ADD TO CART ─────────────────────────── */
 .woocommerce div.product form.cart { display: flex; flex-direction: column; gap: 14px; }
 .woocommerce div.product form.cart .quantity { display: flex; align-items: center; border: 1.5px solid var(--border); border-radius: 30px; width: fit-content; overflow: hidden; }
-.woocommerce div.product form.cart .quantity input.qty { width: 52px; text-align: center; border: none; outline: none; background: transparent; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--dark); padding: 10px 0; -moz-appearance: textfield; }
+.woocommerce div.product form.cart .quantity input.qty { width: 52px; text-align: center; border: none; outline: none; background: transparent; font-family: 'Poppins', sans-serif; font-size: 15px; color: var(--dark); padding: 10px 0; -moz-appearance: textfield; }
 .woocommerce div.product form.cart .quantity input.qty::-webkit-inner-spin-button,
 .woocommerce div.product form.cart .quantity input.qty::-webkit-outer-spin-button { -webkit-appearance: none; }
 .bgmg-qty-btn { width: 44px; height: 44px; background: var(--pink-soft); border: none; font-size: 20px; cursor: pointer; color: var(--dark); transition: background .2s; font-family: inherit; display: flex; align-items: center; justify-content: center; line-height: 1; flex-shrink: 0; }
 .bgmg-qty-btn:hover { background: var(--pink); }
 .woocommerce div.product form.cart .single_add_to_cart_button,
-.woocommerce div.product form.cart button.single_add_to_cart_button.alt { width: 100%; padding: 16px 24px; background: var(--dark); color: #fff; border: none; border-radius: 30px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .2s, opacity .2s, transform .15s; letter-spacing: .3px; text-align: center; line-height: 1.2; min-height: 52px; }
+.woocommerce div.product form.cart button.single_add_to_cart_button.alt { width: 100%; padding: 16px 24px; background: var(--dark); color: #fff; border: none; border-radius: 30px; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 600; cursor: pointer; transition: background .2s, opacity .2s, transform .15s; letter-spacing: .3px; text-align: center; line-height: 1.2; min-height: 52px; }
 .woocommerce div.product form.cart .single_add_to_cart_button:hover,
 .woocommerce div.product form.cart button.single_add_to_cart_button.alt:hover { background: var(--pink-dark); color: #fff; opacity: 1; transform: translateY(-1px); }
 .woocommerce div.product form.cart .single_add_to_cart_button.loading { opacity: .6; pointer-events: none; }
@@ -167,7 +169,7 @@ img { max-width: 100%; height: auto; display: block; }
 /* ── ACORDEÓN ─────────────────────────────────── */
 .bgmg-accordion { margin-top: 40px; border-top: 1px solid var(--border); }
 .bgmg-acc-item { border-bottom: 1px solid var(--border); }
-.bgmg-acc-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 18px 0; background: none; border: none; cursor: pointer; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); text-align: left; }
+.bgmg-acc-btn { width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 18px 0; background: none; border: none; cursor: pointer; font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); text-align: left; }
 .bgmg-acc-icon { font-size: 22px; color: var(--mid); transition: transform .25s; line-height: 1; flex-shrink: 0; }
 .bgmg-acc-item.open .bgmg-acc-icon { transform: rotate(45deg); }
 .bgmg-acc-body { display: none; padding-bottom: 24px; font-size: 14px; color: var(--mid); line-height: 1.7; }
@@ -181,7 +183,7 @@ img { max-width: 100%; height: auto; display: block; }
 
 /* ── PRODUCTOS RELACIONADOS ───────────────────── */
 .bgmg-related-wrap { margin-top: 48px; }
-.bgmg-related-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--dark); margin-bottom: 20px; }
+.bgmg-related-title { font-family: 'Alice', serif; font-size: 28px; font-weight: 400; color: var(--dark); margin-bottom: 20px; }
 .bgmg-rel-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
 
 /* ── CARD (igual que landing) ─────────────────── */
@@ -267,6 +269,17 @@ img { max-width: 100%; height: auto; display: block; }
     <!-- Galería -->
     <div class="bgmg-gallery">
       <div class="bgmg-swiper-wrap">
+        <?php
+        $bgmg_of_info = function_exists('bgm_get_promo_info') ? bgm_get_promo_info($product) : null;
+        if ( $bgmg_of_info || $product->is_on_sale() ) :
+          $bgmg_of_label = function_exists('bgm_get_oferta_etiqueta') ? bgm_get_oferta_etiqueta() : 'Oferta';
+          $bgmg_of_pct   = $bgmg_of_info
+            ? (int) $bgmg_of_info['pct']
+            : ( function_exists('bgm_get_oferta_descuento_pct') ? (int) bgm_get_oferta_descuento_pct($product) : 0 );
+          $bgmg_of_txt   = '🔥 ' . $bgmg_of_label . ( $bgmg_of_pct > 0 ? ' -' . $bgmg_of_pct . '%' : '' );
+        ?>
+        <span class="bgmg-oferta-overlay"><?php echo esc_html($bgmg_of_txt); ?></span>
+        <?php endif; ?>
         <div class="swiper bgmg-swiper">
           <div class="swiper-wrapper">
             <?php if (!empty($all_ids)) :
@@ -322,10 +335,7 @@ img { max-width: 100%; height: auto; display: block; }
             $bgm_tiene_mayorista = bgm_variable_tiene_mayorista( $product );
         }
       ?>
-      <div class="bgmg-prod-price"><?php
-        if ( function_exists( 'bgm_promo_badge_html' ) ) echo bgm_promo_badge_html( $product );
-        echo $product->get_price_html();
-      ?></div>
+      <div class="bgmg-prod-price"><?php echo $product->get_price_html(); ?></div>
       <?php if ( $bgm_tiene_mayorista ) : ?>
       <div class="bgmg-prod-price-label">Precio detalle · por unidad</div>
       <?php endif; ?>
@@ -466,9 +476,8 @@ img { max-width: 100%; height: auto; display: block; }
         $r_img   = get_the_post_thumbnail_url($rid, 'thumbnail') ?: wc_placeholder_img_src();
         $r_terms = get_the_terms($rid, 'product_cat');
         $r_cat   = ($r_terms && !is_wp_error($r_terms)) ? esc_html($r_terms[0]->name) : '';
-        $r_badge = $rp->is_on_sale()
-          ? '<span class="bgmg-badge-oferta">🔥 Oferta</span>'
-          : ($r_cat ? '<span class="bgmg-badge">' . $r_cat . '</span>' : '');
+        $r_disc  = bgmg_oferta_badge_html($rp); // badge único de descuento (promo u oferta WC)
+        $r_badge = $r_disc ?: ($r_cat ? '<span class="bgmg-badge">' . $r_cat . '</span>' : '');
       ?>
       <div class="bgmg-card">
         <a href="<?php echo $r_url; ?>" class="bgmg-card-link">
@@ -476,7 +485,6 @@ img { max-width: 100%; height: auto; display: block; }
           <div class="bgmg-card-body">
             <?php echo $r_badge; ?>
             <div class="bgmg-card-name"><?php echo $r_name; ?></div>
-            <?php if ( function_exists( 'bgm_promo_badge_html' ) ) echo bgm_promo_badge_html( $rp ); ?>
             <div class="bgmg-card-price"><?php echo wp_kses_post($rp->get_price_html()); ?></div>
           </div>
         </a>

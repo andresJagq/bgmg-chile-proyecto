@@ -22,14 +22,14 @@
 }
 .bgmg-footer-logo-link{display:inline-flex;align-items:center;text-decoration:none;margin-bottom:12px}
 .bgmg-footer-logo-img{height:38px !important;width:auto !important;max-width:180px !important;object-fit:contain !important;display:block !important}
-.bgmg-footer-logo-text{font-family:'Cormorant Garamond',serif;font-size:24px;font-weight:600;color:#fff;letter-spacing:.3px}
+.bgmg-footer-logo-text{font-family:'Alice',serif;font-size:24px;font-weight:600;color:#fff;letter-spacing:.3px}
 .bgmg-footer-logo-text em{font-style:italic;color:#F2C4CE}
-.bgmg-footer-tagline{font-family:'DM Sans',sans-serif;font-size:13px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.5}
+.bgmg-footer-tagline{font-family:'Poppins',sans-serif;font-size:13px;color:rgba(255,255,255,.55);font-weight:300;line-height:1.5}
 /* Contacto */
 .bgmg-footer-contact{display:flex;flex-direction:column;gap:12px}
 .bgmg-footer-info-link{
   display:flex;align-items:center;gap:10px;
-  font-family:'DM Sans',sans-serif;font-size:13px;
+  font-family:'Poppins',sans-serif;font-size:13px;
   color:rgba(255,255,255,.75);text-decoration:none;
   transition:color .2s;
 }
@@ -53,7 +53,7 @@
 /* Links */
 .bgmg-footer-links{display:flex;flex-wrap:wrap;gap:8px 0;flex-direction:column}
 .bgmg-footer-links a{
-  font-family:'DM Sans',sans-serif;font-size:13px;
+  font-family:'Poppins',sans-serif;font-size:13px;
   color:rgba(255,255,255,.6);text-decoration:none;
   transition:color .2s,padding-left .2s;
   padding:4px 0;
@@ -66,7 +66,7 @@
   display:flex;flex-wrap:wrap;align-items:center;
   justify-content:center;gap:4px 16px;
   padding:16px 24px;
-  font-family:'DM Sans',sans-serif;font-size:11px;
+  font-family:'Poppins',sans-serif;font-size:11px;
   color:rgba(255,255,255,.35);font-weight:300;
 }
 .bgmg-footer-credit a{color:rgba(255,255,255,.4);text-decoration:none;transition:color .2s}

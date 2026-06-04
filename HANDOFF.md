@@ -19,8 +19,8 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.2** |
-| bgmg-landing | **6.5.6** |
-| beautygirlmg-mayorista | **2.6.0** |
+| bgmg-landing | **6.5.11** |
+| beautygirlmg-mayorista | **2.6.2** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -30,6 +30,51 @@ trabajo con 2 PCs + Drive en **§5.18**.
 > ✅ **Commit/push de la sesión 2026-06-02 HECHO (2026-06-03).** Subido a `origin/main`: promo
 > minorista Fase 1 (v2.5.5), las 8 planillas de migración + `generar-chunks.ps1`, y los docs. Repo
 > y working tree en sync.
+
+**Zip listo, PENDIENTE validar en staging:**
+- **Cambio de tipografía (bgmg-landing 6.5.11):** por pedido del cliente, **títulos → Alice** (serif)
+  y **textos → Poppins** (sans). Reemplazo de `Cormorant Garamond → Alice` y `DM Sans → Poppins`
+  en las 8 plantillas + `bgmg-global.css` + `bgmg-footer.css` (cubrió comillas simples y dobles), y
+  el `<link>` de Google Fonts en cada `<head>` (`family=Alice&family=Poppins:wght@300;400;500;600;700`).
+  **OJO:** Alice tiene **un solo peso (400)**; los títulos con `font-weight:600` se ven en
+  **negrita sintética** (la pinta el navegador). Si no convence, opciones: dejar esos títulos en 400,
+  o elegir otro serif con bold real. **Validar** que se vean bien títulos y textos en todo el sitio.
+- **Badge de descuento UNIFICADO (mayorista 2.6.2 + bgmg-landing 6.5.10) — decisión: la promo es el
+  único sistema de descuento.** El cliente quiere dejar de usar la oferta nativa de WC (NO se suprime
+  en código, solo se deja de usar) y que TODO descuento muestre el MISMO badge personalizado. Ahora
+  hay **un solo badge** `🔥 {etiqueta} -X%` vía `bgmg_oferta_badge_html()`, que cubre **promo**
+  (precede) y **oferta nativa** (fallback): el nombre sale de `bgm_get_oferta_etiqueta()`, el % de
+  `bgm_get_promo_info()` o, si no hay promo, de `bgm_get_oferta_descuento_pct()`. Se **eliminó el
+  badge chico** `bgm_promo_badge_html` de junto al precio en tarjetas, relacionados y producto
+  (queda obsoleto pero definido por compat). La sección **"Precios irresistibles"** ahora lista
+  productos en **promo ∪ oferta nativa** (nuevo helper `bgm_promo_ids_afectados()`). El overlay de
+  la imagen del producto también cubre promo. **Pendientes conocidos:** (a) el tope de unidades de la
+  promo está en 2 — si se usa como descuento general conviene `bgm_promo_qty_max=0`; (b) el precio
+  tachado del filtro de promo solo aplica a **simples** (en variables se ve el badge pero no el
+  tachado). **Validar** tienda/categoría/novedades/destacados/producto/relacionados con productos en
+  promo (simples y variables) y que la sección Ofertas liste los de promo.
+- **Fix 6.5.9 (bgmg-landing):** las 3 secciones inline de la home (Destacados, Novedades, Ofertas)
+  no llamaban a `bgm_promo_badge_html()` → los productos descontados por la **promo Cyber** (no
+  oferta nativa) mostraban precio tachado pero **sin badge**. Causa: esas secciones solo evaluaban
+  el badge de oferta nativa (`is_on_sale()`), que es `false` en productos de promo; el tachado lo
+  pinta el filtro `bgm_promo_price_html` vía `get_price_html()`. Fix: se agregó el badge de promo
+  antes del precio en las 3 secciones (igual que la función canónica `bgmg_product_card_html` y la
+  página de producto). OJO: en **variables** en promo el tachado no aparece (el filtro solo actúa en
+  simples); la promo se comunica por el badge. **Validar** Novedades/Destacados con productos en promo.
+- **Badge de oferta configurable (mayorista 2.6.1 + bgmg-landing 6.5.8).** El badge "🔥 Oferta"
+  (oferta nativa de WC, `is_on_sale()`) dejó de ser texto fijo: el **nombre es configurable** en
+  WC → Ajustes → Mayorista → "Etiqueta de oferta" (`bgm_oferta_etiqueta`, default "Oferta").
+  Nuevo módulo `includes/core/oferta.php` con `bgm_get_oferta_etiqueta()` y
+  `bgm_get_oferta_descuento_pct($product)` (% de oferta; en variables el mayor % entre variaciones).
+  El tema arma el badge vía `bgmg_oferta_badge_html()` (con `function_exists`, fallback "Oferta").
+  Cambios: (a) el nombre reemplaza "Oferta" en **todas las vistas** (home Ofertas, tienda,
+  categoría, relacionados, `bgmg_product_card_html`); (b) **Novedades y Destacados** ahora muestran
+  **categoría + tag de oferta** lado a lado (wrapper `.bgmg-card-badges`); (c) en la **página de
+  producto** hay un **overlay sobre la imagen** con el tag + **% de descuento**; (d) el % también
+  sale en las tarjetas ("🔥 Oferta -17%"). Contrato actualizado (§2 + §7). Lint 0 errores, sin BOM.
+  **Validar:** poner un nombre en Ajustes → Mayorista y revisar tarjetas (home/tienda/categoría),
+  Novedades/Destacados (2 badges) y la imagen del producto (overlay + %), con productos simples y
+  variables en oferta.
 
 **Hecho y VERIFICADO en vivo:**
 - **bgmg-chile 1.18.1** — BC-01 (checkbox "Necesito factura" se desmarca) + BC-02 (estado retiro

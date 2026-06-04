@@ -198,11 +198,55 @@ function bgm_promo_contar_afectados() {
     return $res;
 }
 
+// ─── IDs de productos afectados por la promo (para listados; ej. sección Ofertas)
+//
+// Mismo conjunto que el contador: categorías ∪ personalizados − excluidos.
+// NO filtra por fecha/toggle (eso lo decide quien lo consume con
+// bgm_promo_activa_ahora()). Cacheado en transient 5 min; se invalida junto al contador.
+function bgm_promo_ids_afectados() {
+    $cache = get_transient( 'bgm_promo_ids' );
+    if ( is_array( $cache ) ) return $cache;
+
+    $cats = bgm_promo_ids_categorias();
+
+    $por_categoria = [];
+    if ( ! empty( $cats ) ) {
+        $por_categoria = get_posts( [
+            'post_type'      => 'product',
+            'post_status'    => 'publish',
+            'fields'         => 'ids',
+            'posts_per_page' => -1,
+            'no_found_rows'  => true,
+            'tax_query'      => [ [
+                'taxonomy' => 'product_cat',
+                'field'    => 'term_id',
+                'terms'    => $cats,
+            ] ],
+        ] );
+    }
+
+    $base_meta = [
+        'post_type'      => 'product',
+        'post_status'    => 'publish',
+        'fields'         => 'ids',
+        'posts_per_page' => -1,
+        'no_found_rows'  => true,
+    ];
+    $custom  = get_posts( $base_meta + [ 'meta_key' => '_bgm_promo_modo', 'meta_value' => 'custom' ] );
+    $excluir = get_posts( $base_meta + [ 'meta_key' => '_bgm_promo_modo', 'meta_value' => 'excluir' ] );
+
+    $ids = array_map( 'absint', array_values( array_diff( array_unique( array_merge( $por_categoria, $custom ) ), $excluir ) ) );
+
+    set_transient( 'bgm_promo_ids', $ids, 5 * MINUTE_IN_SECONDS );
+    return $ids;
+}
+
 // Invalidar el conteo cacheado cuando cambie algo relevante.
 add_action( 'save_post_product', 'bgm_promo_invalidar_afectados' );
 add_action( 'woocommerce_update_options_bgm_mayorista', 'bgm_promo_invalidar_afectados' );
 function bgm_promo_invalidar_afectados() {
     delete_transient( 'bgm_promo_afectados' );
+    delete_transient( 'bgm_promo_ids' );
 }
 
 // ─── Migración: el tope de la promo pasó a 2 por defecto (antes 0 = sin límite) ─

@@ -2,14 +2,14 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.5.7
+ * Version:     6.5.11
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.5.7' );
+define( 'BGMG_LANDING_VERSION', '6.5.11' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
@@ -952,6 +952,30 @@ function bgmg_load_products() {
     wp_send_json(array('html' => $html, 'has_more' => $has_more));
 }
 
+/**
+ * Badge ÚNICO de descuento con nombre configurable + %.
+ * Cubre los dos mecanismos (la PROMO del plugin mayorista tiene precedencia;
+ * si no, la oferta nativa de WC). El nombre y el % los aporta el plugin mayorista
+ * (fallback a "Oferta" si está desactivado). Devuelve '' si el producto NO tiene
+ * descuento por ninguna vía. Ver CONTRATO-PLUGIN-TEMA.md §7.
+ */
+function bgmg_oferta_badge_html($product) {
+    if (!is_object($product)) return '';
+
+    // Promo (precede) o, si no, oferta nativa de WC.
+    $info    = function_exists('bgm_get_promo_info') ? bgm_get_promo_info($product) : null;
+    $on_sale = method_exists($product, 'is_on_sale') && $product->is_on_sale();
+    if (!$info && !$on_sale) return '';
+
+    $pct = $info
+        ? (int) $info['pct']
+        : (function_exists('bgm_get_oferta_descuento_pct') ? (int) bgm_get_oferta_descuento_pct($product) : 0);
+
+    $label = function_exists('bgm_get_oferta_etiqueta') ? bgm_get_oferta_etiqueta() : 'Oferta';
+    $txt   = '🔥 ' . $label . ($pct > 0 ? ' -' . $pct . '%' : '');
+    return '<span class="bgmg-badge-oferta">' . esc_html($txt) . '</span>';
+}
+
 function bgmg_product_card_html($p_id) {
     $prod = wc_get_product($p_id);
     if (!$prod) return '';
@@ -960,16 +984,14 @@ function bgmg_product_card_html($p_id) {
     $p_terms = get_the_terms($p_id, 'product_cat');
     $cat     = ($p_terms && !is_wp_error($p_terms)) ? esc_html($p_terms[0]->name) : '';
     $p_url   = esc_url(get_permalink($p_id));
-    $badge   = $prod->is_on_sale()
-        ? '<span class="bgmg-badge-oferta">🔥 Oferta</span>'
-        : ($cat ? '<span class="bgmg-badge">' . $cat . '</span>' : '');
+    $disc    = bgmg_oferta_badge_html($prod); // badge único de descuento (promo u oferta WC)
+    $badge   = $disc ?: ($cat ? '<span class="bgmg-badge">' . $cat . '</span>' : '');
     $h  = '<div class="bgmg-card">';
     $h .= '<a href="' . $p_url . '" class="bgmg-card-link">';
     $h .= '<img class="bgmg-card-img" src="' . esc_url($img) . '" alt="' . $name . '" loading="lazy">';
     $h .= '<div class="bgmg-card-body">' . $badge;
     $h .= '<div class="bgmg-card-name">' . $name . '</div>';
-    $promo_badge = function_exists( 'bgm_promo_badge_html' ) ? bgm_promo_badge_html( $prod ) : '';
-    $h .= '<div class="bgmg-card-price">' . $promo_badge . $prod->get_price_html() . '</div>';
+    $h .= '<div class="bgmg-card-price">' . $prod->get_price_html() . '</div>';
     $h .= '</div></a>';
     $h .= '<a href="' . esc_url($prod->add_to_cart_url()) . '" class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"';
     $h .= ' data-product_id="' . esc_attr($p_id) . '" data-product_type="' . esc_attr($prod->get_type()) . '" data-quantity="1" rel="nofollow">+</a>';

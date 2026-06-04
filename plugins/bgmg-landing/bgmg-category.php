@@ -16,7 +16,7 @@ $cat_desc     = ($current_term && isset($current_term->description)) ? $current_
 <title><?php echo esc_html($cat_name); ?> — BeautyGirlMG</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,300;1,400;1,600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Alice&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <?php wp_head(); ?>
 <style>
 /* ── RESET + BASE ───────────────────────────────────────────── */
@@ -31,7 +31,7 @@ $cat_desc     = ($current_term && isset($current_term->description)) ? $current_
   --border:    #f0e0e5;
 }
 html { scroll-behavior: smooth; }
-body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--dark); }
+body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(--dark); }
 
 /* ── MINI CART ── CSS estructural movido a assets/bgmg-global.css (BL-01c). ── */
 
@@ -43,15 +43,15 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 .bgmg-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }
 .bgmg-badge { display: inline-block; font-size: 10px; font-weight: 500; color: var(--pink-dark); background: var(--pink-soft); padding: 2px 8px; border-radius: 20px; align-self: flex-start; }
 .bgmg-badge-oferta { display: inline-block; font-size: 10px; font-weight: 500; color: #fff; background: var(--pink-dark); padding: 2px 8px; border-radius: 20px; align-self: flex-start; }
-.bgmg-card-name { font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 400; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
-.bgmg-card-price { font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); }
+.bgmg-card-name { font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 400; color: var(--dark); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.3; }
+.bgmg-card-price { font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; color: var(--dark); }
 .bgmg-card-price del { font-size: 12px; color: var(--mid); margin-left: 4px; font-weight: 300; }
 .bgmg-btn-add { width: 38px; height: 38px; border-radius: 50%; border: 1.5px solid var(--pink); background: #fff; color: var(--pink-dark); font-size: 22px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; text-decoration: none; line-height: 1; transition: background .2s, color .2s; }
 .bgmg-btn-add:hover { background: var(--pink); color: #fff; }
 
 /* ── STICKY CTA ─────────────────────────────────────────────── */
 .bgmg-sticky { position: fixed; bottom: 0; left: 0; right: 0; z-index: 9999; background: #fff; border-top: 1px solid var(--border); padding: 10px 16px 14px; display: flex; gap: 10px; box-shadow: 0 -4px 20px rgba(0,0,0,.06); }
-.bgmg-sticky-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 10px; border-radius: 30px; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s; }
+.bgmg-sticky-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px; padding: 13px 10px; border-radius: 30px; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; text-decoration: none; transition: opacity .2s; }
 .bgmg-sticky-btn:hover { opacity: .85; }
 .bgmg-sticky-wa   { background: #25D366; color: #fff; }
 .bgmg-sticky-shop { background: var(--dark); color: #fff; }
@@ -93,14 +93,14 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
     color: var(--dark);
 }
 .bgmg-cat-banner-title {
-    font-family: 'Cormorant Garamond', serif;
+    font-family: 'Alice', serif;
     font-size: 38px;
     font-weight: 400;
     line-height: 1.1;
     margin: 8px 0 6px;
 }
 .bgmg-cat-banner-desc {
-    font-family: 'DM Sans', sans-serif;
+    font-family: 'Poppins', sans-serif;
     font-size: 14px;
     font-weight: 300;
     max-width: 560px;
@@ -134,39 +134,39 @@ body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(
 /* ── CATEGORIA ──────────────────────────────────────────────── */
 .bgmg-shop-wrap { padding-top: 64px; min-height: 100vh; }
 .bgmg-shop-head { background: #fff; border-bottom: 1px solid var(--border); padding: 20px 20px 0; position: sticky; top: 64px; z-index: 100; }
-.bgmg-breadcrumb { display: flex; align-items: center; gap: 6px; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); margin-bottom: 8px; }
+.bgmg-breadcrumb { display: flex; align-items: center; gap: 6px; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); margin-bottom: 8px; }
 .bgmg-breadcrumb a { color: var(--mid); text-decoration: none; transition: color .2s; }
 .bgmg-breadcrumb a:hover { color: var(--pink-dark); }
 .bgmg-breadcrumb span { color: var(--border); }
-.bgmg-shop-title { font-family: 'Cormorant Garamond', serif; font-size: 28px; font-weight: 400; color: var(--dark); margin-bottom: 6px; }
-.bgmg-cat-desc { font-family: 'DM Sans', sans-serif; font-size: 14px; color: var(--mid); font-weight: 300; margin-bottom: 14px; line-height: 1.5; }
+.bgmg-shop-title { font-family: 'Alice', serif; font-size: 28px; font-weight: 400; color: var(--dark); margin-bottom: 6px; }
+.bgmg-cat-desc { font-family: 'Poppins', sans-serif; font-size: 14px; color: var(--mid); font-weight: 300; margin-bottom: 14px; line-height: 1.5; }
 .bgmg-shop-cats { display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; padding-bottom: 12px; flex-wrap: nowrap; }
 .bgmg-shop-cats::-webkit-scrollbar { display: none; }
-.bgmg-shop-cat { flex-shrink: 0; padding: 8px 18px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; transition: all .2s; white-space: nowrap; }
+.bgmg-shop-cat { flex-shrink: 0; padding: 8px 18px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; transition: all .2s; white-space: nowrap; }
 .bgmg-shop-cat:hover { background: var(--pink-soft); border-color: var(--pink); color: var(--dark); }
 .bgmg-shop-cat.is-active { background: var(--dark); border-color: var(--dark); color: #fff; }
 .bgmg-shop-toolbar { display: flex; align-items: center; gap: 8px; padding: 10px 0 14px; }
 .bgmg-price-wrap { position: relative; }
-.bgmg-price-btn { display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; white-space: nowrap; transition: all .2s; }
+.bgmg-price-btn { display: flex; align-items: center; gap: 6px; padding: 9px 16px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; white-space: nowrap; transition: all .2s; }
 .bgmg-price-btn:hover, .bgmg-price-btn.is-active { border-color: var(--pink-dark); color: var(--pink-dark); background: var(--pink-soft); }
 .bgmg-price-dropdown { position: absolute; top: calc(100% + 8px); left: 0; background: #fff; border: 1px solid var(--border); border-radius: 16px; padding: 20px; width: 280px; box-shadow: 0 8px 32px rgba(0,0,0,.10); z-index: 200; display: none; }
 .bgmg-price-dropdown.is-open { display: block; }
-.bgmg-price-dropdown-title { font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid); margin-bottom: 16px; }
+.bgmg-price-dropdown-title { font-family: 'Poppins', sans-serif; font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 1.5px; color: var(--mid); margin-bottom: 16px; }
 .bgmg-price-range { position: relative; height: 32px; margin-bottom: 12px; }
 .bgmg-price-track { position: absolute; top: 50%; transform: translateY(-50%); left: 0; right: 0; height: 4px; background: var(--border); border-radius: 2px; pointer-events: none; }
 .bgmg-price-fill { position: absolute; height: 100%; background: var(--pink-dark); border-radius: 2px; }
 .bgmg-price-range input[type="range"] { position: absolute; top: 50%; transform: translateY(-50%); width: 100%; height: 4px; background: transparent; -webkit-appearance: none; appearance: none; pointer-events: none; outline: none; }
 .bgmg-price-range input[type="range"]::-webkit-slider-thumb { -webkit-appearance: none; width: 20px; height: 20px; border-radius: 50%; background: var(--pink-dark); cursor: pointer; pointer-events: all; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
 .bgmg-price-range input[type="range"]::-moz-range-thumb { width: 20px; height: 20px; border-radius: 50%; background: var(--pink-dark); cursor: pointer; pointer-events: all; border: 2px solid #fff; box-shadow: 0 2px 8px rgba(0,0,0,.15); }
-.bgmg-price-labels { display: flex; justify-content: space-between; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); }
-.bgmg-price-apply { display: block; width: 100%; margin-top: 14px; padding: 11px; border-radius: 30px; background: var(--dark); color: #fff; border: none; font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .2s; }
+.bgmg-price-labels { display: flex; justify-content: space-between; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); }
+.bgmg-price-apply { display: block; width: 100%; margin-top: 14px; padding: 11px; border-radius: 30px; background: var(--dark); color: #fff; border: none; font-family: 'Poppins', sans-serif; font-size: 14px; font-weight: 500; cursor: pointer; transition: opacity .2s; }
 .bgmg-price-apply:hover { opacity: .85; }
-.bgmg-shop-sort { margin-left: auto; padding: 9px 16px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'DM Sans', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A5060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; outline: none; transition: border-color .2s; }
+.bgmg-shop-sort { margin-left: auto; padding: 9px 16px; border-radius: 30px; border: 1.5px solid var(--border); background: #fff; font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); cursor: pointer; -webkit-appearance: none; appearance: none; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%237A5060' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 32px; outline: none; transition: border-color .2s; }
 .bgmg-shop-sort:focus { border-color: var(--pink-dark); }
 .bgmg-shop-list { padding: 16px 20px; display: flex; flex-direction: column; gap: 10px; }
-.bgmg-shop-empty { text-align: center; padding: 60px 20px; font-family: 'DM Sans', sans-serif; font-size: 15px; color: var(--mid); }
+.bgmg-shop-empty { text-align: center; padding: 60px 20px; font-family: 'Poppins', sans-serif; font-size: 15px; color: var(--mid); }
 .bgmg-load-more-wrap { text-align: center; padding: 8px 20px 100px; }
-.bgmg-load-more-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 36px; border-radius: 30px; background: #fff; color: var(--dark); border: 1.5px solid var(--border); font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all .2s; }
+.bgmg-load-more-btn { display: inline-flex; align-items: center; gap: 8px; padding: 14px 36px; border-radius: 30px; background: #fff; color: var(--dark); border: 1.5px solid var(--border); font-family: 'Poppins', sans-serif; font-size: 15px; font-weight: 500; cursor: pointer; transition: all .2s; }
 .bgmg-load-more-btn:hover { background: var(--pink-soft); border-color: var(--pink); }
 .bgmg-load-more-btn.is-loading { opacity: .6; pointer-events: none; }
 .bgmg-load-more-btn.is-hidden { display: none; }
