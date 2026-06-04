@@ -31,7 +31,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 
 /* ── CARD DE PRODUCTO ───────────────────────────────────────── */
 .bgmg-card { display: flex; align-items: center; gap: 12px; padding: 12px; background: #fff; border: 1px solid var(--border); border-radius: 16px; position: relative; }
-.bgmg-card-img { width: 80px; height: 80px; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
+.bgmg-card-img { width: 90px; height: 90px; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
 .bgmg-card-link { display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; text-decoration: none; color: inherit; }
 .bgmg-card-link:hover .bgmg-card-name { color: var(--pink-dark); }
 .bgmg-card-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 3px; }

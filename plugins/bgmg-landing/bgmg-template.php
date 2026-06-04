@@ -113,14 +113,6 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 .bgmg-hero-slider .swiper-pagination-bullet-active {
   opacity: 1; width: 24px; border-radius: 4px;
 }
-.bgmg-hero-slider .swiper-button-prev,
-.bgmg-hero-slider .swiper-button-next {
-  width: 40px; height: 40px; border-radius: 50%;
-  background: rgba(255,255,255,.85); color: var(--dark);
-  --swiper-navigation-size: 15px; transition: background .2s;
-}
-.bgmg-hero-slider .swiper-button-prev:hover,
-.bgmg-hero-slider .swiper-button-next:hover { background: #fff; }
 
 /* ── CARD DE PRODUCTO ───────────────────────────────────────── */
 .bgmg-grid { display: grid; grid-template-columns: 1fr; gap: 12px; }
@@ -129,7 +121,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
   background: #fff; border: 1px solid var(--border); border-radius: 16px;
   position: relative; overflow: hidden;
 }
-.bgmg-card-img  { width: 80px; height: 80px; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
+.bgmg-card-img  { width: 90px; height: 90px; border-radius: 12px; flex-shrink: 0; object-fit: cover; }
 .bgmg-card-link {
   display: flex; align-items: center; gap: 12px;
   flex: 1; min-width: 0; text-decoration: none; color: inherit;
@@ -162,7 +154,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 .bgmg-btn-add:hover { background: var(--pink); color: #fff; }
 
 /* ── CATEGORÍAS ─────────────────────────────────────────────── */
-.bgmg-cats { display: flex; flex-wrap: wrap; gap: 10px; }
+.bgmg-cats { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .bgmg-cat {
   display: inline-flex; align-items: center; gap: 6px;
   padding: 10px 18px; background: #fff; border: 1px solid var(--border);
@@ -589,8 +581,6 @@ if ( $bgmg_hero_css ) {
 
   </div>
   <div class="swiper-pagination"></div>
-  <div class="swiper-button-prev"></div>
-  <div class="swiper-button-next"></div>
 </div>
 
 <!-- ══ 2. CATEGORÍAS ════════════════════════════════════════════ -->
@@ -922,10 +912,6 @@ new Swiper('.bgmg-hero-slider', {
   effect: 'fade',
   fadeEffect: { crossFade: true },
   pagination: { el: '.bgmg-hero-slider .swiper-pagination', clickable: true },
-  navigation: {
-    nextEl: '.bgmg-hero-slider .swiper-button-next',
-    prevEl: '.bgmg-hero-slider .swiper-button-prev',
-  },
 });
 </script>
 <script>

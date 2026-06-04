@@ -124,8 +124,8 @@
 .bgmg-search-view-all:hover{background:var(--pink-dark);color:#fff}
 .bgmg-search-msg{padding:16px;text-align:center;color:var(--mid);font-family:'Poppins',sans-serif;font-size:13px}
 @media(min-width:768px){.bgmg-search-overlay{top:72px;padding:18px 40px}}
-/* ── Pills de categorías landing: grid equitativo ── */
-.bgmg-cats{display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:10px}
+/* ── Pills de categorías landing: flex centrado (se ajustan al texto) ── */
+.bgmg-cats{display:flex;flex-wrap:wrap;justify-content:center;gap:10px}
 .bgmg-cat{justify-content:center;text-align:center}
 /* ── Tab bar mobile ── */
 .bgmg-tabbar{display:flex;position:fixed;bottom:0;left:0;right:0;height:62px;background:#fff;border-top:1px solid #f0e0e5;z-index:9999;box-shadow:0 -4px 20px rgba(0,0,0,.06);padding-bottom:env(safe-area-inset-bottom,0px)}

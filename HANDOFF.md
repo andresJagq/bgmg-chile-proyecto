@@ -19,7 +19,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.2** |
-| bgmg-landing | **6.5.11** |
+| bgmg-landing | **6.6.3** |
 | beautygirlmg-mayorista | **2.6.2** |
 | bgmg-tema-base | 1.1.0 |
 
@@ -32,6 +32,40 @@ trabajo con 2 PCs + Drive en **§5.18**.
 > y working tree en sync.
 
 **Zip listo, PENDIENTE validar en staging:**
+- **Imágenes de cards +10px (bgmg-landing 6.6.3):** `.bgmg-card-img` pasó de **80×80 a 90×90**. La
+  regla está duplicada inline en **4 templates** (`bgmg-template.php`, `bgmg-product.php` —relacionados—,
+  `bgmg-category.php`, `bgmg-shop.php`); se actualizaron las 4 para mantener las cards parejas en toda la
+  web (NO hay copia en global.css). Las cards son flex con `align-items:center`, así que solo crecen un
+  poco de alto, sin romper layout. **Validar:** home, tienda, categoría y relacionados (producto).
+- **Hero sin flechas (bgmg-landing 6.6.2):** se quitaron las flechas prev/next del slider Swiper de la
+  home en sus 3 puntos (markup `.swiper-button-prev/next`, su CSS, y el bloque `navigation:` del init).
+  Se conservan los **puntitos de paginación** y el autoplay. Solo en `bgmg-template.php`. JS validado
+  con `node --check`. **Validar:** la home ya no muestra flechas y el slider sigue rotando/paginando.
+- **Pills de categorías centradas (bgmg-landing 6.6.1):** la sección "Encuentra lo que buscas" de la
+  home distribuía las pills con `flex` alineadas a la izquierda (borde derecho irregular / pills
+  "solas" al envolver). Se agregó `justify-content:center` a `.bgmg-cats` **en los 2 sitios** donde
+  estaba definida (inline en `bgmg-template.php` —la que ganaba— y `assets/bgmg-global.css`, que tenía
+  una versión `grid` muerta ahora alineada a `flex` centrado). El markup `bgmg-cats` solo existe en la
+  home. **Validar:** abrir la home y ver las pills centradas y balanceadas (desktop y móvil).
+- **Páginas legales/informativas (bgmg-landing 6.6.0):** se crean las **5 páginas de contenido** que
+  el footer ya enlazaba (FAQ, Envíos, Devoluciones, Términos) **+ Política de privacidad** (nueva, con
+  su link añadido al footer). Implementación:
+  - **Template branded reutilizable** `bgmg-page.php` (registrado como *"BGMG Página"* en
+    `theme_page_templates` + enrutado en `template_include` por `get_page_template_slug()`): reúsa
+    header/footer/tab bar + CSS/JS global, pinta `the_title()` + `the_content()` con tipografía BGMG.
+    La **FAQ usa acordeón `<details>/<summary>` nativo** (sin JS).
+  - **Contenido + seeder** en `inc/content-pages.php`: el texto se tomó de **beautygirlmg.cl** (footer
+    + FAQ verbatim; Privacidad y Términos los redacté para Chile — Ley 19.496 / 19.628 / SERNAC). El
+    seeder es **idempotente** (crea solo las páginas que faltan, NO pisa ediciones; a las existentes
+    solo les asigna el template) y corre **1 vez en `admin_init`** gated por la opción
+    `bgmg_content_pages_seeded='v1'` (el activation hook NO se redispara al actualizar por zip).
+  - **OJO / pendientes del dueño:** (a) Términos y Privacidad tienen `[RAZÓN SOCIAL]` y `[RUT]` como
+    placeholders → rellenar desde **Páginas → editar**. (b) La exclusión del *derecho a retracto* viene
+    textual de la FAQ V1; conviene revisión legal (art. 3 bis Ley 19.496 en venta a distancia).
+  - **Validar:** subir el zip, entrar a **wp-admin** (dispara el seeder), ir a **Ajustes → Enlaces
+    permanentes → Guardar** (flush) y abrir las 5 URLs (`/preguntas-frecuentes/`, `/politica-de-envios/`,
+    `/politica-de-devoluciones/`, `/terminos-y-condiciones/`, `/politica-de-privacidad/`): deben verse
+    con header/footer branded y la FAQ debe abrir/cerrar cada pregunta. Revisar los 5 links del footer.
 - **Cambio de tipografía (bgmg-landing 6.5.11):** por pedido del cliente, **títulos → Alice** (serif)
   y **textos → Poppins** (sans). Reemplazo de `Cormorant Garamond → Alice` y `DM Sans → Poppins`
   en las 8 plantillas + `bgmg-global.css` + `bgmg-footer.css` (cubrió comillas simples y dobles), y

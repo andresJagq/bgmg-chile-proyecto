@@ -2,19 +2,20 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.5.11
+ * Version:     6.6.3
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.5.11' );
+define( 'BGMG_LANDING_VERSION', '6.6.3' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/category-meta.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/account-renders.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/content-pages.php';
 
 // Deshabilitar zoom de galería de producto (causa imagen ampliada en esquina)
 add_filter('woocommerce_single_product_zoom_enabled', '__return_false');
@@ -665,6 +666,7 @@ function bgmg_nav_fallback() {
 // Registrar el template
 add_filter('theme_page_templates', function($templates) {
     $templates['bgmg-template.php'] = 'BGMG Landing';
+    $templates['bgmg-page.php']     = 'BGMG Página';
     return $templates;
 });
 
@@ -672,6 +674,10 @@ add_filter('theme_page_templates', function($templates) {
 add_filter('template_include', function($template) {
     if (is_page() && get_page_template_slug() === 'bgmg-template.php') {
         $t = plugin_dir_path(__FILE__) . 'bgmg-template.php';
+        if (file_exists($t)) return $t;
+    }
+    if (is_page() && get_page_template_slug() === 'bgmg-page.php') {
+        $t = plugin_dir_path(__FILE__) . 'bgmg-page.php';
         if (file_exists($t)) return $t;
     }
     if (is_shop()) {
@@ -1055,6 +1061,7 @@ function bgmg_footer() {
                 <a href="<?php echo esc_url(home_url('/politica-de-envios/')); ?>">Env&iacute;os</a>
                 <a href="<?php echo esc_url(home_url('/politica-de-devoluciones/')); ?>">Devoluciones</a>
                 <a href="<?php echo esc_url(home_url('/terminos-y-condiciones/')); ?>">T&eacute;rminos</a>
+                <a href="<?php echo esc_url(home_url('/politica-de-privacidad/')); ?>">Privacidad</a>
             </div>
 
         </div>
