@@ -2,20 +2,21 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.6.3
+ * Version:     6.7.0
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.6.3' );
+define( 'BGMG_LANDING_VERSION', '6.7.0' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/category-meta.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/account-renders.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/content-pages.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/meta-regalo-widget.php';
 
 // Deshabilitar zoom de galería de producto (causa imagen ampliada en esquina)
 add_filter('woocommerce_single_product_zoom_enabled', '__return_false');
@@ -358,6 +359,8 @@ add_action('wp_footer', function() { ?>
           el.textContent = resp.data.count > 0 ? resp.data.count : '';
         });
 
+        if (window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
+
         if(body) body.classList.remove('is-loading');
       })
       .catch(function(){ if(body) body.classList.remove('is-loading'); });
@@ -411,6 +414,7 @@ add_action('wp_footer', function() { ?>
               }
               document.querySelectorAll('.bgmg-cart-count').forEach(function(el){ el.textContent = ''; });
             }
+            if (resp && resp.data && window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
             if (body) body.classList.remove('is-loading');
           })
           .catch(function(){ if (body) body.classList.remove('is-loading'); });
@@ -565,6 +569,7 @@ add_action('wp_footer', function() { ?>
         document.querySelectorAll('.bgmg-cart-count').forEach(function(el){
           el.textContent = resp.data.count > 0 ? resp.data.count : '';
         });
+        if (window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
         openCart();
       })
       .catch(function(){ form.submit(); });
@@ -724,8 +729,9 @@ function bgmg_clear_cart() {
     bgmg_minicart_inner();
     $minicart_html = ob_get_clean();
     wp_send_json_success(array(
-        'count'         => 0,
-        'minicart_html' => $minicart_html,
+        'count'            => 0,
+        'minicart_html'    => $minicart_html,
+        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
     ));
 }
 
@@ -781,8 +787,9 @@ function bgmg_add_to_cart() {
     $minicart_html = ob_get_clean();
 
     wp_send_json_success(array(
-        'count'         => WC()->cart->get_cart_contents_count(),
-        'minicart_html' => $minicart_html,
+        'count'            => WC()->cart->get_cart_contents_count(),
+        'minicart_html'    => $minicart_html,
+        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
     ));
 }
 
@@ -897,6 +904,7 @@ function bgmg_update_cart() {
         'savings'       => $savings > 0 ? wc_price($savings) : '',
         'items_data'    => $items_data,
         'minicart_html' => $minicart_html,
+        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
     ));
 }
 

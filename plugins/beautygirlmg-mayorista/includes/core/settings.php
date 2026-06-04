@@ -218,6 +218,109 @@ function bgm_registrar_pagina_settings( $pages ) {
                     ],
                     [ 'type' => 'sectionend', 'id' => 'bgm_section_promo_resumen' ],
 
+                    // ─── Meta de regalo (free gift por monto de carrito) ──
+                    [
+                        'title' => __( 'Meta de regalo', 'beautygirlmg-mayorista' ),
+                        'type'  => 'title',
+                        'desc'  => __( 'Si el carrito alcanza cierto monto, se agrega AUTOMÁTICAMENTE un producto de regalo a $0. Soporta hasta 3 niveles (escalera): se entrega el regalo del nivel <strong>más alto alcanzado</strong> (uno solo, no acumulativo). Aplica a minoristas y mayoristas, midiendo el subtotal real del carrito. El producto-regalo debe ser <strong>simple</strong> y con stock; si se agota, no se agrega. Un nivel aplica solo si está marcado como activo, con umbral &gt; 0 y un producto elegido.', 'beautygirlmg-mayorista' ),
+                        'id'    => 'bgm_section_meta',
+                    ],
+                    [
+                        'title'   => __( 'Activar meta de regalo', 'beautygirlmg-mayorista' ),
+                        'desc'    => __( 'Interruptor maestro. Enciéndelo por temporada/campaña.', 'beautygirlmg-mayorista' ),
+                        'id'      => 'bgm_meta_activa',
+                        'type'    => 'checkbox',
+                        'default' => 'no',
+                    ],
+                    [
+                        'title'             => __( 'Mostrar aviso cuando falte (CLP)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'La ventanita flotante aparece cuando al carrito le falte este monto o menos para el próximo regalo. Default 5.000.', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_meta_cerca_monto',
+                        'type'              => 'number',
+                        'default'           => 5000,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '100' ],
+                    ],
+
+                    // Nivel 1
+                    [
+                        'title'             => __( 'Nivel 1 — umbral (CLP)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Monto de subtotal a alcanzar para el regalo del nivel 1.', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_meta_nivel1_umbral',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '100' ],
+                    ],
+                    [
+                        'title'             => __( 'Nivel 1 — producto regalo (ID)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Pega el ID del producto simple a regalar (lo ves al editar el producto, en la URL: <code>post=ID</code>, o al pasar el mouse sobre el producto en la lista).', 'beautygirlmg-mayorista' ) . ( function_exists( 'bgm_meta_desc_producto' ) ? bgm_meta_desc_producto( 'bgm_meta_nivel1_producto' ) : '' ),
+                        'id'                => 'bgm_meta_nivel1_producto',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
+                    ],
+                    [
+                        'title'   => __( 'Nivel 1 — activo', 'beautygirlmg-mayorista' ),
+                        'desc'    => __( 'Habilita este nivel.', 'beautygirlmg-mayorista' ),
+                        'id'      => 'bgm_meta_nivel1_activo',
+                        'type'    => 'checkbox',
+                        'default' => 'no',
+                    ],
+
+                    // Nivel 2
+                    [
+                        'title'             => __( 'Nivel 2 — umbral (CLP)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Monto de subtotal a alcanzar para el regalo del nivel 2 (debe ser mayor al nivel 1).', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_meta_nivel2_umbral',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '100' ],
+                    ],
+                    [
+                        'title'             => __( 'Nivel 2 — producto regalo (ID)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Pega el ID del producto simple a regalar.', 'beautygirlmg-mayorista' ) . ( function_exists( 'bgm_meta_desc_producto' ) ? bgm_meta_desc_producto( 'bgm_meta_nivel2_producto' ) : '' ),
+                        'id'                => 'bgm_meta_nivel2_producto',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
+                    ],
+                    [
+                        'title'   => __( 'Nivel 2 — activo', 'beautygirlmg-mayorista' ),
+                        'desc'    => __( 'Habilita este nivel.', 'beautygirlmg-mayorista' ),
+                        'id'      => 'bgm_meta_nivel2_activo',
+                        'type'    => 'checkbox',
+                        'default' => 'no',
+                    ],
+
+                    // Nivel 3
+                    [
+                        'title'             => __( 'Nivel 3 — umbral (CLP)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Monto de subtotal a alcanzar para el regalo del nivel 3 (debe ser mayor al nivel 2).', 'beautygirlmg-mayorista' ),
+                        'id'                => 'bgm_meta_nivel3_umbral',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'desc_tip'          => true,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '100' ],
+                    ],
+                    [
+                        'title'             => __( 'Nivel 3 — producto regalo (ID)', 'beautygirlmg-mayorista' ),
+                        'desc'              => __( 'Pega el ID del producto simple a regalar.', 'beautygirlmg-mayorista' ) . ( function_exists( 'bgm_meta_desc_producto' ) ? bgm_meta_desc_producto( 'bgm_meta_nivel3_producto' ) : '' ),
+                        'id'                => 'bgm_meta_nivel3_producto',
+                        'type'              => 'number',
+                        'default'           => 0,
+                        'custom_attributes' => [ 'min' => '0', 'step' => '1' ],
+                    ],
+                    [
+                        'title'   => __( 'Nivel 3 — activo', 'beautygirlmg-mayorista' ),
+                        'desc'    => __( 'Habilita este nivel.', 'beautygirlmg-mayorista' ),
+                        'id'      => 'bgm_meta_nivel3_activo',
+                        'type'    => 'checkbox',
+                        'default' => 'no',
+                    ],
+                    [ 'type' => 'sectionend', 'id' => 'bgm_section_meta' ],
+
                     // ─── Debug ───────────────────────────────────────
                     [
                         'title' => __( 'Debug', 'beautygirlmg-mayorista' ),

@@ -42,6 +42,18 @@ $opciones = [
     'bgm_promo_qty_max_migrado',
     'bgm_promo_categorias',
     'bgm_promo_productos', // huérfana desde 2.5.6 (textarea retirado); se limpia igual
+    // Meta de regalo
+    'bgm_meta_activa',
+    'bgm_meta_cerca_monto',
+    'bgm_meta_nivel1_umbral',
+    'bgm_meta_nivel1_producto',
+    'bgm_meta_nivel1_activo',
+    'bgm_meta_nivel2_umbral',
+    'bgm_meta_nivel2_producto',
+    'bgm_meta_nivel2_activo',
+    'bgm_meta_nivel3_umbral',
+    'bgm_meta_nivel3_producto',
+    'bgm_meta_nivel3_activo',
 ];
 foreach ( $opciones as $opt ) {
     delete_option( $opt );

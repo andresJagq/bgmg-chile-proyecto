@@ -56,18 +56,29 @@ function bgm_render_modo_auto( $product ) {
     $product_id = $product->get_id();
     $info       = bgm_resumen_mayorista_variable( $product );
     $min_1      = $info['min_1'];
+    $min_2      = $info['min_2'];
     $desc_1_max = $info['desc_1_max'];
+    $desc_2_max = $info['desc_2_max'];
 
-    // Precio aprox: precio mínimo del rango menos descuento mayor 1
-    $precio_min  = bgm_get_precio_base( $product );
-    $precio_aprox = max( 0, $precio_min - $desc_1_max );
-    $subtotal_inicial = $min_1 * $precio_aprox;
+    // Precio aprox por nivel: precio mínimo del rango menos el descuento del nivel.
+    // El subtotal en vivo usa el nivel que corresponde a la cantidad (igual que el
+    // carrito): desde min_2 aplica el precio de nivel 2, si está configurado.
+    $precio_min   = bgm_get_precio_base( $product );
+    $precio_1     = max( 0, $precio_min - $desc_1_max );                              // nivel 1
+    $tiene_nivel2 = ( $desc_2_max > 0 && $min_2 > 0 );
+    $precio_2     = $tiene_nivel2 ? max( 0, $precio_min - $desc_2_max ) : $precio_1;  // nivel 2
+    $min_2_data   = $tiene_nivel2 ? $min_2 : 0;                                       // 0 = sin nivel 2
+
+    $precio_aprox     = $precio_1;            // compat con data-precio-aprox
+    $subtotal_inicial = $min_1 * $precio_1;   // cantidad inicial = min_1 → nivel 1
 
     ?>
     <div class="bgm-bloque-auto"
          data-product-id="<?php echo esc_attr( $product_id ); ?>"
          data-min="<?php echo esc_attr( $min_1 ); ?>"
-         data-precio-aprox="<?php echo esc_attr( $precio_aprox ); ?>">
+         data-min-2="<?php echo esc_attr( $min_2_data ); ?>"
+         data-precio-aprox="<?php echo esc_attr( $precio_aprox ); ?>"
+         data-precio-2="<?php echo esc_attr( $precio_2 ); ?>">
 
         <p class="bgm-bloque-desc">
             <?php esc_html_e( 'Te enviamos variedad equilibrada según el stock disponible.', 'beautygirlmg-mayorista' ); ?>

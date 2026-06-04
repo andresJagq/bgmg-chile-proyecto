@@ -81,6 +81,11 @@ function bgm_aplicar_precios_carrito( $cart ) {
         $producto = $item['data'];
         if ( ! $producto ) continue;
 
+        // La línea de regalo (meta de regalo) nunca se reprecia aquí: su precio
+        // lo fuerza a 0 el módulo meta-regalo (prioridad 100). Tampoco cuenta
+        // para el mayorista de su propio producto.
+        if ( ! empty( $item['bgm_regalo'] ) ) continue;
+
         if ( $producto->is_type( 'variation' ) ) {
             $padre_id = $producto->get_parent_id();
             // Promo (Fase 2): incluir también padres en promo aunque NO tengan mayorista.

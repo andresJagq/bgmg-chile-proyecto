@@ -19,8 +19,8 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.2** |
-| bgmg-landing | **6.6.3** |
-| beautygirlmg-mayorista | **2.6.2** |
+| bgmg-landing | **6.7.0** |
+| beautygirlmg-mayorista | **2.7.2** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo
@@ -32,6 +32,42 @@ trabajo con 2 PCs + Drive en **§5.18**.
 > y working tree en sync.
 
 **Zip listo, PENDIENTE validar en staging:**
+- **Subtotal por nivel en Sorpréndeme (mayorista 2.7.2):** la pestaña auto mostraba el "Subtotal aprox."
+  con el precio unitario **fijo de nivel 1**, aunque la cantidad llegara al umbral de nivel 2. Ahora el
+  subtotal en vivo usa el **nivel que corresponde a la cantidad** (igual que el carrito): desde `min_2`
+  aplica el precio de nivel 2 si está configurado. `modo-auto.php` pasa `data-min-2` y `data-precio-2`
+  al bloque; `frontend-auto.js` calcula `precioUnitario(qty)`. **Validar:** en un producto variable con
+  nivel 2 configurado, subir la cantidad en Sorpréndeme y ver que al cruzar `min_2` el subtotal baja al
+  precio de nivel 2 (ej. 3×1100 vs 12×precio-nivel-2).
+- **Meta de regalo — FASE 2 ventanita flotante (bgmg-landing 6.7.0):** módulo nuevo
+  `inc/meta-regalo-widget.php`. Ventanita fija (abajo-derecha en desktop, sobre la tab bar en móvil) que
+  aparece cuando el carrito está **cerca** del próximo nivel ("¡Te faltan $X para tu regalo!" + barra de
+  progreso + nombre del regalo) o al **desbloquear** ("¡Desbloqueaste tu regalo!"). Consume
+  `bgm_meta_regalo_estado()` (con function_exists). Se refresca sin recargar: fragment WC
+  `#bgm-meta-widget-root` (add desde tarjetas) + los 3 endpoints AJAX del side-cart (add/update/clear)
+  devuelven `meta_widget_html` y el JS llama `window.bgmMetaSwap()`. Descartable por sesión
+  (sessionStorage, firma del estado → reaparece al cambiar de nivel). CSS en `bgmg-global.css`
+  (`.bgm-meta-card`). El "cerca" se configura en Ajustes → Mayorista (`bgm_meta_cerca_monto`, default
+  5.000). **Validar:** acercarse al umbral (ver ventanita + barra), cruzarlo (mensaje de desbloqueo),
+  cerrar (× la oculta), y que se actualice al agregar/quitar desde tarjeta, página de producto y
+  side-cart, sin recargar. **Pendiente opcional:** estilizar la línea del regalo (🎁 / qty bloqueada) en
+  el carrito/minicart custom de bgmg-landing (hoy usa el baseline de los filtros WC del mayorista).
+- **Meta de regalo / free gift — FASE 1 lógica (mayorista 2.7.0):** módulo nuevo
+  `includes/core/meta-regalo.php`. Si el carrito alcanza un umbral, se agrega AUTO un producto a $0;
+  soporta **hasta 3 niveles** (escalera) y entrega el del **nivel más alto alcanzado** (uno solo, NO
+  acumulativo). Aplica a minoristas y mayoristas (subtotal real, ya descontado). Config en **WC →
+  Ajustes → Mayorista → "Meta de regalo"** (toggle maestro + monto "cerca" + por nivel: umbral/producto
+  simple/activo, con buscador de productos WC). Lógica en `woocommerce_before_calculate_totals` prio
+  **100** (corre tras mayorista 99) con guard estático anti-recursión; la línea lleva flag `bgm_regalo`,
+  precio forzado a 0, qty fija 1, y los hooks mayorista/promo la **ignoran** (`continue` en carrito.php).
+  Filtros baseline de WC para nombre "🎁 Regalo", qty fija y sin "quitar". Expone
+  `bgm_meta_regalo_estado()` para la Fase 2. **2.7.1:** el selector de producto-regalo pasó de
+  `wc-product-search` (no persistía: WC valida el valor AJAX contra el `options` del campo y lo
+  descartaba) a **campo de ID numérico** que además muestra el nombre del producto y avisa si el ID no
+  sirve (no existe / no simple / sin stock) vía `bgm_meta_desc_producto()`. **Pendiente Fase 2:** ventanita flotante en bgmg-landing +
+  estilizar la línea del regalo en el carrito/minicart custom. **Validar Fase 1 (cart, manual):** activar
+  + configurar nivel(es), cruzar/bajar el umbral (regalo entra/sale a $0), cambiar de nivel (regalo se
+  cambia), y que mayorista/surtido/promo y el checkout sigan OK.
 - **Imágenes de cards +10px (bgmg-landing 6.6.3):** `.bgmg-card-img` pasó de **80×80 a 90×90**. La
   regla está duplicada inline en **4 templates** (`bgmg-template.php`, `bgmg-product.php` —relacionados—,
   `bgmg-category.php`, `bgmg-shop.php`); se actualizaron las 4 para mantener las cards parejas en toda la

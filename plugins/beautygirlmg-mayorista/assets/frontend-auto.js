@@ -10,12 +10,21 @@
     if ( ! $bloque.length ) return;
 
     var min        = parseInt( $bloque.data( 'min' ), 10 ) || 1;
-    var precioAprox = parseFloat( $bloque.data( 'precio-aprox' ) ) || 0;
+    var min2       = parseInt( $bloque.data( 'min-2' ), 10 ) || 0; // 0 = sin nivel 2
+    var precio1    = parseFloat( $bloque.data( 'precio-aprox' ) ) || 0;
+    var precio2    = parseFloat( $bloque.data( 'precio-2' ) );
+    if ( isNaN( precio2 ) ) precio2 = precio1;
     var productId   = parseInt( $bloque.data( 'product-id' ), 10 );
+
+    // Precio unitario según el nivel que corresponde a la cantidad (igual que el
+    // carrito): desde min_2 aplica el precio de nivel 2 si está configurado.
+    function precioUnitario( qty ) {
+        return ( min2 > 0 && qty >= min2 ) ? precio2 : precio1;
+    }
 
     function actualizarSubtotal() {
         var qty = parseInt( $bloque.find( '.bgm-qty-input' ).val(), 10 ) || min;
-        var subtotal = qty * precioAprox;
+        var subtotal = qty * precioUnitario( qty );
         $bloque.find( '.bgm-subtotal-valor' ).html( formatPrecio( subtotal ) );
     }
 
