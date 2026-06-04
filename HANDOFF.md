@@ -6,7 +6,14 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-02**
+> Última actualización: **2026-06-04**
+>
+> **Dónde quedamos (2026-06-04):** se construyó la **meta de regalo / free gift** (mayorista 2.7.0–2.7.2:
+> Fase 1 lógica + Fase 2 ventanita flotante en bgmg-landing 6.7.0) y el **fix del subtotal por nivel en
+> Sorpréndeme**. Todo commiteado/pusheado (`afcaf7a`). **Pendiente del usuario:** validar en staging los
+> zips listados abajo (subir mayorista 2.7.2 + bgmg-landing 6.7.0). Pendiente opcional: estilizar la línea
+> del regalo (🎁 + qty bloqueada) en el carrito/minicart custom. (Aparte: se generó un documento de cobro
+> `detalle-valor-beautygirl.*` — privado, ignorado en git, solo sincroniza por Drive.)
 
 ---
 

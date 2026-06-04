@@ -28,3 +28,8 @@ $RECYCLE.BIN/
 # ─── Dependencias (el proyecto no las usa, pero por si acaso) ─────────────────
 vendor/
 node_modules/
+
+# ─── Documento de cobro / presupuesto (privado: sincroniza por Drive, NO a GitHub) ──
+/detalle-valor-beautygirl.html
+/detalle-valor-beautygirl.pdf
+/beautygirl-logo.png
