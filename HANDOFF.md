@@ -6,14 +6,25 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-04**
+> Última actualización: **2026-06-08**
 >
-> **Dónde quedamos (2026-06-04):** se construyó la **meta de regalo / free gift** (mayorista 2.7.0–2.7.2:
-> Fase 1 lógica + Fase 2 ventanita flotante en bgmg-landing 6.7.0) y el **fix del subtotal por nivel en
-> Sorpréndeme**. Todo commiteado/pusheado (`afcaf7a`). **Pendiente del usuario:** validar en staging los
-> zips listados abajo (subir mayorista 2.7.2 + bgmg-landing 6.7.0). Pendiente opcional: estilizar la línea
-> del regalo (🎁 + qty bloqueada) en el carrito/minicart custom. (Aparte: se generó un documento de cobro
-> `detalle-valor-beautygirl.*` — privado, ignorado en git, solo sincroniza por Drive.)
+> **Dónde quedamos (2026-06-08):** **fix de error fatal en bgmg-chile 1.18.3** — la pantalla
+> **Despachos BGMG → Reportes** (y las stats del Resumen) caía con `E_ERROR`
+> (`Call to undefined method WC_Order_Refund::get_shipping_city()`) cuando `wc_get_orders()` devolvía
+> un reembolso. Ambos loops de stats ahora saltan los objetos que no sean `WC_Order`. Se reportó en
+> **beautygirlmg.cl** (ya corriendo el stack V2: tema BGMG Base 1.1.0). **Acción del usuario:** subir
+> `zips\bgmg-chile.zip` (1.18.3) y reabrir Reportes para confirmar.
+>
+> En el mismo push entró el **trabajo hecho en casa** que estaba sin commitear (llegó por Drive):
+> **mayorista 2.7.4** (variaciones sin stock se muestran *deshabilitadas "Agotado"*, no se ocultan —
+> ver CLAUDE.md del plugin §6: `swatches.php`, `frontend.css`, `producto-variable.php`,
+> `frontend-swatches.js`) y **bgmg-landing 6.7.5** (ajustes de templates). Todo lintea limpio.
+>
+> _Antes (2026-06-04):_ se construyó la **meta de regalo / free gift** (mayorista 2.7.0–2.7.2: Fase 1
+> lógica + Fase 2 ventanita flotante en bgmg-landing 6.7.0) y el **fix del subtotal por nivel en
+> Sorpréndeme** (`afcaf7a`). **Pendiente del usuario:** validar en staging esos zips. Pendiente opcional:
+> estilizar la línea del regalo (🎁 + qty bloqueada) en el carrito/minicart custom. (Aparte: documento de
+> cobro `detalle-valor-beautygirl.*` — privado, ignorado en git, solo sincroniza por Drive.)
 
 ---
 
@@ -25,9 +36,9 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 
 | Pieza | Versión código |
 |---|---|
-| bgmg-chile | **1.18.2** |
-| bgmg-landing | **6.7.0** |
-| beautygirlmg-mayorista | **2.7.2** |
+| bgmg-chile | **1.18.3** |
+| bgmg-landing | **6.7.5** |
+| beautygirlmg-mayorista | **2.7.4** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo

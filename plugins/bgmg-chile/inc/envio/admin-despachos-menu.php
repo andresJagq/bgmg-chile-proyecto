@@ -462,6 +462,12 @@ function bgmg_chile_despachos_get_stats() {
 	$comuna_tally    = array();
 
 	foreach ( $pedidos_30d as $order ) {
+		// wc_get_orders puede devolver reembolsos (WC_Order_Refund), que extienden
+		// WC_Abstract_Order pero NO tienen get_shipping_city() ni dirección. Saltarlos
+		// para no provocar un fatal (Call to undefined method ...::get_shipping_city()).
+		if ( ! $order instanceof WC_Order ) {
+			continue;
+		}
 		$is_bgmg_method = false;
 		$is_retiro      = false;
 		$tipo_tarifa    = '';
@@ -735,6 +741,12 @@ function bgmg_chile_reportes_obtener_stats( $dias = 30 ) {
 	$metodos_acum = array(); // [slug => ['nombre', 'count', 'ingresos']]
 
 	foreach ( $pedidos as $order ) {
+
+		// Saltar reembolsos (WC_Order_Refund): extienden WC_Abstract_Order pero no
+		// tienen get_shipping_city() ni dirección de envío → provocarían un fatal.
+		if ( ! $order instanceof WC_Order ) {
+			continue;
+		}
 
 		$out['total_pedidos']++;
 		$out['total_ingresos_envio'] += (float) $order->get_shipping_total();
