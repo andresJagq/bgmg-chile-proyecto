@@ -16,8 +16,10 @@
         if ( ! $form.length || $form.data( 'bgm-swatches-init' ) ) return;
         $form.data( 'bgm-swatches-init', true );
 
+        var unAtributo = $form.find( 'table.variations select' ).length === 1;
+
         $form.find( 'table.variations select' ).each( function() {
-            convertirSelect( $( this ) );
+            convertirSelect( $( this ), unAtributo );
         } );
 
         // Cuando WC limpia las variaciones (cliente clickea "Limpiar"), resetear pills.
@@ -28,12 +30,13 @@
         } );
     }
 
-    function convertirSelect( $select ) {
+    function convertirSelect( $select, unAtributo ) {
         if ( $select.data( 'bgm-converted' ) ) return;
         $select.data( 'bgm-converted', true );
 
         var attrName = $select.attr( 'name' ) || '';
         var $swatches = $( '<div class="bgm-swatches" role="radiogroup" aria-label="' + ( $select.attr( 'aria-label' ) || attrName ) + '"></div>' );
+        if ( unAtributo ) $swatches.addClass( 'is-single' );
 
         $select.find( 'option' ).each( function() {
             var $opt   = $( this );

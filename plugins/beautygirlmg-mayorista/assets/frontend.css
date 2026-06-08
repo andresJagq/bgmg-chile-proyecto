@@ -19,6 +19,17 @@
     font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* ─── Mensaje "sin stock" en POR MAYOR (coherente con DETALLE) ─── */
+.bgm-mayor-sin-stock {
+    padding: 4px 0;
+}
+.bgm-no-disponible {
+    margin: 0;
+    color: var(--bgm-pink-dark);
+    font-size: 14px;
+    font-weight: 500;
+}
+
 /* ─── Tier badges inline (1 línea por tier) ──────────────── */
 .bgm-tiers-row {
     display: flex;
@@ -774,6 +785,19 @@
 .bgm-swatch:focus-visible {
     outline: 2px solid var(--bgm-pink-dark);
     outline-offset: 2px;
+}
+
+/* Etiqueta "Agotado" SOLO en swatches de UN atributo (donde deshabilitado == sin
+   stock). En multi-atributo un pill puede estar deshabilitado por combinación
+   inválida, no por stock, así que ahí solo se ve tachado, sin la palabra. */
+.bgm-swatches.is-single .bgm-swatch.is-disabled {
+    text-decoration: none;
+    opacity: .7;
+}
+.bgm-swatches.is-single .bgm-swatch.is-disabled .bgm-swatch-label::after {
+    content: " · Agotado";
+    font-weight: 600;
+    font-size: .92em;
 }
 
 /* ─── Avisos de surtido en minicart + página /cart/ ──────── */

@@ -229,6 +229,7 @@ $init_args = array(
         'include_children' => true,
     )),
 );
+if ( function_exists('bgmg_args_excluir_sin_stock') ) { $init_args = bgmg_args_excluir_sin_stock($init_args); } // ocultar agotados
 $init_query    = new WP_Query($init_args);
 $has_more_init = $init_query->max_num_pages > 1;
 ?>

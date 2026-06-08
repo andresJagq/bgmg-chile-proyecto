@@ -219,9 +219,16 @@ foreach ($all_terms as $t) {
 // Búsqueda desde formulario
 $search_q = isset($_GET['s']) ? sanitize_text_field(wp_unslash($_GET['s'])) : '';
 
-// Productos iniciales (8)
-$init_args = array('post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 8, 'paged' => 1, 'orderby' => 'date', 'order' => 'DESC');
+// Modo ofertas (?oferta=1): la tienda muestra solo productos en oferta.
+$is_oferta = ! empty( $_GET['oferta'] );
+// Productos iniciales (12)
+$init_args = array('post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 12, 'paged' => 1, 'orderby' => 'date', 'order' => 'DESC');
 if ($search_q !== '') { $init_args['s'] = $search_q; }
+if ($is_oferta) {
+    $oferta_ids = function_exists('bgmg_oferta_product_ids') ? bgmg_oferta_product_ids() : array();
+    $init_args['post__in'] = ! empty($oferta_ids) ? $oferta_ids : array(0);
+}
+if ( function_exists('bgmg_args_excluir_sin_stock') ) { $init_args = bgmg_args_excluir_sin_stock($init_args); } // ocultar agotados
 $init_query = new WP_Query($init_args);
 $has_more_init = $init_query->max_num_pages > 1;
 ?>
@@ -233,7 +240,7 @@ $has_more_init = $init_query->max_num_pages > 1;
 <!-- SHOP -->
 <div class="bgmg-shop-wrap">
   <div class="bgmg-shop-head">
-    <h1 class="bgmg-shop-title">Tienda</h1>
+    <h1 class="bgmg-shop-title"><?php echo $is_oferta ? 'Ofertas 🔥' : 'Tienda'; ?></h1>
 
     <!-- Pills de categorías top-level -->
     <div class="bgmg-shop-cats">
@@ -315,6 +322,7 @@ $has_more_init = $init_query->max_num_pages > 1;
   var priceMax     = <?php echo $price_max; ?>;
   var currentOrder = 'date';
   var isLoading    = false;
+  var BGMG_OFERTA  = <?php echo $is_oferta ? '1' : '0'; ?>;
 
   // Precio range
   var rangeMin  = document.getElementById('bgmg-range-min');
@@ -446,6 +454,7 @@ $has_more_init = $init_query->max_num_pages > 1;
     data.append('min_price', currentMin);
     data.append('max_price', currentMax);
     data.append('orderby',   currentOrder);
+    data.append('oferta',    BGMG_OFERTA);
 
     fetch(window.bgmgAjax ? window.bgmgAjax.url : '/wp-admin/admin-ajax.php', { method: 'POST', body: data })
       .then(function(r){ return r.json(); })

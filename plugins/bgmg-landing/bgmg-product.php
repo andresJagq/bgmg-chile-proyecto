@@ -476,10 +476,15 @@ img { max-width: 100%; height: auto; display: block; }
         $r_img   = get_the_post_thumbnail_url($rid, 'thumbnail') ?: wc_placeholder_img_src();
         $r_terms = get_the_terms($rid, 'product_cat');
         $r_cat   = ($r_terms && !is_wp_error($r_terms)) ? esc_html($r_terms[0]->name) : '';
-        $r_disc  = bgmg_oferta_badge_html($rp); // badge único de descuento (promo u oferta WC)
-        $r_badge = $r_disc ?: ($r_cat ? '<span class="bgmg-badge">' . $r_cat . '</span>' : '');
+        $r_out   = ! bgmg_card_in_stock($rp);
+        if ($r_out) {
+          $r_badge = '<span class="bgmg-badge bgmg-badge-agotado">Agotado</span>';
+        } else {
+          $r_disc  = bgmg_oferta_badge_html($rp); // badge único de descuento (promo u oferta WC)
+          $r_badge = $r_disc ?: ($r_cat ? '<span class="bgmg-badge">' . $r_cat . '</span>' : '');
+        }
       ?>
-      <div class="bgmg-card">
+      <div class="bgmg-card<?php echo $r_out ? ' bgmg-card-agotado' : ''; ?>">
         <a href="<?php echo $r_url; ?>" class="bgmg-card-link">
           <img class="bgmg-card-img" src="<?php echo esc_url($r_img); ?>" alt="<?php echo esc_attr($r_name); ?>" loading="lazy">
           <div class="bgmg-card-body">
@@ -488,11 +493,7 @@ img { max-width: 100%; height: auto; display: block; }
             <div class="bgmg-card-price"><?php echo wp_kses_post($rp->get_price_html()); ?></div>
           </div>
         </a>
-        <a href="<?php echo esc_url($rp->add_to_cart_url()); ?>"
-           class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"
-           data-product_id="<?php echo esc_attr($rid); ?>"
-           data-product_type="<?php echo esc_attr($rp->get_type()); ?>"
-           data-quantity="1" rel="nofollow">+</a>
+        <?php echo bgmg_card_action_html($rp); ?>
       </div>
       <?php endforeach; ?>
     </div>

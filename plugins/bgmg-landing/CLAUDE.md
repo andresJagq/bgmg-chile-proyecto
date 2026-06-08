@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`6.5.0` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
+`6.7.5` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
 
 ## Arquitectura
 
@@ -50,6 +50,36 @@ BANNERS-CUSTOMIZER-PLAN.md ← roadmap del Customizer, ya completado
 6. **`bgmg_minicart_inner()`**: helper que renderiza el HTML del side-cart. El plugin de mayorista la LLAMA (vía `function_exists()`) para incluir HTML fresco del minicart en sus respuestas AJAX. Es interfaz contrato.
 
 7. **Especificidad CSS contra WooCommerce**: WC inyecta estilos con `.woocommerce .button` que ganan a selectores simples. Para botones críticos (`#place_order`, etc.) usar selectores múltiples + `!important`. Ver el bloque `#place_order` en bgmg-checkout.php.
+
+8. **CSS crítico de estados `.is-open`: INLINE a propósito (v6.7.3). NO mover a global.css.**
+   Las reglas que hacen VISIBLE un panel al abrirse (`.bgmg-search-overlay.is-open`,
+   `.bgmg-search-backdrop.is-open`, `.bgmg-mc-panel.is-open`, `.bgmg-mc-backdrop.is-open`,
+   `.bgmg-catsheet.is-open`, `.bgmg-catsheet-back.is-open`) están **inline en un `<style
+   id="bgmg-critical-open">` emitido en `wp_head`** (bgmg-landing.php, junto al enqueue de
+   global.css). Motivo: esas clases las añade el JS al hacer clic, así que **no existen en el
+   HTML estático** y los optimizadores de *"Quitar CSS sin usar"* (LiteSpeed **UCSS**,
+   Autoptimize, etc.) las borran del CSS externo → el panel recibe la clase pero queda
+   invisible (buscador/minicart/tab-bar "no funcionan"). Inline son inmunes a esa poda.
+   *(Bug real diagnosticado: con UCSS ON, la tienda no abría buscador/carrito en PC; el landing
+   sí, porque tenía esas reglas inline en su propia plantilla. Síntoma clásico: el JS añade
+   `.is-open` pero `getComputedStyle` muestra el panel oculto.)* **Si añades un panel nuevo que
+   se abre por JS, mete su regla `.is-open` en ese bloque inline, no solo en global.css.**
+
+9. **Stock en tarjetas de listado: "Agotado" (v6.7.4).** Las tarjetas de producto NO usaban
+   stock (todo se veía comprable). Ahora dos helpers en `bgmg-landing.php` lo resuelven, y se
+   usan en TODAS las superficies de listado (tienda, categoría, home destacados/novedades/ofertas,
+   relacionados de la ficha, y el AJAX `bgmg_load_products`):
+   - `bgmg_card_in_stock($product)`: disponibilidad real. Para **variables** NO se fía de
+     `is_in_stock()` del padre (puede quedar "instock" si no se resincronizó al agotarse las
+     variaciones); cuenta variaciones comprables vía `bgm_contar_variaciones_disponibles()` del
+     plugin **mayorista** (con `function_exists()` guard — soft-dependency).
+   - `bgmg_card_action_html($product)`: comprable → botón "+" (ajax); sin stock → `<span>` inerte
+     (sin clases ajax, WooCommerce no lo engancha) → no se puede comprar desde el listado.
+   - Sin stock se muestra badge **"Agotado"** (reemplaza el de categoría/oferta) y la card se
+     atenúa (`.bgmg-card-agotado`). Política elegida: **mostrar marcado, NO ocultar** (conserva
+     SEO/descubrimiento). Estilos en global.css con selectores compuestos (ganan a la base
+     `.bgmg-btn-add`/`.bgmg-badge` que vive inline en cada template, sin `!important`).
+   - La **ficha individual** ya respetaba stock (usa el `variations_form` nativo de WC) — no se tocó.
 
 ## Convenciones
 

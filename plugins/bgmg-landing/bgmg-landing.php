@@ -2,14 +2,14 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.7.0
+ * Version:     6.7.5
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.7.0' );
+define( 'BGMG_LANDING_VERSION', '6.7.5' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
@@ -317,6 +317,24 @@ function bgmg_render_minicart_panel() { ?>
 add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style( 'bgmg-global', plugin_dir_url( __FILE__ ) . 'assets/bgmg-global.css', array(), BGMG_LANDING_VERSION );
 }, 99 );
+
+// CSS CRÍTICO de estados "abierto" (.is-open) — INLINE A PROPÓSITO. NO mover a global.css.
+// Estas clases las añade el JS al hacer clic, así que NO existen en el HTML estático
+// inicial. Los optimizadores de "Quitar CSS sin usar" (LiteSpeed UCSS, Autoptimize,
+// etc.) las eliminan del CSS externo por creerlas "sin uso" y rompen el buscador, el
+// minicart y el tab-bar móvil (los paneles reciben la clase pero quedan invisibles).
+// Inline en wp_head son inmunes a esa poda y aplican en TODAS las páginas y plantillas.
+// Es un puñado de reglas (las VISIBLES al abrir); el resto sigue cacheado en global.css.
+add_action( 'wp_head', function() { ?>
+<style id="bgmg-critical-open">
+.bgmg-search-overlay.is-open{transform:translateY(0);opacity:1;pointer-events:all}
+.bgmg-search-backdrop.is-open{display:block}
+.bgmg-mc-panel.is-open{transform:translateX(0)}
+.bgmg-mc-backdrop.is-open{display:block}
+.bgmg-catsheet.is-open{transform:translateY(0)}
+.bgmg-catsheet-back.is-open{display:block}
+</style>
+<?php }, 99 );
 
 // JS para controles +/− del minicart (inyectado en wp_footer — aplica a todas las templates)
 add_action('wp_footer', function() { ?>
@@ -632,6 +650,7 @@ function bgmg_ajax_search() {
         'posts_per_page' => 4,
         's'              => $q,
     );
+    $args  = bgmg_args_excluir_sin_stock( $args ); // la lupa no devuelve agotados
     $query = new WP_Query($args);
 
     $prod_results = array();
@@ -908,6 +927,56 @@ function bgmg_update_cart() {
     ));
 }
 
+// IDs de productos en oferta (promo del mayorista ∪ oferta nativa de WC). Fuente
+// única usada por la sección de ofertas del landing y por el modo ?oferta=1 de la tienda.
+function bgmg_oferta_product_ids() {
+    $promo_ids = ( function_exists('bgm_promo_activa_ahora') && bgm_promo_activa_ahora() && function_exists('bgm_promo_ids_afectados') )
+        ? bgm_promo_ids_afectados()
+        : array();
+    $ids = array_merge( (array) $promo_ids, (array) wc_get_product_ids_on_sale() );
+    return array_values( array_unique( array_filter( array_map('absint', $ids) ) ) );
+}
+
+/**
+ * Añade a un array de args de WP_Query la cláusula para OCULTAR productos sin stock
+ * de los listados de navegación y búsqueda (tienda, categoría, lupa, "cargar más").
+ *
+ * Usa el término 'outofstock' de la taxonomía interna `product_visibility`, que
+ * WooCommerce mantiene en CADA producto —incluido el estado agregado de los variables—
+ * de forma independiente al ajuste "ocultar sin stock" de WC. Ese ajuste lo dejamos
+ * APAGADO a propósito: si está ON, WooCommerce también borra las variaciones agotadas
+ * del selector de la ficha, y nosotros las queremos mostrar marcadas "Agotado".
+ *
+ * Filtrable: add_filter('bgmg_ocultar_sin_stock_listados', '__return_false') lo desactiva.
+ * Respeta cualquier tax_query existente (lo anida con relación AND).
+ */
+function bgmg_args_excluir_sin_stock( $args ) {
+    if ( ! apply_filters( 'bgmg_ocultar_sin_stock_listados', true ) ) return $args;
+    if ( ! function_exists( 'wc_get_product_visibility_term_ids' ) ) return $args;
+
+    $vis = wc_get_product_visibility_term_ids();
+    if ( empty( $vis['outofstock'] ) ) return $args;
+
+    $clause = array(
+        'taxonomy' => 'product_visibility',
+        'field'    => 'term_taxonomy_id',
+        'terms'    => array( (int) $vis['outofstock'] ),
+        'operator' => 'NOT IN',
+    );
+
+    if ( empty( $args['tax_query'] ) ) {
+        $args['tax_query'] = array( $clause );
+    } else {
+        // Anidar el tax_query existente como grupo y exigir AND con la exclusión.
+        $args['tax_query'] = array(
+            'relation' => 'AND',
+            $args['tax_query'],
+            $clause,
+        );
+    }
+    return $args;
+}
+
 // AJAX load more productos para la tienda
 add_action('wp_ajax_bgmg_load_products',        'bgmg_load_products');
 add_action('wp_ajax_nopriv_bgmg_load_products', 'bgmg_load_products');
@@ -926,7 +995,7 @@ function bgmg_load_products() {
     $args = array(
         'post_type'      => 'product',
         'post_status'    => 'publish',
-        'posts_per_page' => 8,
+        'posts_per_page' => 12,
         'paged'          => $page,
         'meta_query'     => array(array(
             'key'     => '_price',
@@ -954,6 +1023,13 @@ function bgmg_load_products() {
         default:
             $args['orderby'] = 'date'; $args['order'] = 'DESC';
     }
+
+    if ( ! empty( $_POST['oferta'] ) ) {
+        $oferta_ids = bgmg_oferta_product_ids();
+        $args['post__in'] = ! empty( $oferta_ids ) ? $oferta_ids : array( 0 );
+    }
+
+    $args = bgmg_args_excluir_sin_stock( $args ); // ocultar agotados del "cargar más"
 
     $query    = new WP_Query($args);
     $html     = '';
@@ -990,6 +1066,34 @@ function bgmg_oferta_badge_html($product) {
     return '<span class="bgmg-badge-oferta">' . esc_html($txt) . '</span>';
 }
 
+/**
+ * Disponibilidad real de un producto para las tarjetas de listado.
+ * Variables: cuenta variaciones realmente comprables vía el helper del mayorista
+ * (el is_in_stock() del padre puede quedar "instock" si no se resincronizó tras
+ * agotarse sus variaciones). Simples/otros tipos: is_in_stock() nativo.
+ */
+function bgmg_card_in_stock($product) {
+    if (!is_object($product)) return false;
+    if ($product->is_type('variable') && function_exists('bgm_contar_variaciones_disponibles')) {
+        return bgm_contar_variaciones_disponibles($product) > 0;
+    }
+    return $product->is_in_stock();
+}
+
+/**
+ * Botón de acción de la tarjeta de listado.
+ * Comprable -> "+" (ajax add-to-cart). Sin stock -> botón inerte (no agrega al carrito).
+ * Es un <span> sin clases ajax: WooCommerce no lo engancha, así que no se puede comprar.
+ */
+function bgmg_card_action_html($product) {
+    if (!is_object($product)) return '';
+    if (!bgmg_card_in_stock($product)) {
+        return '<span class="bgmg-btn-add bgmg-btn-agotado" aria-disabled="true" title="Sin stock">+</span>';
+    }
+    return '<a href="' . esc_url($product->add_to_cart_url()) . '" class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"'
+        . ' data-product_id="' . esc_attr($product->get_id()) . '" data-product_type="' . esc_attr($product->get_type()) . '" data-quantity="1" rel="nofollow">+</a>';
+}
+
 function bgmg_product_card_html($p_id) {
     $prod = wc_get_product($p_id);
     if (!$prod) return '';
@@ -998,17 +1102,21 @@ function bgmg_product_card_html($p_id) {
     $p_terms = get_the_terms($p_id, 'product_cat');
     $cat     = ($p_terms && !is_wp_error($p_terms)) ? esc_html($p_terms[0]->name) : '';
     $p_url   = esc_url(get_permalink($p_id));
-    $disc    = bgmg_oferta_badge_html($prod); // badge único de descuento (promo u oferta WC)
-    $badge   = $disc ?: ($cat ? '<span class="bgmg-badge">' . $cat . '</span>' : '');
-    $h  = '<div class="bgmg-card">';
+    $out     = ! bgmg_card_in_stock($prod);
+    if ($out) {
+        $badge = '<span class="bgmg-badge bgmg-badge-agotado">Agotado</span>';
+    } else {
+        $disc  = bgmg_oferta_badge_html($prod); // badge único de descuento (promo u oferta WC)
+        $badge = $disc ?: ($cat ? '<span class="bgmg-badge">' . $cat . '</span>' : '');
+    }
+    $h  = '<div class="bgmg-card' . ($out ? ' bgmg-card-agotado' : '') . '">';
     $h .= '<a href="' . $p_url . '" class="bgmg-card-link">';
     $h .= '<img class="bgmg-card-img" src="' . esc_url($img) . '" alt="' . $name . '" loading="lazy">';
     $h .= '<div class="bgmg-card-body">' . $badge;
     $h .= '<div class="bgmg-card-name">' . $name . '</div>';
     $h .= '<div class="bgmg-card-price">' . $prod->get_price_html() . '</div>';
     $h .= '</div></a>';
-    $h .= '<a href="' . esc_url($prod->add_to_cart_url()) . '" class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"';
-    $h .= ' data-product_id="' . esc_attr($p_id) . '" data-product_type="' . esc_attr($prod->get_type()) . '" data-quantity="1" rel="nofollow">+</a>';
+    $h .= bgmg_card_action_html($prod);
     $h .= '</div>';
     return $h;
 }

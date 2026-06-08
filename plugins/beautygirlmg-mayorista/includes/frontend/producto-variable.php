@@ -57,6 +57,18 @@ function bgm_render_html_bloque_mayorista( $product ) {
     if ( ! $product->is_type( 'variable' ) ) return;
     if ( ! bgm_variable_tiene_mayorista( $product ) ) return;
 
+    // Sin stock real → no ofrecer el builder. Evita la contradicción con DETALLE (que
+    // ya muestra "no disponible") y que el cliente arme un surtido que falla al agregar.
+    // bgm_contar_variaciones_disponibles() cuenta variaciones comprables con stock; si es
+    // 0, el producto está 100% agotado.
+    if ( function_exists( 'bgm_contar_variaciones_disponibles' )
+         && bgm_contar_variaciones_disponibles( $product ) === 0 ) {
+        echo '<div class="bgm-bloque-mayor bgm-mayor-sin-stock"><p class="bgm-no-disponible">'
+           . esc_html__( 'Este producto no está disponible porque no quedan existencias.', 'beautygirlmg-mayorista' )
+           . '</p></div>';
+        return;
+    }
+
     $product_id  = $product->get_id();
     $modo_global = bgm_get_modo_surtido();
     $precio_base = bgm_get_precio_base( $product );

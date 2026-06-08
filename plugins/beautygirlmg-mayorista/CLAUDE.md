@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`2.5.1` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
+`2.7.4` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
 
 ## Arquitectura
 
@@ -39,6 +39,8 @@ assets/        admin.js+css, frontend-*.js, frontend.css
 4. **Despliegue** vía SSH con Claude Code. Antes de asumir que un bug "raro" es del código local, verificar que el servidor tenga la versión actualizada (con `fetch(scriptSrc).then(r=>r.text())` en consola del navegador).
 
 5. **Swatches activos por defecto**: `bgm_usar_swatches()` trata meta vacío como `true`. Productos sin configurar tienen pills automáticamente.
+
+6. **Stock de variaciones en la ficha (v2.7.4):** las variaciones SIN stock se muestran **deshabilitadas ("Agotado"), no se ocultan**. El filtro `woocommerce_variation_is_active` (en `frontend/swatches.php`) devuelve `false` si `! is_in_stock()` → WC deshabilita la opción (swatch tachado, no seleccionable) pero la mantiene visible. La etiqueta "Agotado" (CSS `.bgm-swatches.is-single`) solo aplica en productos de **UN atributo** (ahí deshabilitado == sin stock; en multi-atributo un pill puede deshabilitarse por combinación, así que solo va tachado). **Dependencia crítica:** requiere el ajuste de WooCommerce *"ocultar artículos sin stock"* **APAGADO** — si se enciende, WC excluye la variación del JSON y no se puede marcar. El ocultado de PRODUCTOS agotados del catálogo lo hace **bgmg-landing** (independiente de ese ajuste), no este. **POR MAYOR:** si el producto tiene 0 variaciones con stock, muestra "no disponible" en vez del builder (`frontend/producto-variable.php`).
 
 ## Convenciones
 

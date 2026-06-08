@@ -184,6 +184,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 .bgmg-tips-title { font-family: 'Alice', serif; font-size: 22px; font-weight: 600; color: var(--dark); line-height: 1.2; }
 .bgmg-tips-desc  { font-family: 'Poppins', sans-serif; font-size: 13px; color: var(--mid); line-height: 1.55; flex: 1; font-weight: 300; }
 .bgmg-tips-link  { font-family: 'Poppins', sans-serif; font-size: 13px; font-weight: 500; color: var(--pink-dark); text-decoration: none; margin-top: 4px; }
+.bgmg-tips-soon  { color: var(--mid); cursor: default; opacity: .9; display: inline-block; }
 
 /* ── BANNER ─────────────────────────────────────────────────── */
 .bgmg-banner {
@@ -342,13 +343,13 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 
 /* ── BUSCADOR ────────────────────────────────────────────────── */
 .bgmg-search-btn {
-  width: 40px; height: 40px; border-radius: 50%; flex-shrink: 0;
+  width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
   background: var(--pink-soft); border: none; cursor: pointer;
   display: flex; align-items: center; justify-content: center;
-  color: var(--dark); transition: background .2s;
+  color: var(--dark); transition: background .2s; overflow: visible;
 }
 .bgmg-search-btn:hover { background: var(--pink); }
-.bgmg-search-btn svg { stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; }
+.bgmg-search-btn svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 2.5; stroke-linecap: round; display: block; }
 .bgmg-search-overlay {
   position: fixed; top: 64px; left: 0; right: 0; z-index: 998;
   background: #fff; border-bottom: 1px solid var(--border);
@@ -644,26 +645,25 @@ if ($dest_query->have_posts()) :
         $p_img   = get_the_post_thumbnail_url($p_id, 'thumbnail') ?: wc_placeholder_img_src();
         $p_terms = get_the_terms($p_id, 'product_cat');
         $p_cat   = ($p_terms && !is_wp_error($p_terms)) ? esc_html($p_terms[0]->name) : '';
+        $p_out   = ! bgmg_card_in_stock($prod);
       ?>
-        <div class="bgmg-card">
+        <div class="bgmg-card<?php echo $p_out ? ' bgmg-card-agotado' : ''; ?>">
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <?php $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
+              <?php if ($p_out) : ?>
+              <div class="bgmg-card-badges"><span class="bgmg-badge bgmg-badge-agotado">Agotado</span></div>
+              <?php else : $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
               <div class="bgmg-card-badges">
                 <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
                 <?php echo $bgmg_of; ?>
               </div>
-              <?php endif; ?>
+              <?php endif; endif; ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>
           </a>
-          <a href="<?php echo esc_url($prod->add_to_cart_url()); ?>"
-             class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"
-             data-product_id="<?php echo esc_attr($p_id); ?>"
-             data-product_type="<?php echo esc_attr($prod->get_type()); ?>"
-             data-quantity="1" rel="nofollow">+</a>
+          <?php echo bgmg_card_action_html($prod); ?>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     </div>
@@ -682,21 +682,21 @@ if ($dest_query->have_posts()) :
         <span class="bgmg-tips-tag">Skincare</span>
         <h3 class="bgmg-tips-title">Rutina de noche en 3 pasos</h3>
         <p class="bgmg-tips-desc">Descubre cómo cuidar tu piel mientras duermes con ingredientes naturales que regeneran de verdad.</p>
-        <a href="#" class="bgmg-tips-link">Leer más →</a>
+        <span class="bgmg-tips-link bgmg-tips-soon">Próximamente ✨</span>
       </article>
       <article class="bgmg-tips-card bgmg-tips-aqua">
         <div class="bgmg-tips-emoji">💆</div>
         <span class="bgmg-tips-tag">Cabello</span>
         <h3 class="bgmg-tips-title">Cómo usar el exfoliante capilar</h3>
         <p class="bgmg-tips-desc">Dale un reset a tu cuero cabelludo con esta técnica de 5 minutos que transforma tu melena.</p>
-        <a href="#" class="bgmg-tips-link">Leer más →</a>
+        <span class="bgmg-tips-link bgmg-tips-soon">Próximamente ✨</span>
       </article>
       <article class="bgmg-tips-card bgmg-tips-peach">
         <div class="bgmg-tips-emoji">🌿</div>
         <span class="bgmg-tips-tag">Natural</span>
         <h3 class="bgmg-tips-title">Ingredientes que transforman tu piel</h3>
         <p class="bgmg-tips-desc">Los activos botánicos que deberías incluir en tu rutina ahora mismo y cómo usarlos bien.</p>
-        <a href="#" class="bgmg-tips-link">Leer más →</a>
+        <span class="bgmg-tips-link bgmg-tips-soon">Próximamente ✨</span>
       </article>
     </div>
   </div>
@@ -721,26 +721,25 @@ if ($nov_query->have_posts()) :
         $p_img   = get_the_post_thumbnail_url($p_id, 'thumbnail') ?: wc_placeholder_img_src();
         $p_terms = get_the_terms($p_id, 'product_cat');
         $p_cat   = ($p_terms && !is_wp_error($p_terms)) ? esc_html($p_terms[0]->name) : '';
+        $p_out   = ! bgmg_card_in_stock($prod);
       ?>
-        <div class="bgmg-card">
+        <div class="bgmg-card<?php echo $p_out ? ' bgmg-card-agotado' : ''; ?>">
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <?php $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
+              <?php if ($p_out) : ?>
+              <div class="bgmg-card-badges"><span class="bgmg-badge bgmg-badge-agotado">Agotado</span></div>
+              <?php else : $bgmg_of = bgmg_oferta_badge_html($prod); if ($p_cat || $bgmg_of) : ?>
               <div class="bgmg-card-badges">
                 <?php if ($p_cat) : ?><span class="bgmg-badge"><?php echo $p_cat; ?></span><?php endif; ?>
                 <?php echo $bgmg_of; ?>
               </div>
-              <?php endif; ?>
+              <?php endif; endif; ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>
           </a>
-          <a href="<?php echo esc_url($prod->add_to_cart_url()); ?>"
-             class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"
-             data-product_id="<?php echo esc_attr($p_id); ?>"
-             data-product_type="<?php echo esc_attr($prod->get_type()); ?>"
-             data-quantity="1" rel="nofollow">+</a>
+          <?php echo bgmg_card_action_html($prod); ?>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     </div>
@@ -765,9 +764,11 @@ if ( $bgmg_mb_enabled ) :
     $bgmg_mb_cta_txt = get_theme_mod( 'bgmg_midbanner_cta_text', $bgmg_mb_defaults['cta_text'] ?? 'Ver más' );
     $bgmg_mb_cta_url = get_theme_mod( 'bgmg_midbanner_cta_url', '' );
     if ( $bgmg_mb_cta_url === '' ) {
-        $bgmg_mb_cta_url = function_exists( 'wc_get_page_id' )
+        $bgmg_shop_url = function_exists( 'wc_get_page_id' )
             ? get_permalink( wc_get_page_id( 'shop' ) )
             : home_url( '/' );
+        // Por defecto, "Ver ofertas" lleva a la tienda en modo ofertas (?oferta=1).
+        $bgmg_mb_cta_url = $bgmg_shop_url ? add_query_arg( 'oferta', '1', $bgmg_shop_url ) : home_url( '/?oferta=1' );
     }
 
     // Acepta imagen de PC O de celular: si solo subes una, se usa como base. Antes
@@ -809,11 +810,7 @@ if ( $bgmg_mb_enabled ) :
 <!-- ══ 7. OFERTAS ═══════════════════════════════════════════════ -->
 <?php
 // Candidatos: productos en PROMO (si está activa) ∪ productos en oferta nativa de WC.
-$promo_ids = ( function_exists('bgm_promo_activa_ahora') && bgm_promo_activa_ahora() && function_exists('bgm_promo_ids_afectados') )
-  ? bgm_promo_ids_afectados()
-  : array();
-$sale_ids  = array_merge( (array) $promo_ids, (array) wc_get_product_ids_on_sale() );
-$sale_ids  = array_values( array_unique( array_filter( array_map('absint', $sale_ids) ) ) );
+$sale_ids = function_exists('bgmg_oferta_product_ids') ? bgmg_oferta_product_ids() : array();
 if (!empty($sale_ids)) :
   $sale_args = array('post_type' => 'product', 'post_status' => 'publish', 'posts_per_page' => 4, 'post__in' => $sale_ids, 'orderby' => 'date', 'order' => 'DESC');
   $sale_query = new WP_Query($sale_args);
@@ -830,21 +827,18 @@ if (!empty($sale_ids)) :
         if (!$prod) continue;
         $p_name = esc_html(get_the_title());
         $p_img  = get_the_post_thumbnail_url($p_id, 'thumbnail') ?: wc_placeholder_img_src();
+        $p_out  = ! bgmg_card_in_stock($prod);
       ?>
-        <div class="bgmg-card">
+        <div class="bgmg-card<?php echo $p_out ? ' bgmg-card-agotado' : ''; ?>">
           <a href="<?php echo esc_url(get_permalink($p_id)); ?>" class="bgmg-card-link">
             <img class="bgmg-card-img" src="<?php echo esc_url($p_img); ?>" alt="<?php echo esc_attr($p_name); ?>" loading="lazy">
             <div class="bgmg-card-body">
-              <?php echo bgmg_oferta_badge_html($prod); ?>
+              <?php if ($p_out) : ?><span class="bgmg-badge bgmg-badge-agotado">Agotado</span><?php else : echo bgmg_oferta_badge_html($prod); endif; ?>
               <div class="bgmg-card-name"><?php echo $p_name; ?></div>
               <div class="bgmg-card-price"><?php echo $prod->get_price_html(); ?></div>
             </div>
           </a>
-          <a href="<?php echo esc_url($prod->add_to_cart_url()); ?>"
-             class="bgmg-btn-add add_to_cart_button ajax_add_to_cart"
-             data-product_id="<?php echo esc_attr($p_id); ?>"
-             data-product_type="<?php echo esc_attr($prod->get_type()); ?>"
-             data-quantity="1" rel="nofollow">+</a>
+          <?php echo bgmg_card_action_html($prod); ?>
         </div>
       <?php endwhile; wp_reset_postdata(); ?>
     </div>
@@ -856,11 +850,11 @@ if (!empty($sale_ids)) :
 <div class="bgmg-trust">
   <div class="bgmg-trust-item">
     <span class="bgmg-trust-icon">🚚</span>
-    <span class="bgmg-trust-text">Envío gratis<br>sobre $25.000</span>
+    <span class="bgmg-trust-text">Envíos<br>a todo Chile</span>
   </div>
   <div class="bgmg-trust-item">
-    <span class="bgmg-trust-icon">✅</span>
-    <span class="bgmg-trust-text">100% ingredientes<br>naturales</span>
+    <span class="bgmg-trust-icon">💰</span>
+    <span class="bgmg-trust-text">Precios<br>competitivos</span>
   </div>
   <div class="bgmg-trust-item">
     <span class="bgmg-trust-icon">💬</span>

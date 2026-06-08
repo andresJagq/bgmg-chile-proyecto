@@ -175,6 +175,16 @@
 .bgm-meta-close:hover{background:#f7eef1;color:#7A5060}
 @keyframes bgmMetaIn{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
 @media(min-width:768px){.bgm-meta-card{left:auto;right:24px;bottom:24px;width:360px;margin:0}}
+/* ── Tarjetas de producto SIN STOCK ("Agotado") — global, todas las superficies ──
+   Render server-side (estático): badge "Agotado", botón inerte y card atenuada. Se
+   aplica en tienda/categoría/home/relacionados/buscar vía bgmg_card_action_html().
+   Selectores COMPUESTOS (.bgmg-btn-add.bgmg-btn-agotado, etc.) para ganarle a la base
+   .bgmg-btn-add/.bgmg-badge —que vive inline en cada template— sin usar !important.
+   El TEXTO "Agotado" del badge comunica aunque un optimizador podara este CSS. ── */
+.bgmg-card-agotado .bgmg-card-img{filter:grayscale(.55);opacity:.62}
+.bgmg-badge.bgmg-badge-agotado{background:#6b6b6b;color:#fff}
+.bgmg-btn-add.bgmg-btn-agotado{border-color:#ddd6d9;background:#f1edef;color:#c2b9bd;cursor:not-allowed;pointer-events:none}
+.bgmg-btn-add.bgmg-btn-agotado:hover{background:#f1edef;color:#c2b9bd}
 /* ────────────────────────────────────────────────────────────
    WOOCOMMERCE — NOTICES Y BOTONES (global, todas las páginas)
    ──────────────────────────────────────────────────────────── */
