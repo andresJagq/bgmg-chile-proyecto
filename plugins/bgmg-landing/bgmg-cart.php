@@ -154,8 +154,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 
 <?php
 $logo_id     = get_theme_mod('custom_logo');
-$parent_cats = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0, 'exclude' => array(get_option('default_product_cat')), 'orderby' => 'name'));
-$parent_cats = is_wp_error($parent_cats) ? array() : $parent_cats;
+$parent_cats = bgm_get_nav_cats(0); // orden manual + visibilidad (inc/category-organizer.php)
 $cart        = WC()->cart;
 $cart_empty  = $cart->is_empty();
 ?>

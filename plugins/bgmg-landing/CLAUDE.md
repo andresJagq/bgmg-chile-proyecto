@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`6.7.5` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
+`6.8.1` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
 
 ## Arquitectura
 
@@ -32,6 +32,8 @@ bgmg-account.php       ← reemplaza el template de cuenta
 inc/
   customizer.php       ← registra panel Customizer (hero + midbanner)
   category-meta.php    ← campos custom en editor de categoría (banner header)
+  category-organizer.php ← pantalla admin "Organizar categorías" (árbol drag&drop)
+                           + helper bgm_get_nav_cats() (orden/visibilidad canónicos)
 BANNERS-CUSTOMIZER-PLAN.md ← roadmap del Customizer, ya completado
 ```
 
@@ -44,6 +46,17 @@ BANNERS-CUSTOMIZER-PLAN.md ← roadmap del Customizer, ya completado
 3. **Customizer**: panel "BGMG Tema" con secciones para hero slider y banner mid-page. Defaults reproducen el contenido hardcoded anterior — sin configurar nada, el sitio se ve igual. Ver `BANNERS-CUSTOMIZER-PLAN.md`.
 
 4. **Banner por categoría**: term meta `bgm_cat_banner_id` + `_focus` + `_overlay`. Editable desde el editor de la categoría (no del Customizer, porque es per-término).
+
+   **4-bis. Orden y visibilidad de categorías — CANÓNICOS (v6.8.0 / v6.8.1).** Hay **una sola fuente
+   de verdad**: el orden manual se guarda en term meta **`order`** (la clave que WC traduce desde
+   `orderby => 'menu_order'`) y la visibilidad por **dispositivo** en dos metas opt-in (`'1'` = oculta):
+   **`bgm_cat_hide_pc`** (megamenú de escritorio) y **`bgm_cat_hide_mobile`** (hoja de categorías de
+   móvil). Se editan con la pantalla **Productos → Organizar categorías** (`inc/category-organizer.php`,
+   árbol drag&drop, 2 niveles, con checks **PC** / **Móvil** por categoría). **TODAS** las superficies
+   que listan categorías deben usar el helper **`bgm_get_nav_cats($parent = 0, $args = [])`** — NO llamar
+   `get_terms` con `orderby` propio. Args útiles: `$parent = null` = todos los niveles; `$args['context']`
+   = **`'pc'`** (megamenú), **`'mobile'`** (hoja móvil) o **`'any'`** (default: vitrinas compartidas —
+   pills, tienda, categoría, carrito; muestra salvo que esté oculta en AMBOS dispositivos).
 
 5. **`window.bgmAfterAddToCart`**: función definida POR ESTE PLUGIN en bgmg-product.php (~línea 592). El plugin de mayorista la LLAMA tras add-to-cart. NO sobrescribir. El plugin de mayorista tiene una guard `if ( typeof !== 'function' )` que la respeta.
 

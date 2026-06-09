@@ -6,7 +6,25 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-08**
+> Última actualización: **2026-06-09**
+>
+> **Dónde quedamos (2026-06-09):** sesión de varios cambios encadenados (zips PENDIENTES de generar
+> cuando el usuario lo pida):
+> - **Organizador de categorías (bgmg-landing 6.8.1)** — pantalla admin nueva **Productos → Organizar
+>   categorías** (`inc/category-organizer.php` + `assets/category-organizer.js/.css`): árbol drag&drop
+>   (jQuery UI Sortable, 2 niveles) para decidir padre/hija, orden y **visibilidad por dispositivo**.
+>   **Canónicos:** helper `bgm_get_nav_cats($parent, $args)` con `$args['context']` = `'pc'` / `'mobile'`
+>   / `'any'`; orden en term meta `order`/`menu_order`; visibilidad en `bgm_cat_hide_pc` y
+>   `bgm_cat_hide_mobile` (checks **PC** / **Móvil** por categoría). Se refactorizaron los **9 consumidores**
+>   (megamenú→`pc`, hoja móvil→`mobile`, pills/tienda/categoría/carrito→`any`). La hoja móvil ya **no**
+>   tiene tope de 12. **Validar (usuario, requiere login):** arrastrar/anidar/promover, tildar/destildar
+>   PC y Móvil por separado, Guardar; confirmar que el orden y la visibilidad por dispositivo se reflejan
+>   en cada superficie (una con Móvil off NO sale en la hoja del celular pero sí en el megamenú de PC).
+> - **Etiqueta de despacho (bgmg-chile 1.18.4)** — la etiqueta **térmica** ahora muestra el **correo**
+>   (antes solo en A4/metabox). Commiteado/pusheado (`7bd1f63`).
+> - **Limpieza de tipografía (mayorista 2.7.5)** — `frontend.css` usaba `'DM Sans'` (no se carga → caía
+>   a font de sistema) en 4 bloques de la ficha; ahora **Poppins** (coherente con Alice+Poppins del
+>   sitio). SPECS.md del mayorista actualizado. **Sin commitear aún** (junto con el organizador).
 >
 > **Dónde quedamos (2026-06-08):** **fix de error fatal en bgmg-chile 1.18.3** — la pantalla
 > **Despachos BGMG → Reportes** (y las stats del Resumen) caía con `E_ERROR`
@@ -37,8 +55,8 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.4** |
-| bgmg-landing | **6.7.5** |
-| beautygirlmg-mayorista | **2.7.4** |
+| bgmg-landing | **6.8.1** |
+| beautygirlmg-mayorista | **2.7.5** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo

@@ -191,12 +191,11 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 
 <?php
 $logo_id     = get_theme_mod('custom_logo');
-$parent_cats = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0, 'exclude' => array(get_option('default_product_cat')), 'orderby' => 'name'));
-$parent_cats = is_wp_error($parent_cats) ? array() : $parent_cats;
+// Orden manual + visibilidad centralizados (ver inc/category-organizer.php).
+$parent_cats = bgm_get_nav_cats(0);
 
 // Subcategorías de la categoría actual (para pills)
-$sub_cats = get_terms(array('taxonomy' => 'product_cat', 'parent' => $cat_id, 'hide_empty' => true, 'orderby' => 'name'));
-$sub_cats = is_wp_error($sub_cats) ? array() : $sub_cats;
+$sub_cats = bgm_get_nav_cats($cat_id);
 
 // Precio min/max de esta categoría
 global $wpdb;

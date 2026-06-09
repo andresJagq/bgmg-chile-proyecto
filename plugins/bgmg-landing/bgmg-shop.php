@@ -180,8 +180,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 <?php
 // Datos de cabecera
 $logo_id     = get_theme_mod('custom_logo');
-$parent_cats = get_terms(array('taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0, 'exclude' => array(get_option('default_product_cat')), 'orderby' => 'name'));
-$parent_cats = is_wp_error($parent_cats) ? array() : $parent_cats;
+$parent_cats = bgm_get_nav_cats(0); // orden manual + visibilidad (inc/category-organizer.php)
 
 // Precio mínimo y máximo — cacheado 6h en transient
 $price_row = get_transient('bgmg_price_range');
@@ -200,15 +199,9 @@ if ($price_row === false) {
 $price_min = $price_row ? (int) floor($price_row->min_p) : 0;
 $price_max = $price_row ? (int) ceil($price_row->max_p)  : 100000;
 
-// Categorías: una sola query, árbol en PHP (elimina N+1)
-$all_terms = get_terms(array(
-    'taxonomy'   => 'product_cat',
-    'hide_empty' => true,
-    'exclude'    => array(get_option('default_product_cat')),
-    'orderby'    => 'count',
-    'order'      => 'DESC',
-));
-$all_terms  = is_wp_error($all_terms) ? array() : $all_terms;
+// Categorías: una sola query (todos los niveles), árbol en PHP (elimina N+1).
+// Orden manual + visibilidad centralizados (ver inc/category-organizer.php).
+$all_terms  = bgm_get_nav_cats(null);
 $all_cats   = array();
 $cats_index = array();
 foreach ($all_terms as $t) { $cats_index[$t->term_id] = $t; }

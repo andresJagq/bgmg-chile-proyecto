@@ -2,18 +2,19 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.7.5
+ * Version:     6.8.1
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.7.5' );
+define( 'BGMG_LANDING_VERSION', '6.8.1' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/category-meta.php';
+require_once plugin_dir_path( __FILE__ ) . 'inc/category-organizer.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/account-renders.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/content-pages.php';
 require_once plugin_dir_path( __FILE__ ) . 'inc/meta-regalo-widget.php';
@@ -193,10 +194,8 @@ function bgmg_render_header( $args = [] ) {
 
     $parent_cats = [];
     if ( $args['show_nav'] ) {
-        $cats = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => 0, 'orderby' => 'menu_order']);
-        if ( ! is_wp_error($cats) ) {
-            $parent_cats = array_filter( $cats, fn($t) => $t->slug !== 'uncategorized' );
-        }
+        // Megamenú de escritorio → contexto 'pc' (ver inc/category-organizer.php).
+        $parent_cats = bgm_get_nav_cats( 0, array( 'context' => 'pc' ) );
     }
     ?>
     <header class="bgmg-header">
@@ -219,8 +218,7 @@ function bgmg_render_header( $args = [] ) {
               <a href="<?php echo esc_url($shop_url); ?>">Categorías <span>▾</span></a>
               <div class="bgmg-drop">
                 <?php foreach ( $parent_cats as $pcat ) :
-                  $kids = get_terms(['taxonomy' => 'product_cat', 'hide_empty' => true, 'parent' => $pcat->term_id]);
-                  $kids = is_wp_error($kids) ? [] : $kids;
+                  $kids = bgm_get_nav_cats( $pcat->term_id, array( 'context' => 'pc' ) );
                 ?>
                 <div class="bgmg-drop-col">
                   <h4><a href="<?php echo esc_url(get_term_link($pcat)); ?>"><?php echo esc_html($pcat->name); ?></a></h4>
@@ -1208,16 +1206,8 @@ add_action('wp_footer', function() {
         'corporal'   => '🛁', 'cabello'   => '💆', 'unas'     => '💅',
         'kits'       => '🎁', 'accesorios'=> '👜', 'perfumes' => '🌹',
     );
-    $cats = get_terms(array(
-        'taxonomy'   => 'product_cat',
-        'hide_empty' => true,
-        'parent'     => 0,
-        'exclude'    => array(get_option('default_product_cat')),
-        'orderby'    => 'count',
-        'order'      => 'DESC',
-        'number'     => 12,
-    ));
-    $cats = is_wp_error($cats) ? array() : $cats;
+    // Hoja de categorías de móvil → contexto 'mobile', sin tope (ver inc/category-organizer.php).
+    $cats = bgm_get_nav_cats(0, array('context' => 'mobile'));
 
     $active = is_front_page() ? 'home' : (is_shop() || is_product_category() || is_product() ? 'shop' : (is_cart() ? 'cart' : ''));
     ?>

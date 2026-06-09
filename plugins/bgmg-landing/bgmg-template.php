@@ -598,16 +598,9 @@ $cat_emojis = array(
     'perfumes'    => '🌹',
     'cuidado'     => '✨',
 );
-$cat_args = array(
-    'taxonomy'   => 'product_cat',
-    'hide_empty' => true,
-    'exclude'    => array(get_option('default_product_cat')),
-    'number'     => 8,
-    'orderby'    => 'count',
-    'order'      => 'DESC',
-);
-$cat_terms = get_terms($cat_args);
-if (!is_wp_error($cat_terms) && !empty($cat_terms)) :
+// Orden manual + visibilidad centralizados (ver inc/category-organizer.php).
+$cat_terms = bgm_get_nav_cats(0, array('number' => 8));
+if (!empty($cat_terms)) :
 ?>
 <section class="bgmg-sec" style="background:#fff;">
   <div class="bgmg-sec-inner">
