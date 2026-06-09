@@ -437,6 +437,13 @@ function bgmg_chile_etiqueta_inner_html( $order, $formato ) {
 					<div class="valor"><?php echo esc_html( $datos['metodo'] ); ?></div>
 				</div>
 			<?php endif; ?>
+
+			<?php if ( $datos['correo'] ) : ?>
+				<div class="campo compacto">
+					<div class="label"><?php echo esc_html( $labels['correo'] ); ?>:</div>
+					<div class="valor"><?php echo esc_html( $datos['correo'] ); ?></div>
+				</div>
+			<?php endif; ?>
 		</div>
 	<?php else : ?>
 		<div class="etiqueta-a4">

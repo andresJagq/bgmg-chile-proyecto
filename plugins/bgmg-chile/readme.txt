@@ -4,7 +4,7 @@ Tags: woocommerce, chile, rut, comunas, envio, checkout
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.18.3
+Stable tag: 1.18.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Plugin propio de BeautyGirlMG. Funcionalidades:
 4. En WooCommerce → Ajustes → Envío, agrega los métodos "Envío BeautyGirlMG (Chile)" y "Retiro en tienda" a tu zona de Chile.
 
 == Changelog ==
+
+= 1.18.4 =
+* **Etiqueta de despacho:** la etiqueta térmica (60×80mm) ahora también muestra el **correo** del cliente. Antes solo aparecía en el formato A4 y en el metabox/"Copiar todo"; el térmico (el que se imprime por defecto) lo omitía.
 
 = 1.18.3 =
 * **Fix (error fatal):** la pantalla **Despachos BGMG → Reportes** (y las stats del Resumen) caía con un `E_ERROR` (`Call to undefined method WC_Order_Refund::get_shipping_city()`) cuando `wc_get_orders()` devolvía un reembolso. Ahora ambos bucles saltan los objetos que no sean `WC_Order` (los reembolsos no tienen dirección de envío).

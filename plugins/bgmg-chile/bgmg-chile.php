@@ -5,7 +5,7 @@
  * Description:       Localización chilena para BeautyGirlMG: validación de RUT (módulo 11),
  *                    selector en cascada de regiones y comunas oficiales, método de envío
  *                    "Por pagar" y administración de tarifas fijas para la Región Metropolitana.
- * Version:           1.18.3
+ * Version:           1.18.4
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            BeautyGirlMG
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Constantes globales del plugin.
  * Las usamos en cualquier submódulo de /inc/ sin recalcular rutas.
  */
-define( 'BGMG_CHILE_VERSION', '1.18.3' );
+define( 'BGMG_CHILE_VERSION', '1.18.4' );
 define( 'BGMG_CHILE_FILE', __FILE__ );
 define( 'BGMG_CHILE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BGMG_CHILE_URL', plugin_dir_url( __FILE__ ) );

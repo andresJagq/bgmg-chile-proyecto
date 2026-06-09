@@ -36,7 +36,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 
 | Pieza | Versión código |
 |---|---|
-| bgmg-chile | **1.18.3** |
+| bgmg-chile | **1.18.4** |
 | bgmg-landing | **6.7.5** |
 | beautygirlmg-mayorista | **2.7.4** |
 | bgmg-tema-base | 1.1.0 |
