@@ -16,7 +16,7 @@
     --bgm-mid:       var(--mid,       #7A5060);
     --bgm-border:    var(--border,    #f0e0e5);
 
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 /* ─── Mensaje "sin stock" en POR MAYOR (coherente con DETALLE) ─── */
@@ -738,7 +738,7 @@
     color: var(--bgm-dark);
     padding: 9px 18px;
     border-radius: 30px;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     font-size: 13px;
     font-weight: 500;
     cursor: pointer;
@@ -835,7 +835,7 @@
     background: #fff;
     border: 1px solid var(--border, #f0e0e5);
     border-radius: 12px;
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
 }
 
 .bgm-avisos-titulo {
@@ -940,7 +940,7 @@
     border-left: 4px solid var(--pink-dark, #C4728A);
     border-radius: 12px;
     box-shadow: 0 8px 24px rgba(26, 16, 21, .12), 0 2px 6px rgba(26, 16, 21, .06);
-    font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    font-family: 'Poppins', -apple-system, BlinkMacSystemFont, sans-serif;
     color: var(--dark, #1A1015);
     transform: translateX(420px);
     opacity: 0;

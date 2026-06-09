@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`2.7.4` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
+`2.7.5` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
 
 ## Arquitectura
 

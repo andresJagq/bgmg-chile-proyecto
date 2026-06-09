@@ -534,8 +534,10 @@ Cuando está inactivo:
 ```
 
 ### Tipografía
-- **Títulos**: `'Cormorant Garamond', serif` (italic para énfasis)
-- **UI**: `'DM Sans', sans-serif`
+> Migrada en bgmg-landing 6.5.11: el sitio carga **Alice + Poppins**. El plugin las hereda del tema
+> (los `<link>` de Google Fonts viven en los templates de bgmg-landing). Mantener este par.
+- **Títulos**: `'Alice', serif` (un solo peso, 400; los `font-weight:600` salen en negrita sintética)
+- **UI / texto**: `'Poppins', sans-serif`
 
 ### Componentes
 
