@@ -2,14 +2,14 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.8.1
+ * Version:     6.8.3
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.8.1' );
+define( 'BGMG_LANDING_VERSION', '6.8.3' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
@@ -57,10 +57,18 @@ add_action('wp_enqueue_scripts', function() {
     ));
 });
 
-// Actualizar contador + mini cart via AJAX cuando se agrega un producto
+// Actualizar contador + mini cart via AJAX cuando se agrega un producto.
+// OJO con las claves: wc-cart-fragments hace replaceWith sobre TODAS las
+// coincidencias del selector con el MISMO markup. La clave genérica
+// 'span.bgmg-cart-count' pisaba también el badge de la tab bar
+// (<span class="bgmg-tab-count bgmg-cart-count">) y le borraba la clase
+// bgmg-tab-count → el numerito saltaba de posición en móvil. Por eso el
+// header y la tab bar llevan claves y markup separados.
 add_filter('woocommerce_add_to_cart_fragments', function($fragments) {
     $count = WC()->cart ? WC()->cart->get_cart_contents_count() : 0;
-    $fragments['span.bgmg-cart-count'] = '<span class="bgmg-cart-count">' . ($count > 0 ? $count : '') . '</span>';
+    $label = $count > 0 ? $count : '';
+    $fragments['#bgmg-cart-btn .bgmg-cart-count'] = '<span class="bgmg-cart-count">' . $label . '</span>';
+    $fragments['span.bgmg-tab-count']             = '<span class="bgmg-tab-count bgmg-cart-count">' . $label . '</span>';
     ob_start();
     bgmg_minicart_inner();
     $fragments['#bgmg-minicart-inner'] = ob_get_clean();
@@ -314,6 +322,19 @@ function bgmg_render_minicart_panel() { ?>
 // :root de cada template; se consolidaran a un base.css al extraer los templates.
 add_action( 'wp_enqueue_scripts', function() {
     wp_enqueue_style( 'bgmg-global', plugin_dir_url( __FILE__ ) . 'assets/bgmg-global.css', array(), BGMG_LANDING_VERSION );
+
+    // wc-cart-fragments EXPLÍCITO (v6.8.3): WooCommerce moderno ya NO lo encola
+    // salvo que exista el widget clásico de mini-carrito (este sitio no usa
+    // widgets; verificado en producción: el script no estaba en la tienda).
+    // Sin él, NADA hidrata el carrito al cargar una página servida por el caché
+    // de LiteSpeed (HTML con el carrito de otro momento horneado) → en móvil la
+    // tienda mostraba "carrito en 0" hasta la primera acción AJAX. Es además el
+    // consumidor de los fragments/cart_hash que sincroniza bgmgSyncWcFragments.
+    // Se excluyen cart/checkout (criterio de WC clásico: ahí el carrito se
+    // rinde server-side fresco en cada carga).
+    if ( ! is_cart() && ! is_checkout() && wp_script_is( 'wc-cart-fragments', 'registered' ) ) {
+        wp_enqueue_script( 'wc-cart-fragments' );
+    }
 }, 99 );
 
 // CSS CRÍTICO de estados "abierto" (.is-open) — INLINE A PROPÓSITO. NO mover a global.css.
@@ -338,6 +359,25 @@ add_action( 'wp_head', function() { ?>
 add_action('wp_footer', function() { ?>
 <script id="bgmg-mc-qty-js">
 (function(){
+  // Sincroniza la respuesta de los AJAX custom del carrito con el storage de
+  // wc-cart-fragments. Sin esto, el sessionStorage de WC quedaba con el carrito
+  // VIEJO y lo re-pintaba al navegar a otra página ("caché raro" del minicart).
+  // Mismo formato que cart-fragments.js (fragment_name / cart_hash_key / wc_cart_created).
+  window.bgmgSyncWcFragments = function(data){
+    try {
+      var params = window.wc_cart_fragments_params;
+      if (!params || !window.sessionStorage || !data) return;
+      if (data.fragments) {
+        sessionStorage.setItem(params.fragment_name, JSON.stringify(data.fragments));
+      }
+      if (typeof data.cart_hash !== 'undefined') {
+        sessionStorage.setItem(params.cart_hash_key, data.cart_hash || '');
+        try { localStorage.setItem(params.cart_hash_key, data.cart_hash || ''); } catch(e){}
+        if (data.cart_hash) sessionStorage.setItem('wc_cart_created', String((new Date()).getTime()));
+      }
+    } catch(e){}
+  };
+
   var panel = document.getElementById('bgmg-mc-panel');
   if (!panel) return;
 
@@ -376,6 +416,7 @@ add_action('wp_footer', function() { ?>
         });
 
         if (window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
+        window.bgmgSyncWcFragments(resp.data);
 
         if(body) body.classList.remove('is-loading');
       })
@@ -431,6 +472,7 @@ add_action('wp_footer', function() { ?>
               document.querySelectorAll('.bgmg-cart-count').forEach(function(el){ el.textContent = ''; });
             }
             if (resp && resp.data && window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
+            if (resp && resp.data) window.bgmgSyncWcFragments(resp.data);
             if (body) body.classList.remove('is-loading');
           })
           .catch(function(){ if (body) body.classList.remove('is-loading'); });
@@ -530,10 +572,14 @@ add_action('wp_footer', function() { ?>
   // Escape cierra buscador y minicart.
   document.addEventListener('keydown', function(e){ if (e.key === 'Escape') { closeSearch(); closeCart(); } });
 
-  // Abrir el minicart tras "añadir al carrito" + refrescar fragmentos WC al cargar.
+  // Abrir el minicart tras "añadir al carrito" (evento nativo de WC).
+  // NOTA: antes acá se forzaba un wc_fragment_refresh en CADA page load como
+  // parche contra el minicart "viejo" (1 request extra a admin-ajax por página).
+  // Ya no hace falta: los AJAX custom sincronizan sessionStorage + cookie del
+  // hash (bgmgSyncWcFragments + bgmg_cart_ajax_payload), y cart-fragments se
+  // auto-refresca solo cuando el hash no coincide o no hay nada guardado.
   if (typeof jQuery !== 'undefined') {
     jQuery(document.body).on('added_to_cart', function(){ openCart(); });
-    jQuery(function($){ $(document.body).trigger('wc_fragment_refresh'); });
   }
 
   // ── "Añadir al carrito" del producto por AJAX (no recarga + abre el side-cart) ──
@@ -586,6 +632,7 @@ add_action('wp_footer', function() { ?>
           el.textContent = resp.data.count > 0 ? resp.data.count : '';
         });
         if (window.bgmMetaSwap) window.bgmMetaSwap(resp.data.meta_widget_html);
+        if (window.bgmgSyncWcFragments) window.bgmgSyncWcFragments(resp.data);
         openCart();
       })
       .catch(function(){ form.submit(); });
@@ -733,6 +780,58 @@ add_filter('template_include', function($template) {
     return $template;
 }, 99);
 
+/**
+ * Payload común para los endpoints AJAX que MUTAN el carrito (add/update/clear).
+ *
+ * Hace dos cosas críticas para que el minicart no quede "viejo" al navegar:
+ *
+ * 1. Refresca las cookies del carrito ANTES de enviar el JSON (mismas reglas
+ *    que WC_Cart_Session::set_cart_cookies). WC las setea en 'shutdown', pero
+ *    en AJAX los headers ya se enviaron a esa altura → la cookie
+ *    woocommerce_cart_hash quedaba desactualizada y wc-cart-fragments daba por
+ *    "válido" el sessionStorage viejo, re-pintando un carrito desactualizado
+ *    en la siguiente página.
+ *
+ * 2. Devuelve los fragments completos de WC + cart_hash para que el JS los
+ *    sincronice en sessionStorage (window.bgmgSyncWcFragments) — así la
+ *    próxima página pinta el carrito correcto al instante, sin flash.
+ *    La semilla div.widget_shopping_cart_content imita a
+ *    WC_AJAX::get_refreshed_fragments: cart-fragments.js exige esa clave para
+ *    considerar válido lo guardado.
+ */
+function bgmg_cart_ajax_payload() {
+    $cart = WC()->cart;
+
+    if ( ! headers_sent() && $cart ) {
+        if ( ! $cart->is_empty() ) {
+            wc_setcookie( 'woocommerce_items_in_cart', 1 );
+            wc_setcookie( 'woocommerce_cart_hash', $cart->get_cart_hash() );
+        } elseif ( isset( $_COOKIE['woocommerce_items_in_cart'] ) ) {
+            wc_setcookie( 'woocommerce_items_in_cart', 0, time() - HOUR_IN_SECONDS );
+            wc_setcookie( 'woocommerce_cart_hash', '', time() - HOUR_IN_SECONDS );
+        }
+    }
+
+    ob_start();
+    bgmg_minicart_inner();
+    $minicart_html = ob_get_clean();
+
+    ob_start();
+    woocommerce_mini_cart();
+    $wc_mini   = ob_get_clean();
+    $fragments = apply_filters( 'woocommerce_add_to_cart_fragments', array(
+        'div.widget_shopping_cart_content' => '<div class="widget_shopping_cart_content">' . $wc_mini . '</div>',
+    ) );
+
+    return array(
+        'count'            => $cart ? $cart->get_cart_contents_count() : 0,
+        'minicart_html'    => $minicart_html,
+        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
+        'fragments'        => $fragments,
+        'cart_hash'        => $cart ? $cart->get_cart_hash() : '',
+    );
+}
+
 // AJAX vaciar el carrito completo
 add_action('wp_ajax_bgmg_clear_cart',        'bgmg_clear_cart');
 add_action('wp_ajax_nopriv_bgmg_clear_cart', 'bgmg_clear_cart');
@@ -742,14 +841,7 @@ function bgmg_clear_cart() {
     if ($cart) {
         $cart->empty_cart();
     }
-    ob_start();
-    bgmg_minicart_inner();
-    $minicart_html = ob_get_clean();
-    wp_send_json_success(array(
-        'count'            => 0,
-        'minicart_html'    => $minicart_html,
-        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
-    ));
+    wp_send_json_success( bgmg_cart_ajax_payload() );
 }
 
 // AJAX agregar al carrito (producto simple o variable) sin recargar la página.
@@ -799,15 +891,7 @@ function bgmg_add_to_cart() {
     // Limpiamos el notice de éxito de WC (la apertura del side-cart ya es el feedback).
     if ( function_exists('wc_clear_notices') ) wc_clear_notices();
 
-    ob_start();
-    bgmg_minicart_inner();
-    $minicart_html = ob_get_clean();
-
-    wp_send_json_success(array(
-        'count'            => WC()->cart->get_cart_contents_count(),
-        'minicart_html'    => $minicart_html,
-        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
-    ));
+    wp_send_json_success( bgmg_cart_ajax_payload() );
 }
 
 // AJAX actualizar cantidad / eliminar item del carrito
@@ -907,22 +991,16 @@ function bgmg_update_cart() {
             . '</div>';
     }
 
-    // HTML fresco del minicart (para actualizarlo sin fragment refresh adicional)
-    ob_start();
-    bgmg_minicart_inner();
-    $minicart_html = ob_get_clean();
-
-    wp_send_json_success(array(
-        'subtotal'      => $cart->get_cart_subtotal(),
-        'total'         => $cart->get_cart_total(),
-        'count'         => $cart->get_cart_contents_count(),
-        'empty'         => $cart->is_empty(),
-        'coupon_rows'   => $coupon_rows,
-        'savings'       => $savings > 0 ? wc_price($savings) : '',
-        'items_data'    => $items_data,
-        'minicart_html' => $minicart_html,
-        'meta_widget_html' => function_exists('bgmg_meta_widget_inner') ? bgmg_meta_widget_inner() : '',
-    ));
+    // Payload común (minicart fresco + fragments/cart_hash + cookies) + extras
+    // que usa la página /cart/ para actualizar sus cards en tiempo real.
+    wp_send_json_success( array_merge( bgmg_cart_ajax_payload(), array(
+        'subtotal'    => $cart->get_cart_subtotal(),
+        'total'       => $cart->get_cart_total(),
+        'empty'       => $cart->is_empty(),
+        'coupon_rows' => $coupon_rows,
+        'savings'     => $savings > 0 ? wc_price($savings) : '',
+        'items_data'  => $items_data,
+    ) ) );
 }
 
 // IDs de productos en oferta (promo del mayorista ∪ oferta nativa de WC). Fuente

@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`6.8.1` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
+`6.8.3` — última en local. Versiona en **2 sitios**: header del plugin + constante `BGMG_LANDING_VERSION` (cache-buster de los `wp_enqueue_*`). Bumpea **ambos** al cambiar PHP/JS/CSS.
 
 ## Arquitectura
 
@@ -42,6 +42,24 @@ BANNERS-CUSTOMIZER-PLAN.md ← roadmap del Customizer, ya completado
 1. **Es un plugin, no un tema.** Por eso los hooks `wp_head` (líneas ~251+ de `bgmg-landing.php`) aplican GLOBALMENTE. Si necesitas CSS que aplique en TODAS las páginas (no solo en una plantilla), va ahí, no en archivos de plantilla individuales.
 
 2. **Estilos + markup del minicart: GLOBALES (BL-01c Fase 1, v6.5.0).** El CSS estructural del panel vive en `assets/bgmg-global.css` (junto a los enhancements); el markup lo rinde `bgmg_render_minicart_panel()` desde `bgmg_render_header()` (cuando `show_cart`). Ya **no** hay copias inline en los templates — el panel aparece en TODAS las páginas desde una sola fuente. **Pendiente Fase 2:** el JS de abrir/cerrar (botón `#bgmg-cart-btn` del header + `added_to_cart`) sigue duplicado per-template; globalizarlo cierra BL-01c (ver `../../HANDOFF.md` §3). *(Histórico: el bloque `#bgmg-mc-enhancements` que esta doc mencionaba nunca existió.)*
+
+   **2-bis. Sincronía del minicart con wc-cart-fragments (v6.8.2).** El carrito tiene 3 "verdades":
+   HTML del servidor (cacheable), sessionStorage de `wc-cart-fragments` (se re-pinta en cada
+   navegación) y los swaps de los AJAX custom. Para que NO se desincronicen: (a) los 3 endpoints
+   (`bgmg_add_to_cart`/`bgmg_update_cart`/`bgmg_clear_cart`) responden vía
+   **`bgmg_cart_ajax_payload()`**, que setea las cookies `woocommerce_cart_hash`/`items_in_cart`
+   ANTES del JSON (WC las setea en `shutdown`, tarde para AJAX) y devuelve `fragments` + `cart_hash`;
+   (b) el JS llama **`window.bgmgSyncWcFragments(resp.data)`** (definido en `bgmg-mc-qty-js`) tras
+   cada swap para escribir el sessionStorage en el formato de cart-fragments.js. Reglas: todo endpoint
+   nuevo que MUTE el carrito debe usar el payload + sync; los fragments del contador usan claves
+   SEPARADAS por elemento (`#bgmg-cart-btn .bgmg-cart-count` y `span.bgmg-tab-count`) porque
+   `replaceWith` pisa todas las coincidencias y borraba la clase `bgmg-tab-count` del badge móvil;
+   NO reintroducir el `wc_fragment_refresh` forzado en page load (parche viejo: 1 request extra por
+   página). **(v6.8.3)** `wc-cart-fragments` se encola EXPLÍCITO en `wp_enqueue_scripts` (salvo
+   cart/checkout): WooCommerce moderno ya no lo carga solo (requiere el widget clásico de
+   mini-carrito, que este sitio no usa) y sin él nada hidrata el carrito en páginas servidas por el
+   caché de LiteSpeed (síntoma real: tienda móvil mostraba carrito en 0 hasta el primer AJAX).
+   NO quitar ese enqueue.
 
 3. **Customizer**: panel "BGMG Tema" con secciones para hero slider y banner mid-page. Defaults reproducen el contenido hardcoded anterior — sin configurar nada, el sitio se ve igual. Ver `BANNERS-CUSTOMIZER-PLAN.md`.
 

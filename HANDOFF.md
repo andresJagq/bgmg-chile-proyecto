@@ -6,10 +6,30 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-09**
+> Última actualización: **2026-06-10**
 >
-> **Dónde quedamos (2026-06-09):** sesión de varios cambios encadenados (zips PENDIENTES de generar
-> cuando el usuario lo pida):
+> **Dónde quedamos (2026-06-10b):** **fix carrito en 0 en tienda móvil (bgmg-landing 6.8.3)** — el
+> usuario reportó que en la tienda (móvil) el minicart aparecía vacío hasta agregar un producto.
+> Verificado contra producción (beautygirlmg.cl/tienda): **`wc-cart-fragments` NO se estaba cargando**
+> (WooCommerce moderno solo lo encola si existe el widget clásico de mini-carrito; el sitio no usa
+> widgets) + **LiteSpeed Cache (LSCWP) activo** sirviendo HTML con el carrito horneado de otro momento
+> → nada hidrataba el carrito al cargar. Fix: enqueue explícito de `wc-cart-fragments` en
+> `wp_enqueue_scripts` (salvo cart/checkout). Nota: producción corre un bgmg-landing viejo (sin
+> marcadores 6.7.3+) — subir el zip 6.8.3 lo trae todo. Ver CLAUDE.md de bgmg-landing §2-bis.
+>
+> **Dónde quedamos (2026-06-10):** **fix de sincronía del minicart (bgmg-landing 6.8.2)** — auditoría
+> por reporte del usuario ("a veces no carga bien / caché raro según la página"). Causa: 3 verdades del
+> carrito desincronizadas — los AJAX custom no actualizaban ni la cookie `woocommerce_cart_hash` (WC la
+> setea en `shutdown`, tarde para AJAX) ni el sessionStorage de `wc-cart-fragments`, que re-pintaba un
+> carrito VIEJO al navegar; un `wc_fragment_refresh` forzado lo "curaba" tarde (flash + 1 request/página).
+> Fix: `bgmg_cart_ajax_payload()` (cookies antes del JSON + fragments + cart_hash en los 3 endpoints) +
+> `window.bgmgSyncWcFragments()` en el JS + claves de fragment separadas para el badge del header y el de
+> la tab bar (el genérico borraba la clase `bgmg-tab-count` → numerito desplazado en móvil) + se eliminó
+> el refresh forzado. Ver CLAUDE.md de bgmg-landing §2-bis. **Validar (usuario):** cambiar qty/vaciar
+> desde el minicart, navegar a otra página → el carrito debe verse correcto AL INSTANTE (sin flash de
+> contenido viejo); badge de la tab bar móvil no se desplaza tras agregar producto.
+>
+> _Antes (2026-06-09):_ sesión de varios cambios encadenados (commiteados/pusheados `2692f7b`):
 > - **Organizador de categorías (bgmg-landing 6.8.1)** — pantalla admin nueva **Productos → Organizar
 >   categorías** (`inc/category-organizer.php` + `assets/category-organizer.js/.css`): árbol drag&drop
 >   (jQuery UI Sortable, 2 niveles) para decidir padre/hija, orden y **visibilidad por dispositivo**.
@@ -55,7 +75,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 | Pieza | Versión código |
 |---|---|
 | bgmg-chile | **1.18.4** |
-| bgmg-landing | **6.8.1** |
+| bgmg-landing | **6.8.3** |
 | beautygirlmg-mayorista | **2.7.5** |
 | bgmg-tema-base | 1.1.0 |
 
