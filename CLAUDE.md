@@ -26,7 +26,7 @@ Sitio WooCommerce chileno **`new.beautygirlmg.cl`** (V2, en construcción). 3 pl
 |---|---|
 | bgmg-chile | **1.18.4** |
 | bgmg-landing | **6.8.3** |
-| beautygirlmg-mayorista | **2.7.5** |
+| beautygirlmg-mayorista | **2.7.6** |
 | bgmg-tema-base | 1.1.0 |
 
 > bgmg-landing versiona en 2 sitios: header del plugin + constante `BGMG_LANDING_VERSION`

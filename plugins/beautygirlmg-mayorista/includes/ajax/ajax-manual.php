@@ -8,7 +8,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * Recibe product_id + cantidades por variación: { vid => qty }.
  * Valida la regla de surtido equilibrado (delegada a bgm_evaluar_distribucion).
  * Crea items en el carrito marcados con cart_item_data ['bgm_origen' =>
- * 'manual'] para distinguirlos en avisos visuales (no afecta el precio).
+ * 'surtido'] para distinguirlos del detalle en avisos visuales (no afecta
+ * el precio). Mismo valor que el modo auto → WC fusiona la misma variación
+ * entre ambos caminos.
  * =========================================================
  */
 
@@ -97,7 +99,10 @@ function bgm_ajax_agregar_manual() {
         }
     }
 
-    // Agregar al carrito SIN metadata custom → WC fusiona items duplicados
+    // Flag de surtido UNIFICADO ('surtido' en auto y manual, v2.7.6): con el
+    // mismo cart_item_data, WC fusiona la misma variación venga del camino que
+    // venga (antes 'auto' vs 'manual' generaban 2 líneas duplicadas por
+    // variación en la misma orden). Nadie lee el valor — solo presencia.
     $agregados = 0;
     $errores   = [];
 
@@ -110,7 +115,7 @@ function bgm_ajax_agregar_manual() {
             $qty,
             $vid,
             $variacion->get_variation_attributes(),
-            [ 'bgm_origen' => 'manual' ]
+            [ 'bgm_origen' => 'surtido' ]
         );
 
         if ( $cart_key ) {

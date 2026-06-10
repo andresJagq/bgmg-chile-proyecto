@@ -8,6 +8,17 @@
 >
 > Última actualización: **2026-06-10**
 >
+> **Dónde quedamos (2026-06-10c):** **fix líneas duplicadas Sorpréndeme+Manual (mayorista 2.7.6)** —
+> usar ambos modos en la misma orden generaba líneas duplicadas por variación (8 de 4: una 'auto' y
+> una 'manual' por color), porque WC solo fusiona líneas con `cart_item_data` idéntico. El precio y la
+> regla de equilibrio NO se veían afectados (suman por variación/padre) — era solo confusión visual y
+> operativa en carrito/orden. Fix: **flag `bgm_origen` unificado a `'surtido'`** en ajax-auto y
+> ajax-manual (verificado: NADIE lee el valor, solo presencia con `!empty` — plugin y landing).
+> Surtido vs DETALLE sigue separado a propósito (avisos "no califica" por línea). Docs actualizados
+> (CLAUDE §3 del mayorista + CONTRATO). **Validar (usuario):** agregar el mismo producto via
+> Sorpréndeme y luego via Manual → las variaciones repetidas deben quedar en UNA línea sumada;
+> avisos/chips de surtido intactos; DETALLE sigue en línea aparte.
+>
 > **Dónde quedamos (2026-06-10b):** **fix carrito en 0 en tienda móvil (bgmg-landing 6.8.3)** — el
 > usuario reportó que en la tienda (móvil) el minicart aparecía vacío hasta agregar un producto.
 > Verificado contra producción (beautygirlmg.cl/tienda): **`wc-cart-fragments` NO se estaba cargando**
@@ -76,7 +87,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.4** |
 | bgmg-landing | **6.8.3** |
-| beautygirlmg-mayorista | **2.7.5** |
+| beautygirlmg-mayorista | **2.7.6** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo

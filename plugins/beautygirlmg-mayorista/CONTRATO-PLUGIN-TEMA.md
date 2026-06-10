@@ -119,9 +119,9 @@ Set por plugin, leído por plugin + tema:
 
 | Key | Valor | Set por | Leído por |
 |---|---|---|---|
-| `bgm_origen` | `'auto'` o `'manual'` | `add_to_cart` en `ajax-auto.php` y `ajax-manual.php` | Plugin (`bgm_estado_grupo_variaciones`) + tema (`bgmg_minicart_inner` para clase `bgm-item-surtido`) |
+| `bgm_origen` | `'surtido'` (unificado en v2.7.6; antes `'auto'`/`'manual'`) | `add_to_cart` en `ajax-auto.php` y `ajax-manual.php` | Plugin (`bgm_estado_grupo_variaciones`) + tema (`bgmg_minicart_inner` para clase `bgm-item-surtido`) — ambos leen solo PRESENCIA (`!empty`), nunca el valor |
 
-**Importante**: WC NO fusiona items con `cart_item_data` distinto. Si el cliente agrega vía Sorpréndeme y luego vía detalle normal, verá 2 entradas separadas del mismo producto/variación.
+**Importante**: WC NO fusiona items con `cart_item_data` distinto. Desde v2.7.6 auto y manual usan el MISMO valor (`'surtido'`) → la misma variación se fusiona en una línea venga del camino que venga. Surtido vs **detalle normal** (sin flag) sigue sin fusionarse a propósito: los avisos de "no califica" aplican solo a líneas de surtido.
 
 ### Post meta (productos)
 

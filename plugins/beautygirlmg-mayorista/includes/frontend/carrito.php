@@ -21,9 +21,10 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *    umbral), se intenta la PROMO minorista (no exige surtido). Si tampoco,
  *    queda a precio detalle.
  *
- * El flag bgm_origen ('auto' | 'manual') se guarda en cart_item_data al
- * agregar, pero NO afecta la lógica de precio: se usa solo para distinguir
- * en avisos visuales (minicart, página /cart/).
+ * El flag bgm_origen ('surtido', unificado en v2.7.6; antes 'auto'|'manual')
+ * se guarda en cart_item_data al agregar, pero NO afecta la lógica de precio:
+ * se usa solo para distinguir surtido vs detalle en avisos visuales
+ * (minicart, página /cart/). Nadie lee el valor — solo presencia (!empty).
  * =========================================================
  */
 
