@@ -29,7 +29,8 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  * @param int $padre_id
  * @return array|null  ['califica', 'razon', 'mensaje', 'qty_total', 'min_1',
  *                      'min_2', 'tier', 'tiene_flag_origen', 'por_variacion']
- *                     o null si no hay items del padre en el cart
+ *                     o null si no hay items de SURTIDO del padre en el cart
+ *                     (las líneas de detalle no cuentan desde v2.7.7)
  */
 function bgm_estado_grupo_variaciones( $padre_id ) {
     static $cache = [];
@@ -47,6 +48,10 @@ function bgm_estado_grupo_variaciones( $padre_id ) {
         if ( empty( $item['data'] ) ) continue;
         if ( ! $item['data']->is_type( 'variation' ) ) continue;
         if ( (int) $item['data']->get_parent_id() !== (int) $padre_id ) continue;
+        // v2.7.7: solo las líneas de SURTIDO cuentan para el grupo mayorista —
+        // espejo exacto del pricing (carrito.php). El detalle del mismo padre
+        // ya no suma al mínimo ni a la regla de equilibrio.
+        if ( empty( $item['bgm_origen'] ) ) continue;
 
         $qty = (int) $item['quantity'];
         $vid = (int) $item['variation_id'];
@@ -209,8 +214,8 @@ function bgm_sugerencia_grupo( $estado ) {
         return sprintf(
             /* translators: %d: cantidad faltante */
             _n(
-                'Agrega %d unidad más para precio mayorista',
-                'Agrega %d unidades más para precio mayorista',
+                'Agrega %d unidad más a tu surtido para precio mayorista',
+                'Agrega %d unidades más a tu surtido para precio mayorista',
                 $faltan,
                 'beautygirlmg-mayorista'
             ),

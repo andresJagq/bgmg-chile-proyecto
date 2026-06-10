@@ -13,7 +13,7 @@ Este es uno de **dos plugins hermanos** que cooperan:
 
 ## Versión actual
 
-`2.7.6` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
+`2.7.7` — última en local. Bumpea con cada cambio de PHP/JS/CSS para forzar cache-busting (las versiones de scripts/styles se cuelgan de `BGM_VERSION`).
 
 ## Arquitectura
 
@@ -34,7 +34,7 @@ assets/        admin.js+css, frontend-*.js, frontend.css
 
 2. **Regla "atrancadas no cuentan"**: si una variación tiene `qty === stock_máximo`, se excluye del cálculo de tolerancia. El cliente no se penaliza por restricciones de stock.
 
-3. **Flag `bgm_origen`** (valor único `'surtido'` desde v2.7.6; antes 'auto'|'manual') en `cart_item_data`. NO afecta el precio (solo distingue items de surtido vs detalle normal para avisos visuales). **Nadie lee el valor — solo presencia (`!empty`)**; por eso se unificó: con el mismo valor, WC fusiona la misma variación venga de Sorpréndeme o de Manual (antes salían líneas duplicadas en la misma orden). Surtido vs DETALLE (sin flag) sigue SIN fusionarse a propósito (los avisos "no califica" aplican solo a líneas de surtido).
+3. **Flag `bgm_origen`** (valor único `'surtido'` desde v2.7.6; antes 'auto'|'manual') en `cart_item_data`. **Nadie lee el valor — solo presencia (`!empty`)**; por eso se unificó: con el mismo valor, WC fusiona la misma variación venga de Sorpréndeme o de Manual (antes salían líneas duplicadas en la misma orden). Surtido vs DETALLE (sin flag) sigue SIN fusionarse a propósito. **Desde v2.7.7 el flag SÍ enruta el precio:** en variables, el grupo mayorista (mínimo + regla de equilibrio + repricing) se forma SOLO con líneas con flag; las líneas de DETALLE van a un subgrupo aparte que **nunca** recibe mayorista (solo promo minorista, contada por su propio subgrupo). Razón de negocio: el mayorista exige surtir (evita cajas desarmadas); el detalle no debe alcanzar el mínimo "por la puerta de atrás" ni romper el equilibrio de un surtido bien armado. `bgm_estado_grupo_variaciones` (avisos) cuenta igual: solo surtido. **Productos SIMPLES intactos** (tier por cantidad, sin surtido).
 
 4. **Despliegue** vía SSH con Claude Code. Antes de asumir que un bug "raro" es del código local, verificar que el servidor tenga la versión actualizada (con `fetch(scriptSrc).then(r=>r.text())` en consola del navegador).
 

@@ -43,7 +43,7 @@ Funciones globales del plugin que el tema (o cualquier otro plugin) puede llamar
 | `bgm_render_mayorista_bloque_publico( $product )` | Renderiza el bloque mayorista completo del producto variable | `bgmg-product.php` dentro del tab "Por mayor" |
 | `bgm_render_chip_minicart( $cart_item )` | Devuelve HTML de un chip "⚠ Sin mayorista" si el item es de surtido y el grupo no califica. `''` si no aplica | `bgmg-landing.php` → `bgmg_minicart_inner()` |
 | `bgm_render_avisos_grupos_cart()` | Devuelve HTML de bloque "Estado de tus surtidos mayoristas" para `/cart/` | `bgmg-cart.php` antes del form de items |
-| `bgm_estado_grupo_variaciones( $padre_id )` | Devuelve `['califica', 'razon', 'tier', 'qty_total', 'mensaje', ...]` del grupo de variaciones del padre en el carrito actual | Usado internamente por las dos funciones de arriba. Cacheada por request. |
+| `bgm_estado_grupo_variaciones( $padre_id )` | Devuelve `['califica', 'razon', 'tier', 'qty_total', 'mensaje', ...]` del grupo de variaciones **del SURTIDO** del padre en el carrito actual (desde v2.7.7 cuenta solo líneas con `bgm_origen`; el detalle queda fuera, espejo del pricing). `null` si el padre solo tiene líneas de detalle | Usado internamente por las dos funciones de arriba. Cacheada por request. |
 | `bgm_capacidades_variaciones( $product )` | Devuelve `[vid => stock_max]` por variación | Usado en evaluación; disponible para el tema si lo necesita |
 | `bgm_evaluar_distribucion( $product_id, $cantidades, $n_disponibles = null, $stocks = null )` | Evalúa si una distribución cumple la regla de surtido. Devuelve `true` o `WP_Error`. **Centralizado**: única fuente de verdad de la regla | Plugin solo, pero expuesto si el tema lo necesita |
 | `bgm_get_min_1` / `min_2` / `descuento_1` / `descuento_2` ( $product_id, $variation_id = 0 ) | Getters de config del producto | Tema podría usarlos para badges custom |
@@ -122,6 +122,8 @@ Set por plugin, leído por plugin + tema:
 | `bgm_origen` | `'surtido'` (unificado en v2.7.6; antes `'auto'`/`'manual'`) | `add_to_cart` en `ajax-auto.php` y `ajax-manual.php` | Plugin (`bgm_estado_grupo_variaciones`) + tema (`bgmg_minicart_inner` para clase `bgm-item-surtido`) — ambos leen solo PRESENCIA (`!empty`), nunca el valor |
 
 **Importante**: WC NO fusiona items con `cart_item_data` distinto. Desde v2.7.6 auto y manual usan el MISMO valor (`'surtido'`) → la misma variación se fusiona en una línea venga del camino que venga. Surtido vs **detalle normal** (sin flag) sigue sin fusionarse a propósito: los avisos de "no califica" aplican solo a líneas de surtido.
+
+**Desde v2.7.7 el flag enruta el PRECIO**: en productos variables, solo las líneas con `bgm_origen` forman el grupo que puede recibir mayorista (mínimo + equilibrio + repricing en `carrito.php`); las líneas de detalle van a un subgrupo aparte que solo puede recibir promo minorista. Productos simples sin cambios.
 
 ### Post meta (productos)
 

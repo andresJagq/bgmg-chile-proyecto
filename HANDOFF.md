@@ -8,6 +8,20 @@
 >
 > Última actualización: **2026-06-10**
 >
+> **Dónde quedamos (2026-06-10d):** **mayorista SOLO por surtido (mayorista 2.7.7)** — decisión de
+> negocio del usuario: el mayorista exige surtir (evita cajas desarmadas); el DETALLE ya **no** cuenta
+> para el grupo mayorista. En variables, el pricing separa las líneas por flag `bgm_origen`: con flag →
+> grupo surtido (mínimo + equilibrio + mayorista, fallback promo); sin flag → subgrupo detalle (NUNCA
+> mayorista, solo promo por su propio qty; función nueva `bgm_aplicar_promo_detalle_variaciones` en
+> carrito.php). `bgm_estado_grupo_variaciones` (chips/cards) cuenta solo surtido (espejo del pricing) y
+> el texto sugiere "agrega N **a tu surtido**". **SIMPLES intactos** (tier por cantidad, camino separado
+> `bgm_aplicar_precio_simple` sin tocar). Plan + tabla de impacto en
+> `~/.claude/plans/immutable-waddling-spark.md` (sesión); resumen en CLAUDE §3 del mayorista + CONTRATO.
+> **Validar (usuario, carrito vacío):** (1) surtido OK + 2 sueltas del mismo producto → las sueltas a
+> detalle, mayorista intacto; (2) 4×3 balanceado SOLO por detalle → todo detalle (antes daba mayorista);
+> (3) simple con mayorista → tier igual que siempre; (4) promo aplica al detalle; (5) cards muestran
+> solo qty del surtido.
+>
 > **Dónde quedamos (2026-06-10c):** **fix líneas duplicadas Sorpréndeme+Manual (mayorista 2.7.6)** —
 > usar ambos modos en la misma orden generaba líneas duplicadas por variación (8 de 4: una 'auto' y
 > una 'manual' por color), porque WC solo fusiona líneas con `cart_item_data` idéntico. El precio y la
@@ -87,7 +101,7 @@ estado vivo de correcciones en `AUDITORIA-OPTIMIZACION.md` §4.
 |---|---|
 | bgmg-chile | **1.18.4** |
 | bgmg-landing | **6.8.3** |
-| beautygirlmg-mayorista | **2.7.6** |
+| beautygirlmg-mayorista | **2.7.7** |
 | bgmg-tema-base | 1.1.0 |
 
 **Respaldo en GitHub (2026-06-02):** todo el proyecto está versionado en git y subido a un repo

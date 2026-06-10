@@ -22,9 +22,11 @@ if ( ! defined( 'ABSPATH' ) ) exit;
  *    queda a precio detalle.
  *
  * El flag bgm_origen ('surtido', unificado en v2.7.6; antes 'auto'|'manual')
- * se guarda en cart_item_data al agregar, pero NO afecta la lógica de precio:
- * se usa solo para distinguir surtido vs detalle en avisos visuales
- * (minicart, página /cart/). Nadie lee el valor — solo presencia (!empty).
+ * se guarda en cart_item_data al agregar vía Sorpréndeme/Manual. Desde v2.7.7
+ * el flag SÍ enruta el precio: solo las líneas CON flag forman el grupo que
+ * puede recibir mayorista; las líneas de DETALLE (sin flag) van a un subgrupo
+ * aparte que solo puede recibir promo minorista. Nadie lee el valor del flag —
+ * solo presencia (!empty). También alimenta los avisos visuales.
  * =========================================================
  */
 
@@ -74,9 +76,18 @@ function bgm_aplicar_precios_carrito( $cart ) {
     $items = $cart->get_cart();
     if ( empty( $items ) ) return;
 
-    // Agrupar items: variaciones por padre + simples sueltos
-    $por_padre = []; // [padre_id => [keys...]]
-    $simples   = []; // [keys...]
+    // Agrupar items: variaciones por padre — separando SURTIDO de DETALLE — y
+    // simples sueltos.
+    //
+    // v2.7.7: el mayorista se evalúa SOLO sobre las líneas de surtido (flag
+    // bgm_origen, puestas por Sorpréndeme/Manual). Las líneas de DETALLE del
+    // mismo padre van en un subgrupo aparte que NUNCA recibe mayorista (solo
+    // promo minorista): así el detalle no alcanza el mínimo "por la puerta de
+    // atrás" ni rompe el equilibrio de un surtido bien armado (el objetivo del
+    // negocio es no quedar con cajas desarmadas). Los SIMPLES no cambian.
+    $por_padre_surtido = []; // [padre_id => [keys...]] líneas con bgm_origen
+    $por_padre_detalle = []; // [padre_id => [keys...]] líneas sin flag
+    $simples           = []; // [keys...]
 
     foreach ( $items as $key => $item ) {
         $producto = $item['data'];
@@ -94,15 +105,23 @@ function bgm_aplicar_precios_carrito( $cart ) {
                 && bgm_promo_activa_ahora()
                 && bgm_producto_en_promo( $padre_id );
             if ( bgm_tiene_precio_mayorista( $padre_id ) || bgm_variacion_padre_tiene_mayorista( $padre_id ) || $promo_ok ) {
-                $por_padre[ $padre_id ][] = $key;
+                if ( ! empty( $item['bgm_origen'] ) ) {
+                    $por_padre_surtido[ $padre_id ][] = $key;
+                } else {
+                    $por_padre_detalle[ $padre_id ][] = $key;
+                }
             }
         } elseif ( $producto->is_type( 'simple' ) ) {
             $simples[] = $key;
         }
     }
 
-    foreach ( $por_padre as $padre_id => $keys ) {
+    foreach ( $por_padre_surtido as $padre_id => $keys ) {
         bgm_aplicar_precio_conjunto_variaciones( $cart, $padre_id, $keys );
+    }
+
+    foreach ( $por_padre_detalle as $padre_id => $keys ) {
+        bgm_aplicar_promo_detalle_variaciones( $cart, $padre_id, $keys );
     }
 
     foreach ( $simples as $key ) {
@@ -240,6 +259,46 @@ function bgm_aplicar_precio_conjunto_variaciones( $cart, $padre_id, $keys ) {
             'qty_total'  => $qty_total,
             'razon'      => $evaluacion->get_error_code(),
             'cantidades' => $por_variacion,
+        ] );
+    }
+}
+
+// ─── Escenario 2-bis: variaciones compradas al DETALLE (sin flag de surtido) ──
+//
+// v2.7.7: estas líneas NUNCA reciben precio mayorista — el mayorista exige armar
+// surtido (Sorpréndeme/Manual). Solo se les intenta la promo minorista, contando
+// la cantidad del propio subgrupo de detalle del padre. Sin promo activa quedan
+// al precio detalle normal (no se toca el precio).
+function bgm_aplicar_promo_detalle_variaciones( $cart, $padre_id, $keys ) {
+    if ( ! function_exists( 'bgm_calcular_precio_promo' ) ) return;
+
+    $items = $cart->get_cart();
+
+    $qty_total = 0;
+    foreach ( $keys as $key ) {
+        if ( ! isset( $items[ $key ] ) ) continue;
+        $qty_total += (int) $items[ $key ]['quantity'];
+    }
+    if ( $qty_total === 0 ) return;
+
+    $promo_aplico = false;
+    foreach ( $keys as $key ) {
+        if ( ! isset( $items[ $key ] ) ) continue;
+
+        $producto     = $items[ $key ]['data'];
+        $precio_promo = bgm_calcular_precio_promo( $producto, $qty_total );
+
+        if ( $precio_promo !== null ) {
+            $producto->set_price( $precio_promo );
+            $promo_aplico = true;
+        }
+    }
+
+    if ( $promo_aplico ) {
+        bgm_log( 'cart', 'Detalle variaciones: promo minorista aplicada', [
+            'padre_id'  => $padre_id,
+            'qty_total' => $qty_total,
+            'items'     => count( $keys ),
         ] );
     }
 }
