@@ -60,6 +60,13 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
   font-family: 'Alice', serif; font-size: 28px; font-weight: 400;
   color: var(--dark); margin-bottom: 16px;
 }
+.bgmg-search-chip {
+  display: inline-flex; align-items: center; gap: 8px; margin: -6px 0 14px;
+  padding: 7px 14px; border-radius: 30px; border: 1.5px solid var(--pink);
+  background: var(--pink-soft); font-family: 'Poppins', sans-serif;
+  font-size: 13px; color: var(--pink-dark); cursor: pointer; transition: all .2s;
+}
+.bgmg-search-chip:hover { background: var(--pink); color: #fff; }
 .bgmg-shop-cats {
   display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none;
   -webkit-overflow-scrolling: touch; padding-bottom: 12px; flex-wrap: nowrap;
@@ -234,6 +241,13 @@ $has_more_init = $init_query->max_num_pages > 1;
 <div class="bgmg-shop-wrap">
   <div class="bgmg-shop-head">
     <h1 class="bgmg-shop-title"><?php echo $is_oferta ? 'Ofertas 🔥' : 'Tienda'; ?></h1>
+
+    <?php if ($search_q !== '') : ?>
+    <!-- Búsqueda activa visible: la ✕ la quita sin recargar (los pills la combinan) -->
+    <button class="bgmg-search-chip" id="bgmg-search-chip" title="Quitar búsqueda">
+      Resultados para &ldquo;<?php echo esc_html($search_q); ?>&rdquo; <strong>✕</strong>
+    </button>
+    <?php endif; ?>
 
     <!-- Pills de categorías top-level -->
     <div class="bgmg-shop-cats">
@@ -411,6 +425,14 @@ $has_more_init = $init_query->max_num_pages > 1;
     });
   });
 
+  // Chip de búsqueda activa: quitarla recarga el listado sin la búsqueda
+  var searchChip = document.getElementById('bgmg-search-chip');
+  if (searchChip) searchChip.addEventListener('click', function(){
+    currentSearch = '';
+    this.remove();
+    loadProducts(true);
+  });
+
   // Ordenar
   var sortSel = document.getElementById('bgmg-shop-sort');
   if(sortSel) sortSel.addEventListener('change', function(){
@@ -440,7 +462,6 @@ $has_more_init = $init_query->max_num_pages > 1;
 
     var data = new FormData();
     data.append('action',    'bgmg_load_products');
-    data.append('nonce',     window.bgmgAjax ? window.bgmgAjax.shopNonce : '');
     data.append('page',      currentPage);
     data.append('cat',       currentCat);
     data.append('search',    currentSearch);
@@ -487,10 +508,9 @@ $has_more_init = $init_query->max_num_pages > 1;
     catsEl.style.cursor = 'grab';
   }
 
-  // Fragmentos WooCommerce
-  if(typeof jQuery !== 'undefined'){
-    jQuery(function($){ $(document.body).trigger('wc_fragment_refresh'); });
-  }
+  // (El wc_fragment_refresh forzado que vivía acá se eliminó en 6.8.4: era el
+  // viejo parche del minicart, redundante desde la hidratación de 6.8.2/6.8.3
+  // y costaba 1 request a admin-ajax por cada visita a la tienda.)
 })();
 </script>
 <?php wp_footer(); ?>

@@ -6,7 +6,54 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-10**
+> Última actualización: **2026-06-11**
+>
+> **Dónde quedamos (2026-06-12): PWA de despachos — Parte 1 IMPLEMENTADA (bgmg-chile 1.19.0).**
+> Módulo nuevo `inc/pwa-despachos/` (pwa-despachos.php = ruta/auth/datos/manifest; vista-lista.php =
+> pantalla 1). Ruta `/despachos/` vía `add_rewrite_rule` + query var `bgmg_despachos` con **flush
+> perezoso** (opción `bgmg_chile_pwa_rw` — no hay que guardar permalinks tras subir el zip).
+> Login WP (`auth_redirect`) + permiso `edit_shop_orders` o cap futura `bgmg_despachos`; página
+> excluida de caché (nocache_headers + X-LiteSpeed-Cache-Control: no-cache + DONOTCACHEPAGE). El
+> manifest (`?bgmg_manifest=1`) se sirve SIN auth a propósito (el navegador lo pide sin cookies; solo
+> metadatos públicos; íconos = site icon del Customizer). Pestañas: Por despachar (processing, no
+> retiro, sin estado despachado; más antiguos primero) / Enviados (despachados + 20 completados
+> recientes) / Retiro (processing con método bgmg_chile_retiro). Reusa `bgmg_chile_get_datos_despacho`
+> y guarda del refund (`type => shop_order` + instanceof). Tocar una tarjeta → toast "Parte 2".
+> **Validar (usuario, en el teléfono):** abrir `/despachos/` → pide login → lista correcta en las 3
+> pestañas; "Agregar a pantalla de inicio" instala con ícono; usuario sin permisos ve el aviso 403;
+> 📞 llama al cliente. **Siguiente: Parte 2** = detalle + guardar courier/código/estado + checkbox
+> avisar (AJAX con nonce; reusa bgmg_chile_send_tracking_email). Luego Fase 2: voucher cámara +
+> rol Despachos + etiqueta.
+>
+> **DISEÑO ACORDADO (2026-06-12, Parte 1 ya implementada — ver arriba): PWA de despachos** — mini-app móvil para
+> gestionar despachos desde el teléfono, como módulo nuevo de **bgmg-chile** (`inc/pwa-despachos/`).
+> NO es app nativa ni externa: URL propia (ej. `/despachos/`) servida vía `template_include`,
+> protegida por login WP. Decisiones del usuario: (1) **foto del voucher** del courier adjuntable
+> desde la cámara, comprimida en cliente (~300KB), guardada en medios amarrada al pedido, con
+> **checkbox por pedido** "incluir voucher en el email" al cliente; (2) **rol custom "Despachos"**
+> para ayudantes (usa la app y ve pedidos; sin acceso a productos/precios/ajustes); (3) lista
+> principal = pedidos **Procesando** (pagados por despachar) con pestañas Enviados y Retiro.
+> El botón "Guardar y avisar" reusa `bgmg_chile_send_tracking_email()` + metas
+> `_bgmg_tracking_codigo/_metodo/_bgmg_estado_despacho` (inc/tracking/order-tracking.php).
+> Fases: MVP (lista+detalle+tracking+aviso) → búsqueda/filtros/etiqueta → cámara-scan/notifs.
+> Con esto NO hacen falta ni la app de WooCommerce ni el plugin AST (alternativa descartada
+> tras investigación: la app oficial solo desbloquea tracking con la API `wc-shipment-tracking/v3`).
+>
+> **Dónde quedamos (2026-06-11):** **auditoría buscador/lupa/filtros → bgmg-landing 6.8.4.** Hallazgo
+> clave (verificado EN VIVO en producción): LiteSpeed cachea las páginas con los **nonces horneados**
+> en el HTML; al expirar el nonce (12-24h) la lupa y el "Ver más" morían **en silencio** (server
+> responde `-1`). Fix: `bgmg_search` y `bgmg_load_products` ya **NO exigen nonce** (son SOLO lectura
+> de datos públicos; el rate-limit queda como protección; `cartNonce` para mutaciones se mantiene).
+> Además: token anti-carrera en la lupa (no pinta respuestas viejas), mensajes honestos de error
+> (antes el rate-limit mostraba "Sin resultados" y el fallo de red ocultaba todo), **chip "Resultados
+> para 'X' ✕"** en la tienda (la búsqueda activa era invisible y los pills la combinaban en silencio;
+> la ✕ la limpia sin recargar), y se eliminó el `wc_fragment_refresh` forzado fósil de bgmg-shop.php
+> (1 request extra por visita, redundante desde 6.8.2/6.8.3). bgmg-category.php usaba el mismo
+> endpoint → arreglada de gratis. **Validar (usuario):** lupa busca y muestra preview; "Ver más"
+> pagina en tienda y categoría; chip ✕ aparece al buscar desde la lupa y al quitarlo recarga el grid;
+> minicart sigue OK al agregar producto. Tras subir: **LiteSpeed → Purge All**. Pendiente menor
+> anotado: `<title>` duplicado (template + Rank Math), orden por precio impreciso en variables, lupa
+> sin búsqueda por SKU.
 >
 > **Dónde quedamos (2026-06-10d):** **mayorista SOLO por surtido (mayorista 2.7.7)** — decisión de
 > negocio del usuario: el mayorista exige surtir (evita cajas desarmadas); el DETALLE ya **no** cuenta

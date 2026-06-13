@@ -4,7 +4,7 @@ Tags: woocommerce, chile, rut, comunas, envio, checkout
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.18.4
+Stable tag: 1.19.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,9 @@ Plugin propio de BeautyGirlMG. Funcionalidades:
 4. En WooCommerce → Ajustes → Envío, agrega los métodos "Envío BeautyGirlMG (Chile)" y "Retiro en tienda" a tu zona de Chile.
 
 == Changelog ==
+
+= 1.19.0 =
+* **NUEVO — PWA de despachos (Parte 1):** mini-app móvil en la URL `/despachos/` para gestionar los despachos desde el teléfono, instalable con "Agregar a pantalla de inicio" (manifest + standalone). Protegida con el login de WordPress (admins y gerentes de tienda; rol "Despachos" llegará en Fase 2). Esta primera parte trae la **lista de pedidos** con pestañas **Por despachar / Enviados / Retiro**, tarjetas con cliente, comuna, courier, total, tracking y llamada directa 📞. Página excluida de toda caché (privada por usuario). El detalle del pedido + guardar tracking + avisar al cliente llegan en la Parte 2.
 
 = 1.18.4 =
 * **Etiqueta de despacho:** la etiqueta térmica (60×80mm) ahora también muestra el **correo** del cliente. Antes solo aparecía en el formato A4 y en el metabox/"Copiar todo"; el térmico (el que se imprime por defecto) lo omitía.

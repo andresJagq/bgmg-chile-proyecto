@@ -383,9 +383,9 @@ function bgmg_customizer_register_midbanner( $wp_customize ) {
  */
 function bgmg_customizer_midbanner_defaults() {
     return [
-        'title'    => 'Hasta 30% OFF<br>en productos seleccionados',
-        'subtitle' => 'Solo por tiempo limitado · Envío gratis incluido',
-        'cta_text' => 'Ver ofertas 🌸',
+        'title'    => '¿Compras al por mayor?<br>Aprovecha nuestros <em>precios mayoristas</em>',
+        'subtitle' => 'Mientras más llevas, mejor precio · Arma tu surtido',
+        'cta_text' => 'Ver la tienda 🛍️',
     ];
 }
 

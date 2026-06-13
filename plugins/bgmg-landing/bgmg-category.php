@@ -400,7 +400,7 @@ if ( $bgmg_cat_banner ) :
     if(reset){ list.innerHTML='<div class="bgmg-shop-empty">Cargando...</div>'; if(loadMoreBtn) loadMoreBtn.classList.add('is-hidden'); }
     else { if(loadMoreBtn) loadMoreBtn.classList.add('is-loading'); }
     var fd=new FormData();
-    fd.append('action','bgmg_load_products'); fd.append('nonce',window.bgmgAjax?window.bgmgAjax.shopNonce:'');
+    fd.append('action','bgmg_load_products');
     fd.append('page',currentPage); fd.append('cat',currentCat);
     fd.append('min_price',currentMin); fd.append('max_price',currentMax); fd.append('orderby',currentOrder);
     fetch(window.bgmgAjax?window.bgmgAjax.url:'/wp-admin/admin-ajax.php',{method:'POST',body:fd})

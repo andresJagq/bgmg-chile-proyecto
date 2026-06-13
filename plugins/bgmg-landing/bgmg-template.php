@@ -757,11 +757,11 @@ if ( $bgmg_mb_enabled ) :
     $bgmg_mb_cta_txt = get_theme_mod( 'bgmg_midbanner_cta_text', $bgmg_mb_defaults['cta_text'] ?? 'Ver más' );
     $bgmg_mb_cta_url = get_theme_mod( 'bgmg_midbanner_cta_url', '' );
     if ( $bgmg_mb_cta_url === '' ) {
-        $bgmg_shop_url = function_exists( 'wc_get_page_id' )
+        // Por defecto el banner es un cross-sell mayorista: lleva a la tienda para
+        // que el cliente descubra el precio "Por mayor" en cada ficha de producto.
+        $bgmg_mb_cta_url = function_exists( 'wc_get_page_id' )
             ? get_permalink( wc_get_page_id( 'shop' ) )
             : home_url( '/' );
-        // Por defecto, "Ver ofertas" lleva a la tienda en modo ofertas (?oferta=1).
-        $bgmg_mb_cta_url = $bgmg_shop_url ? add_query_arg( 'oferta', '1', $bgmg_shop_url ) : home_url( '/?oferta=1' );
     }
 
     // Acepta imagen de PC O de celular: si solo subes una, se usa como base. Antes

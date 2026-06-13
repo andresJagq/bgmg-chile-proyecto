@@ -2,14 +2,14 @@
 /**
  * Plugin Name: BeautyGirlMG Landing
  * Description: Landing page completa con WooCommerce — sin Elementor ni WPCode.
- * Version:     6.8.3
+ * Version:     6.8.5
  */
 
 if (!defined('ABSPATH')) exit;
 
 // Versión del plugin. Úsala como cache-buster en wp_enqueue_style/script para no
 // hardcodear el número en cada asset. Mantener sincronizada con el header de arriba.
-define( 'BGMG_LANDING_VERSION', '6.8.3' );
+define( 'BGMG_LANDING_VERSION', '6.8.5' );
 
 // ─── Módulos del plugin ────────────────────────────────────────────────────
 require_once plugin_dir_path( __FILE__ ) . 'inc/customizer.php';
@@ -49,10 +49,11 @@ function bgmg_landing_rebrand_billing_strings( $translation, $text, $domain ) {
 
 // Exponer AJAX URL y nonces al frontend
 add_action('wp_enqueue_scripts', function() {
+    // OJO: solo el cartNonce (mutaciones). Los endpoints de LECTURA (bgmg_search,
+    // bgmg_load_products) van sin nonce a propósito: LiteSpeed cachea el HTML con
+    // el nonce dentro y al expirar (12-24h) mataba lupa y "Ver más" en silencio.
     wp_localize_script('jquery', 'bgmgAjax', array(
         'url'        => admin_url('admin-ajax.php'),
-        'nonce'      => wp_create_nonce('bgmg_search'),
-        'shopNonce'  => wp_create_nonce('bgmg_shop'),
         'cartNonce'  => wp_create_nonce('bgmg_cart'),
     ));
 });
@@ -527,6 +528,7 @@ add_action('wp_footer', function() { ?>
   // Live search preview
   var sRes = document.getElementById('bgmg-search-results');
   var sTimer;
+  var sSeq = 0; // token anti-carrera: solo se pinta la respuesta de la búsqueda más reciente
   if (sInp && sRes) {
     sInp.addEventListener('input', function(){
       var q = this.value.trim();
@@ -535,10 +537,15 @@ add_action('wp_footer', function() { ?>
       sRes.innerHTML = '<div class="bgmg-search-msg">Buscando...</div>';
       sRes.classList.add('is-visible');
       sTimer = setTimeout(function(){
+        var myReq = ++sSeq;
         var url = (window.bgmgAjax ? window.bgmgAjax.url : '/wp-admin/admin-ajax.php')
-          + '?action=bgmg_search&q=' + encodeURIComponent(q)
-          + '&nonce=' + (window.bgmgAjax ? window.bgmgAjax.nonce : '');
+          + '?action=bgmg_search&q=' + encodeURIComponent(q);
         fetch(url).then(function(r){ return r.json(); }).then(function(data){
+          if (myReq !== sSeq) return; // respuesta vieja: ya hay otra búsqueda en curso
+          if (data && data.success === false) {
+            sRes.innerHTML = '<div class="bgmg-search-msg">' + ((data.data && data.data.message) || 'No pudimos buscar. Intenta de nuevo.') + '</div>';
+            return;
+          }
           if (!data.results || !data.results.length) { sRes.innerHTML = '<div class="bgmg-search-msg">Sin resultados para "' + q + '"</div>'; return; }
           var html = '';
           data.results.forEach(function(p){
@@ -549,7 +556,10 @@ add_action('wp_footer', function() { ?>
           });
           html += '<a href="' + data.search_url + '" class="bgmg-search-view-all">Ver todos los resultados (' + data.total + ') →</a>';
           sRes.innerHTML = html;
-        }).catch(function(){ sRes.classList.remove('is-visible'); });
+        }).catch(function(){
+          if (myReq !== sSeq) return;
+          sRes.innerHTML = '<div class="bgmg-search-msg">No pudimos buscar. Intenta de nuevo.</div>';
+        });
       }, 350);
     });
     document.addEventListener('click', function(e){ if (sRes && sOv && !sOv.contains(e.target)) sRes.classList.remove('is-visible'); });
@@ -658,7 +668,10 @@ function bgmg_rate_limit_exceeded( $endpoint_key, $max_per_minute = 30 ) {
 add_action('wp_ajax_bgmg_search',        'bgmg_ajax_search');
 add_action('wp_ajax_nopriv_bgmg_search', 'bgmg_ajax_search');
 function bgmg_ajax_search() {
-    check_ajax_referer('bgmg_search', 'nonce');
+    // SIN nonce a propósito: endpoint público de SOLO LECTURA (datos públicos).
+    // El nonce viajaba horneado en el HTML que cachea LiteSpeed; al expirar
+    // (12-24h) el server respondía -1 y la lupa moría en silencio para los
+    // visitantes con página cacheada vieja. Protección real: el rate-limit.
     if ( bgmg_rate_limit_exceeded( 'search', 30 ) ) {
         wp_send_json_error( array( 'message' => 'Demasiadas búsquedas. Espera un momento.' ), 429 );
     }
@@ -1057,7 +1070,8 @@ function bgmg_args_excluir_sin_stock( $args ) {
 add_action('wp_ajax_bgmg_load_products',        'bgmg_load_products');
 add_action('wp_ajax_nopriv_bgmg_load_products', 'bgmg_load_products');
 function bgmg_load_products() {
-    check_ajax_referer('bgmg_shop', 'nonce');
+    // SIN nonce a propósito (mismo motivo que bgmg_ajax_search): solo lectura
+    // pública + nonce cacheado por LiteSpeed = "Ver más" muerto tras 12-24h.
     if ( bgmg_rate_limit_exceeded( 'load_products', 60 ) ) {
         wp_send_json_error( array( 'message' => 'Demasiadas peticiones. Espera un momento.' ), 429 );
     }
