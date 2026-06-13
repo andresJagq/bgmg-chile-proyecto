@@ -5,7 +5,7 @@
  * Description:       Localización chilena para BeautyGirlMG: validación de RUT (módulo 11),
  *                    selector en cascada de regiones y comunas oficiales, método de envío
  *                    "Por pagar" y administración de tarifas fijas para la Región Metropolitana.
- * Version:           1.20.0
+ * Version:           1.21.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            BeautyGirlMG
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Constantes globales del plugin.
  * Las usamos en cualquier submódulo de /inc/ sin recalcular rutas.
  */
-define( 'BGMG_CHILE_VERSION', '1.20.0' );
+define( 'BGMG_CHILE_VERSION', '1.21.0' );
 define( 'BGMG_CHILE_FILE', __FILE__ );
 define( 'BGMG_CHILE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BGMG_CHILE_URL', plugin_dir_url( __FILE__ ) );
@@ -115,6 +115,12 @@ function bgmg_chile_bootstrap() {
 	// del email "en espera" para transferencia bancaria + inserta aviso destacado
 	// alineado con el mensaje de la thank-you en on-hold y processing.
 	require_once BGMG_CHILE_DIR . 'inc/checkout/email-pago-pendiente.php';
+
+	// Módulo Checkout — resultado del pago Webpay (v1.21.0): nota clara en la
+	// orden cuando un pago Transbank falla/se abandona (visibilidad para la
+	// dueña) + aviso al cliente con botón "Reintentar pago" al volver de la
+	// pasarela sin pagar (?transbank_status=N).
+	require_once BGMG_CHILE_DIR . 'inc/checkout/pago-resultado.php';
 
 	// Módulo Wizard de envíos (v1.13.0): asistente paso a paso para configurar
 	// zona, métodos, retiro, tarifas RM y comunas con retiro.
