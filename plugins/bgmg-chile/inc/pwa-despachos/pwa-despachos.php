@@ -5,7 +5,7 @@ if ( ! defined( 'ABSPATH' ) ) {
 
 /**
  * =========================================================
- * MÓDULO: PWA DE DESPACHOS (v1.19.0) — Parte 1: ruta + lista
+ * MÓDULO: PWA DE DESPACHOS — mini-app móvil de despachos
  *
  * Mini-app móvil para gestionar despachos desde el teléfono, instalable
  * vía "Agregar a pantalla de inicio" (manifest + standalone). Vive en la
@@ -13,10 +13,13 @@ if ( ! defined( 'ABSPATH' ) ) {
  * consulta los pedidos directo de WooCommerce y la seguridad es el login
  * de WordPress (auth_redirect) + capability por acción.
  *
- * Parte 1 (esta): ruta, login/permisos, manifest y pantalla de LISTA con
- * pestañas Por despachar / Enviados / Retiro.
- * Parte 2 (pendiente): detalle del pedido + guardar tracking/estado +
- * "avisar al cliente" (reusa bgmg_chile_send_tracking_email).
+ * Parte 1: ruta, login/permisos, manifest y pantalla de LISTA con pestañas
+ *   Por despachar / Enviados / Retiro.
+ * Parte 2 (v1.20.0): DETALLE del pedido (`?pedido=ID`) + guardar courier /
+ *   código / estado + "avisar al cliente" por AJAX. La persistencia y el
+ *   email se delegan en bgmg_chile_persistir_tracking() (núcleo COMPARTIDO
+ *   con el metabox de wp-admin → cero drift). La página /despachos/ NO se
+ *   cachea, así que el nonce del formulario siempre va fresco.
  * Fase 2+: foto del voucher, rol "Despachos", etiqueta, búsqueda.
  *
  * Diseño y decisiones acordadas: HANDOFF.md §"DISEÑO ACORDADO (2026-06-12)".
@@ -98,6 +101,21 @@ function bgmg_chile_pwa_render() {
 		);
 	}
 
+	// ── DETALLE de un pedido (?pedido=ID) ───────────────────────────────────
+	$pedido_id = isset( $_GET['pedido'] ) ? absint( $_GET['pedido'] ) : 0;
+	if ( $pedido_id > 0 ) {
+		$order = wc_get_order( $pedido_id );
+		// Solo pedidos reales (los reembolsos no tienen dirección de envío).
+		if ( $order instanceof WC_Order ) {
+			$detalle = bgmg_chile_pwa_detalle_data( $order );
+			require BGMG_CHILE_DIR . 'inc/pwa-despachos/vista-detalle.php';
+			exit;
+		}
+		// Pedido inexistente o no válido → caemos a la lista con un aviso suave.
+		$pedido_no_encontrado = true;
+	}
+
+	// ── LISTA (pantalla principal) ──────────────────────────────────────────
 	$tab = isset( $_GET['tab'] ) ? sanitize_key( wp_unslash( $_GET['tab'] ) ) : 'pendientes';
 	if ( ! in_array( $tab, array( 'pendientes', 'enviados', 'retiro' ), true ) ) {
 		$tab = 'pendientes';
@@ -215,6 +233,143 @@ function bgmg_chile_pwa_card_data( $order ) {
 		'estado_label' => $estado ? bgmg_chile_get_estado_despacho_label( $estado ) : '',
 		'wc_status'    => $order->get_status(),
 		'tracking'     => trim( (string) $order->get_meta( '_bgmg_tracking_codigo' ) ),
+	);
+}
+
+/**
+ * Couriers sugeridos como pills en el detalle. La dueña puede tocar uno para
+ * rellenar el campo, o escribir cualquier otro a mano (el texto manda).
+ *
+ * @return string[]
+ */
+function bgmg_chile_pwa_couriers() {
+	return apply_filters(
+		'bgmg_chile_pwa_couriers',
+		array( 'Starken', 'Chilexpress', 'Bluexpress', 'Correos Chile', 'Pullman Cargo', 'Despacho propio' )
+	);
+}
+
+/**
+ * Datos completos para la pantalla de DETALLE de un pedido.
+ * Reusa bgmg_chile_get_datos_despacho() (nombre/dirección/courier) y agrega
+ * ítems, totales, nota del cliente y el estado/tracking actuales.
+ *
+ * @param WC_Order $order
+ * @return array<string,mixed>
+ */
+function bgmg_chile_pwa_detalle_data( $order ) {
+
+	$d = bgmg_chile_get_datos_despacho( $order );
+
+	$items = array();
+	foreach ( $order->get_items() as $item ) {
+		$producto = $item->get_product();
+		$items[]  = array(
+			'nombre' => $item->get_name(),
+			'qty'    => (int) $item->get_quantity(),
+			'sku'    => $producto ? $producto->get_sku() : '',
+		);
+	}
+
+	$es_retiro = bgmg_chile_orden_es_retiro( $order );
+
+	// Estados disponibles (igual que el metabox: sin "listo_retiro" si no es retiro).
+	$estados = bgmg_chile_get_estados_despacho();
+	if ( ! $es_retiro ) {
+		unset( $estados['listo_retiro'] );
+	}
+
+	$enviado_ts = (int) $order->get_meta( '_bgmg_tracking_email_enviado' );
+
+	return array(
+		'id'            => $order->get_id(),
+		'numero'        => $d['id'],
+		'nombre'        => $d['nombre'],
+		'rut'           => $d['rut'],
+		'telefono'      => $d['telefono'],
+		'correo'        => $d['correo'],
+		'calle'         => $d['calle'],
+		'comuna'        => $d['comuna'],
+		'region'        => $d['region'],
+		'es_retiro'     => $es_retiro,
+		'metodo'        => trim( (string) $order->get_meta( '_bgmg_tracking_metodo' ) ),
+		'metodo_envio'  => $d['metodo'], // courier guardado o método del checkout
+		'codigo'        => trim( (string) $order->get_meta( '_bgmg_tracking_codigo' ) ),
+		'estado'        => (string) $order->get_meta( '_bgmg_estado_despacho' ),
+		'estados'       => $estados,
+		'items'         => $items,
+		'item_count'    => (int) $order->get_item_count(),
+		'total'         => wp_strip_all_tags( wc_price( $order->get_total() ) ),
+		'envio'         => wp_strip_all_tags( wc_price( $order->get_shipping_total() ) ),
+		'pago'          => $order->get_payment_method_title(),
+		'nota'          => $order->get_customer_note(),
+		'fecha'         => $order->get_date_created() ? date_i18n( 'j M Y, H:i', $order->get_date_created()->getOffsetTimestamp() ) : '',
+		'wc_status'     => $order->get_status(),
+		'wc_status_lbl' => wc_get_order_status_name( $order->get_status() ),
+		'email_fecha'   => $enviado_ts ? date_i18n( 'd/m/Y H:i', $enviado_ts ) : '',
+		'edit_url'      => $order->get_edit_order_url(),
+	);
+}
+
+/* ------------------------------------------------------------------------- *
+ *  AJAX: guardar tracking/estado + (opcional) avisar al cliente
+ * ------------------------------------------------------------------------- */
+
+add_action( 'wp_ajax_bgmg_pwa_guardar', 'bgmg_chile_pwa_ajax_guardar' );
+// Sin nopriv a propósito: la app es solo para usuarias autenticadas.
+
+function bgmg_chile_pwa_ajax_guardar() {
+
+	check_ajax_referer( 'bgmg_pwa_guardar', 'nonce' );
+
+	if ( ! bgmg_chile_pwa_user_can() ) {
+		wp_send_json_error( array( 'message' => __( 'Sin permiso.', 'bgmg-chile' ) ), 403 );
+	}
+
+	$order_id = isset( $_POST['order_id'] ) ? absint( $_POST['order_id'] ) : 0;
+	$order    = $order_id ? wc_get_order( $order_id ) : null;
+	if ( ! $order instanceof WC_Order ) {
+		wp_send_json_error( array( 'message' => __( 'Pedido no encontrado.', 'bgmg-chile' ) ), 404 );
+	}
+
+	$codigo = isset( $_POST['codigo'] )
+		? bgmg_chile_sanitize_text( wp_unslash( $_POST['codigo'] ), 100 )
+		: '';
+	$metodo = isset( $_POST['metodo'] )
+		? bgmg_chile_sanitize_text( wp_unslash( $_POST['metodo'] ), 80 )
+		: '';
+	$estado = isset( $_POST['estado'] )
+		? sanitize_key( wp_unslash( $_POST['estado'] ) )
+		: '';
+	$avisar = ! empty( $_POST['avisar'] );
+
+	// Mismo núcleo que el metabox de wp-admin → metas, notas y email idénticos.
+	$res = bgmg_chile_persistir_tracking( $order, $codigo, $metodo, $estado, $avisar );
+
+	$estado_label = $res['estado'] ? bgmg_chile_get_estado_despacho_label( $res['estado'] ) : '';
+
+	if ( $res['emailed'] ) {
+		$mensaje = sprintf(
+			/* translators: %s: correo del cliente */
+			__( 'Guardado · aviso enviado a %s', 'bgmg-chile' ),
+			$order->get_billing_email()
+		);
+	} elseif ( $res['sin_datos'] ) {
+		$mensaje = __( 'Guardado. No se envió aviso: falta el courier o el código.', 'bgmg-chile' );
+	} else {
+		$mensaje = __( 'Cambios guardados', 'bgmg-chile' );
+	}
+
+	wp_send_json_success(
+		array(
+			'message'      => $mensaje,
+			'emailed'      => (bool) $res['emailed'],
+			'sin_datos'    => (bool) $res['sin_datos'],
+			'estado'       => $res['estado'],
+			'estado_label' => $estado_label,
+			'codigo'       => $codigo,
+			'metodo'       => $metodo,
+		)
 	);
 }
 

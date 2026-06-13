@@ -6,7 +6,25 @@
 > Snapshots viejos (27, 28, 30 may 2026) archivados en `historial/` — solo por si se
 > necesita el detalle granular (changelogs fase a fase, datos crudos de Clarity).
 >
-> Última actualización: **2026-06-11**
+> Última actualización: **2026-06-13**
+>
+> **Dónde quedamos (2026-06-13): PWA de despachos — Parte 2 IMPLEMENTADA (bgmg-chile 1.20.0).**
+> Nuevo `inc/pwa-despachos/vista-detalle.php` + el controlador rutea `?pedido=ID` al detalle (pedido
+> inexistente/refund → vuelve a la lista con toast). El detalle muestra cliente (tel+WhatsApp, correo,
+> RUT), envío (dirección/comuna/región o banner Retiro), productos+totales+nota, y un formulario que
+> guarda **estado / courier / código** y **"Avisar al cliente"** por AJAX (`wp_ajax_bgmg_pwa_guardar`,
+> nonce `bgmg_pwa_guardar` fresco porque la página no se cachea; confirm() antes de mandar el correo;
+> sin nopriv). **Refactor clave:** se extrajo `bgmg_chile_persistir_tracking($order,$codigo,$metodo,$estado,$avisar)`
+> en order-tracking.php como núcleo COMPARTIDO; el metabox de wp-admin (`bgmg_chile_save_tracking_meta`)
+> ahora lo llama también → PWA y panel guardan idénticas metas/notas y disparan el MISMO email. Couriers
+> via `bgmg_chile_pwa_couriers()` (filtrable). **Fix lista:** tarjeta dejó de usar anchors anidados
+> (rompían el HTML — la tarjeta se veía "partida"); ahora `.pwa-card-cover` cubre la tarjeta y el 📞 va
+> por encima. **Validar (usuario):** (1) tocar pedido abre detalle con datos correctos; (2) guardar
+> estado+courier+código → se refleja en wp-admin (mismas metas/nota); (3) marcar avisar + confirmar →
+> llega el email "Tu pedido fue despachado" (probar también desde el metabox: debe seguir igual que
+> antes — es el camino refactorizado); (4) avisar sin courier ni código → aviso, no envía; (5) tarjeta
+> se ve completa (no partida) y el 📞 llama sin abrir el detalle. **Siguiente: Fase 2** = foto del
+> voucher (cámara) + rol "Despachos" (cap `bgmg_despachos`) + imprimir etiqueta + búsqueda.
 >
 > **Dónde quedamos (2026-06-12): PWA de despachos — Parte 1 IMPLEMENTADA (bgmg-chile 1.19.0).**
 > Módulo nuevo `inc/pwa-despachos/` (pwa-despachos.php = ruta/auth/datos/manifest; vista-lista.php =

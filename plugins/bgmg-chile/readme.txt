@@ -4,7 +4,7 @@ Tags: woocommerce, chile, rut, comunas, envio, checkout
 Requires at least: 6.0
 Tested up to: 6.7
 Requires PHP: 7.4
-Stable tag: 1.19.0
+Stable tag: 1.20.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
@@ -35,6 +35,10 @@ Plugin propio de BeautyGirlMG. Funcionalidades:
 4. En WooCommerce → Ajustes → Envío, agrega los métodos "Envío BeautyGirlMG (Chile)" y "Retiro en tienda" a tu zona de Chile.
 
 == Changelog ==
+
+= 1.20.0 =
+* **PWA de despachos (Parte 2 — detalle + guardar):** tocar un pedido en la lista abre su **detalle** (`/despachos/?pedido=ID`) con todos los datos del cliente, dirección, productos y totales. Desde ahí se puede **guardar el estado de despacho, el courier y el número de seguimiento**, y marcar **"Avisar al cliente por email"** (con confirmación previa) — todo por AJAX, sin recargar. El guardado y el correo usan el **mismo núcleo** que el metabox de wp-admin (`bgmg_chile_persistir_tracking`), así que ambos dejan idénticas metas, notas de auditoría y disparan el mismo email "Tu pedido fue despachado": la app y el panel quedan siempre sincronizados. Couriers chilenos como accesos rápidos (Starken, Chilexpress, Bluexpress, Correos, Pullman, despacho propio) + WhatsApp directo al cliente.
+* **Fix (lista):** la tarjeta del pedido ya no usa anchors anidados (el `<a>` del teléfono dentro del `<a>` de la tarjeta partía el HTML); ahora usa un enlace que cubre toda la tarjeta con el botón de llamar por encima.
 
 = 1.19.0 =
 * **NUEVO — PWA de despachos (Parte 1):** mini-app móvil en la URL `/despachos/` para gestionar los despachos desde el teléfono, instalable con "Agregar a pantalla de inicio" (manifest + standalone). Protegida con el login de WordPress (admins y gerentes de tienda; rol "Despachos" llegará en Fase 2). Esta primera parte trae la **lista de pedidos** con pestañas **Por despachar / Enviados / Retiro**, tarjetas con cliente, comuna, courier, total, tracking y llamada directa 📞. Página excluida de toda caché (privada por usuario). El detalle del pedido + guardar tracking + avisar al cliente llegan en la Parte 2.

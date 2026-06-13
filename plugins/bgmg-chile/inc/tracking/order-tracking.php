@@ -283,23 +283,68 @@ function bgmg_chile_save_tracking_meta( $order_id, $order = null ) {
 		: '';
 	$avisar = ! empty( $_POST['bgmg_tracking_avisar'] );
 
-	// Estado del despacho: solo aceptamos slugs conocidos. Si la orden no
-	// es retiro, también rechazamos "listo_retiro" (defensa contra POST manual).
+	// Estado del despacho: el helper compartido lo valida (slug conocido +
+	// regla de retiro) y persiste todo. Mismo núcleo que usa la PWA por AJAX.
 	$estado_nuevo = isset( $_POST['bgmg_estado_despacho'] )
 		? sanitize_key( wp_unslash( $_POST['bgmg_estado_despacho'] ) )
 		: '';
+
+	$resultado = bgmg_chile_persistir_tracking( $order, $codigo, $metodo, $estado_nuevo, $avisar );
+
+	// Marcó "avisar" pero dejó método y código vacíos: avisamos en pantalla
+	// para que sepa que no se envió nada (antes era silencioso → bug UX).
+	if ( ! empty( $resultado['sin_datos'] ) ) {
+		set_transient(
+			'bgmg_chile_tracking_notice_' . get_current_user_id(),
+			__( 'No se envió aviso al cliente: necesitas completar al menos el método o el código de tracking.', 'bgmg-chile' ),
+			30
+		);
+	}
+}
+
+/**
+ * Núcleo COMPARTIDO de persistencia de tracking + estado de despacho.
+ *
+ * Lo usan tanto el metabox de wp-admin (bgmg_chile_save_tracking_meta) como la
+ * PWA de despachos (AJAX). Centralizarlo asegura que ambos guarden EXACTAMENTE
+ * las mismas metas, dejen las mismas notas y disparen el mismo email — sin que
+ * uno se desincronice del otro.
+ *
+ * Los valores llegan YA sanitizados por el llamador (cada contexto valida su
+ * propio nonce y capability). El estado se revalida aquí como última defensa.
+ *
+ * @param WC_Order $order
+ * @param string   $codigo  Código de seguimiento (puede ir vacío).
+ * @param string   $metodo  Método / courier (puede ir vacío).
+ * @param string   $estado  Slug de estado de despacho ('' = sin estado).
+ * @param bool     $avisar  Si true y hay método o código, dispara el email.
+ * @return array{ok:bool, estado:string, emailed:bool, sin_datos:bool}
+ */
+function bgmg_chile_persistir_tracking( $order, $codigo, $metodo, $estado, $avisar ) {
+
+	if ( ! $order instanceof WC_Order ) {
+		return array(
+			'ok'        => false,
+			'estado'    => '',
+			'emailed'   => false,
+			'sin_datos' => false,
+		);
+	}
+
+	// Estado: solo slugs conocidos. Si la orden no es retiro, rechazamos
+	// "listo_retiro" (defensa contra POST manual).
 	$estados_validos = array_keys( bgmg_chile_get_estados_despacho() );
 	if ( ! bgmg_chile_orden_es_retiro( $order ) ) {
 		$estados_validos = array_diff( $estados_validos, array( 'listo_retiro' ) );
 	}
-	if ( '' !== $estado_nuevo && ! in_array( $estado_nuevo, $estados_validos, true ) ) {
-		$estado_nuevo = '';
+	if ( '' !== $estado && ! in_array( $estado, $estados_validos, true ) ) {
+		$estado = '';
 	}
 	$estado_previo = (string) $order->get_meta( '_bgmg_estado_despacho' );
 
 	$order->update_meta_data( '_bgmg_tracking_codigo', $codigo );
 	$order->update_meta_data( '_bgmg_tracking_metodo', $metodo );
-	$order->update_meta_data( '_bgmg_estado_despacho', $estado_nuevo );
+	$order->update_meta_data( '_bgmg_estado_despacho', $estado );
 
 	// Dejamos rastro en el log de la orden para auditoría.
 	$notas = array();
@@ -310,8 +355,8 @@ function bgmg_chile_save_tracking_meta( $order_id, $order = null ) {
 	} elseif ( $codigo ) {
 		$notas[] = sprintf( __( 'Código de tracking actualizado: %s', 'bgmg-chile' ), $codigo );
 	}
-	if ( $estado_nuevo !== $estado_previo ) {
-		$label_nuevo  = $estado_nuevo ? bgmg_chile_get_estado_despacho_label( $estado_nuevo ) : __( 'sin estado', 'bgmg-chile' );
+	if ( $estado !== $estado_previo ) {
+		$label_nuevo  = $estado ? bgmg_chile_get_estado_despacho_label( $estado ) : __( 'sin estado', 'bgmg-chile' );
 		$label_previo = $estado_previo ? bgmg_chile_get_estado_despacho_label( $estado_previo ) : __( 'sin estado', 'bgmg-chile' );
 		$notas[] = sprintf(
 			/* translators: 1: estado anterior, 2: estado nuevo */
@@ -327,21 +372,25 @@ function bgmg_chile_save_tracking_meta( $order_id, $order = null ) {
 	$order->save();
 
 	// Si pidió avisar al cliente: necesitamos al menos método o código.
+	$emailed   = false;
+	$sin_datos = false;
 	if ( $avisar ) {
 		if ( $codigo || $metodo ) {
 			bgmg_chile_send_tracking_email( $order );
 			$order->update_meta_data( '_bgmg_tracking_email_enviado', time() );
 			$order->save();
+			$emailed = true;
 		} else {
-			// Marcó el checkbox pero dejó ambos campos vacíos: avisamos en pantalla
-			// para que sepa que no se envió nada (antes era silencioso → bug UX).
-			set_transient(
-				'bgmg_chile_tracking_notice_' . get_current_user_id(),
-				__( 'No se envió aviso al cliente: necesitas completar al menos el método o el código de tracking.', 'bgmg-chile' ),
-				30
-			);
+			$sin_datos = true;
 		}
 	}
+
+	return array(
+		'ok'        => true,
+		'estado'    => $estado,
+		'emailed'   => $emailed,
+		'sin_datos' => $sin_datos,
+	);
 }
 
 /**

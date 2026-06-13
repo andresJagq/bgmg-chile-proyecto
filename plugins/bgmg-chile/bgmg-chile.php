@@ -5,7 +5,7 @@
  * Description:       Localización chilena para BeautyGirlMG: validación de RUT (módulo 11),
  *                    selector en cascada de regiones y comunas oficiales, método de envío
  *                    "Por pagar" y administración de tarifas fijas para la Región Metropolitana.
- * Version:           1.19.0
+ * Version:           1.20.0
  * Requires at least: 6.0
  * Requires PHP:      7.4
  * Author:            BeautyGirlMG
@@ -30,7 +30,7 @@ if ( ! defined( 'ABSPATH' ) ) {
  * Constantes globales del plugin.
  * Las usamos en cualquier submódulo de /inc/ sin recalcular rutas.
  */
-define( 'BGMG_CHILE_VERSION', '1.19.0' );
+define( 'BGMG_CHILE_VERSION', '1.20.0' );
 define( 'BGMG_CHILE_FILE', __FILE__ );
 define( 'BGMG_CHILE_DIR', plugin_dir_path( __FILE__ ) );
 define( 'BGMG_CHILE_URL', plugin_dir_url( __FILE__ ) );
@@ -128,8 +128,9 @@ function bgmg_chile_bootstrap() {
 	// imprimir + alertas (pedidos atrasados, sin código, etc.).
 	require_once BGMG_CHILE_DIR . 'inc/wizard/wizard-operativa.php';
 
-	// Módulo PWA de despachos (v1.19.0): mini-app móvil en /despachos/
-	// (login WP + lista de pedidos; el detalle llega en la Parte 2).
+	// Módulo PWA de despachos (v1.19.0 lista / v1.20.0 detalle): mini-app móvil
+	// en /despachos/ — login WP + lista + detalle con guardar tracking/estado y
+	// avisar al cliente (reusa el núcleo bgmg_chile_persistir_tracking).
 	require_once BGMG_CHILE_DIR . 'inc/pwa-despachos/pwa-despachos.php';
 
 	// Assets (frontend + admin).

@@ -88,10 +88,13 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 
 .pwa-list { padding: 12px 16px; display: flex; flex-direction: column; gap: 10px; max-width: 560px; margin: 0 auto; }
 .pwa-card {
+  position: relative;
   background: #fff; border: 1px solid var(--border); border-radius: 16px;
   padding: 12px 14px; display: block; color: inherit; text-decoration: none;
 }
 .pwa-card:active { background: var(--pink-soft); }
+/* Enlace que cubre toda la tarjeta (evita anchors anidados con el teléfono). */
+.pwa-card-cover { position: absolute; inset: 0; z-index: 1; border-radius: 16px; }
 .pwa-card-top { display: flex; align-items: center; gap: 8px; }
 .pwa-card-num { font-size: 14px; font-weight: 600; }
 .pwa-card-name { font-size: 14px; font-weight: 400; flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
@@ -104,7 +107,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 .pwa-card-line { margin-top: 5px; font-size: 12px; color: var(--mid); display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
 .pwa-card-line .sep { opacity: .5; }
 .pwa-track { font-family: ui-monospace, Menlo, Consolas, monospace; font-size: 12px; background: var(--pink-soft); border-radius: 8px; padding: 1px 8px; color: var(--dark); }
-.pwa-tel { margin-left: auto; text-decoration: none; font-size: 16px; }
+.pwa-tel { position: relative; z-index: 2; margin-left: auto; text-decoration: none; font-size: 18px; padding: 2px 6px; }
 
 .pwa-empty { text-align: center; padding: 60px 20px; color: var(--mid); font-size: 14px; }
 .pwa-empty .big { font-size: 40px; display: block; margin-bottom: 10px; }
@@ -172,7 +175,8 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
           $badge_texto = __( 'Pagado', 'bgmg-chile' );
       }
   ?>
-  <a class="pwa-card" href="#" data-order="<?php echo (int) $c['id']; ?>">
+  <div class="pwa-card">
+    <a class="pwa-card-cover" href="<?php echo esc_url( add_query_arg( 'pedido', $c['id'], $bgmg_pwa_base ) ); ?>" aria-label="<?php echo esc_attr( sprintf( __( 'Ver pedido %s', 'bgmg-chile' ), $c['numero'] ) ); ?>"></a>
     <div class="pwa-card-top">
       <span class="pwa-card-num"><?php echo esc_html( $c['numero'] ); ?></span>
       <span class="pwa-card-name"><?php echo esc_html( $c['nombre'] ); ?></span>
@@ -182,7 +186,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
       <span>📍 <?php echo esc_html( $c['comuna'] ); ?></span>
       <?php if ( $c['metodo'] ) : ?><span class="sep">·</span><span><?php echo esc_html( $c['metodo'] ); ?></span><?php endif; ?>
       <?php if ( $c['telefono'] ) : ?>
-      <a class="pwa-tel" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $c['telefono'] ) ); ?>" onclick="event.stopPropagation()" aria-label="<?php esc_attr_e( 'Llamar', 'bgmg-chile' ); ?>">📞</a>
+      <a class="pwa-tel" href="tel:<?php echo esc_attr( preg_replace( '/[^0-9+]/', '', $c['telefono'] ) ); ?>" aria-label="<?php esc_attr_e( 'Llamar', 'bgmg-chile' ); ?>">📞</a>
       <?php endif; ?>
     </div>
     <div class="pwa-card-line">
@@ -191,7 +195,7 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
       <?php if ( $c['fecha'] ) : ?><span class="sep">·</span><span><?php echo esc_html( $c['fecha'] ); ?></span><?php endif; ?>
       <?php if ( $c['tracking'] ) : ?><span class="pwa-track"><?php echo esc_html( $c['tracking'] ); ?></span><?php endif; ?>
     </div>
-  </a>
+  </div>
   <?php endforeach; ?>
 <?php endif; ?>
 </main>
@@ -199,24 +203,16 @@ body { font-family: 'Poppins', sans-serif; background: var(--cream); color: var(
 <div class="pwa-toast" id="pwa-toast"></div>
 <div class="pwa-foot">Despachos BGMG · v<?php echo esc_html( BGMG_CHILE_VERSION ); ?></div>
 
+<?php if ( ! empty( $pedido_no_encontrado ) ) : ?>
 <script>
 (function(){
-  var toast = document.getElementById('pwa-toast');
-  var timer;
-  function showToast(msg){
-    if (!toast) return;
-    toast.textContent = msg;
-    toast.classList.add('show');
-    clearTimeout(timer);
-    timer = setTimeout(function(){ toast.classList.remove('show'); }, 2200);
-  }
-  document.querySelectorAll('.pwa-card').forEach(function(card){
-    card.addEventListener('click', function(e){
-      e.preventDefault();
-      showToast('El detalle del pedido llega en la Parte 2 😉');
-    });
-  });
+  var t = document.getElementById('pwa-toast');
+  if (!t) return;
+  t.textContent = '<?php echo esc_js( __( 'Ese pedido no existe o fue eliminado.', 'bgmg-chile' ) ); ?>';
+  t.classList.add('show');
+  setTimeout(function(){ t.classList.remove('show'); }, 2800);
 })();
 </script>
+<?php endif; ?>
 </body>
 </html>
