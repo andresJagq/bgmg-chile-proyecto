@@ -283,13 +283,22 @@ img { max-width: 100%; height: auto; display: block; }
         <div class="swiper bgmg-swiper">
           <div class="swiper-wrapper">
             <?php if (!empty($all_ids)) :
-              foreach ($all_ids as $img_id) :
-                $img_url = wp_get_attachment_image_url($img_id, 'large') ?: wc_placeholder_img_src();
+              foreach ($all_ids as $img_idx => $img_id) :
                 $img_alt = trim(get_post_meta($img_id, '_wp_attachment_image_alt', true)) ?: get_the_title();
+                // Tamaño 'full' + srcset: el navegador baja la resolución óptima por
+                // pantalla (nítido en retina, liviano en móvil chico). El tope real lo pone
+                // el ORIGINAL subido (ideal >=1600px). Antes pedía 'large' (<=1024) sin srcset.
+                $img_html = wp_get_attachment_image($img_id, 'full', false, array(
+                  'alt'           => $img_alt,
+                  'sizes'         => '(min-width: 768px) 500px, 100vw',
+                  'loading'       => $img_idx === 0 ? 'eager' : 'lazy',
+                  'fetchpriority' => $img_idx === 0 ? 'high' : 'auto',
+                ));
+                if (!$img_html) {
+                  $img_html = '<img src="' . esc_url(wc_placeholder_img_src()) . '" alt="' . esc_attr($img_alt) . '">';
+                }
             ?>
-            <div class="swiper-slide">
-              <img src="<?php echo esc_url($img_url); ?>" alt="<?php echo esc_attr($img_alt); ?>" loading="eager">
-            </div>
+            <div class="swiper-slide"><?php echo $img_html; ?></div>
             <?php endforeach; else : ?>
             <div class="swiper-slide">
               <img src="<?php echo esc_url(wc_placeholder_img_src()); ?>" alt="<?php echo esc_attr(get_the_title()); ?>">
